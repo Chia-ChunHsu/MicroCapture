@@ -1,0 +1,11 @@
+debug/
+Makefile
+Makefile.Debug
+Makefile.Release
+release/
+1.jpg
+2.jpg
+3.jpg
+4.jpg
+*.jpg
+*.txt
