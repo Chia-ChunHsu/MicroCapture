@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>417</height>
+    <width>642</width>
+    <height>472</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>10</y>
       <width>621</width>
-      <height>351</height>
+      <height>371</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -37,9 +37,9 @@
       <property name="geometry">
        <rect>
         <x>370</x>
-        <y>270</y>
-        <width>80</width>
-        <height>50</height>
+        <y>260</y>
+        <width>241</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
@@ -68,14 +68,14 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>450</x>
-        <y>270</y>
-        <width>80</width>
-        <height>50</height>
+        <x>370</x>
+        <y>290</y>
+        <width>241</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
-       <string>Load</string>
+       <string>Load Capture Pictures</string>
       </property>
      </widget>
      <widget class="QTabWidget" name="tabWidget_2">
@@ -84,7 +84,7 @@
         <x>10</x>
         <y>10</y>
         <width>351</width>
-        <height>311</height>
+        <height>321</height>
        </rect>
       </property>
       <property name="currentIndex">
@@ -114,7 +114,7 @@
         <property name="geometry">
          <rect>
           <x>180</x>
-          <y>150</y>
+          <y>160</y>
           <width>160</width>
           <height>120</height>
          </rect>
@@ -146,7 +146,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>150</y>
+          <y>160</y>
           <width>160</width>
           <height>120</height>
          </rect>
@@ -199,7 +199,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>150</y>
+          <y>160</y>
           <width>160</width>
           <height>120</height>
          </rect>
@@ -215,7 +215,7 @@
         <property name="geometry">
          <rect>
           <x>180</x>
-          <y>150</y>
+          <y>160</y>
           <width>160</width>
           <height>120</height>
          </rect>
@@ -247,7 +247,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>270</y>
+          <y>280</y>
           <width>161</width>
           <height>16</height>
          </rect>
@@ -263,7 +263,7 @@
         <property name="geometry">
          <rect>
           <x>180</x>
-          <y>270</y>
+          <y>280</y>
           <width>161</width>
           <height>16</height>
          </rect>
@@ -284,13 +284,13 @@
       <property name="geometry">
        <rect>
         <x>370</x>
-        <y>220</y>
+        <y>230</y>
         <width>241</width>
-        <height>41</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
-       <string>SaveResult</string>
+       <string>Save Result Picture</string>
       </property>
      </widget>
      <widget class="QSlider" name="CapResultSlider">
@@ -318,14 +318,14 @@
      <widget class="QPushButton" name="SaveCap">
       <property name="geometry">
        <rect>
-        <x>530</x>
-        <y>270</y>
-        <width>80</width>
-        <height>50</height>
+        <x>369</x>
+        <y>319</y>
+        <width>241</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
-       <string>Save</string>
+       <string>Save Capture Pictures</string>
       </property>
      </widget>
     </widget>
@@ -702,7 +702,123 @@
      </rect>
     </property>
     <property name="text">
-     <string>SetUp</string>
+     <string>Set Up</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="cutButton">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>390</y>
+      <width>91</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>cut</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="shadowButton">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>390</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Shadow</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox1">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>380</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox2">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>380</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox3">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>400</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox4">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>400</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QSlider" name="hSlider01">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>390</y>
+      <width>160</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>255</number>
+    </property>
+    <property name="value">
+     <number>125</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QSlider" name="hSlider03">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>390</y>
+      <width>160</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>255</number>
+    </property>
+    <property name="value">
+     <number>100</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
   </widget>
@@ -711,8 +827,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>640</width>
-     <height>22</height>
+     <width>642</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>

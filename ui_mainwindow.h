@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QListWidget>
@@ -82,6 +83,14 @@ public:
     QPushButton *SaveBlackRef;
     QPushButton *AutoDetectButtom;
     QPushButton *SetUpButton;
+    QPushButton *cutButton;
+    QPushButton *shadowButton;
+    QCheckBox *checkBox1;
+    QCheckBox *checkBox2;
+    QCheckBox *checkBox3;
+    QCheckBox *checkBox4;
+    QSlider *hSlider01;
+    QSlider *hSlider03;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -90,18 +99,18 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(640, 417);
+        MainWindow->resize(642, 472);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
-        tabWidget->setGeometry(QRect(10, 10, 621, 351));
+        tabWidget->setGeometry(QRect(10, 10, 621, 371));
         DetectTab = new QWidget();
         DetectTab->setObjectName(QStringLiteral("DetectTab"));
         CapturePicture = new QPushButton(DetectTab);
         CapturePicture->setObjectName(QStringLiteral("CapturePicture"));
         CapturePicture->setEnabled(false);
-        CapturePicture->setGeometry(QRect(370, 270, 80, 50));
+        CapturePicture->setGeometry(QRect(370, 260, 241, 21));
         CapResultLabel = new QLabel(DetectTab);
         CapResultLabel->setObjectName(QStringLiteral("CapResultLabel"));
         CapResultLabel->setGeometry(QRect(370, 10, 240, 180));
@@ -109,10 +118,10 @@ public:
         LoadCapPic = new QPushButton(DetectTab);
         LoadCapPic->setObjectName(QStringLiteral("LoadCapPic"));
         LoadCapPic->setEnabled(false);
-        LoadCapPic->setGeometry(QRect(450, 270, 80, 50));
+        LoadCapPic->setGeometry(QRect(370, 290, 241, 21));
         tabWidget_2 = new QTabWidget(DetectTab);
         tabWidget_2->setObjectName(QStringLiteral("tabWidget_2"));
-        tabWidget_2->setGeometry(QRect(10, 10, 351, 311));
+        tabWidget_2->setGeometry(QRect(10, 10, 351, 321));
         tab_2 = new QWidget();
         tab_2->setObjectName(QStringLiteral("tab_2"));
         FilterLabel2 = new QLabel(tab_2);
@@ -121,7 +130,7 @@ public:
         FilterLabel2->setStyleSheet(QStringLiteral("background-color: rgb(233, 255, 255);"));
         FilterLabel4 = new QLabel(tab_2);
         FilterLabel4->setObjectName(QStringLiteral("FilterLabel4"));
-        FilterLabel4->setGeometry(QRect(180, 150, 160, 120));
+        FilterLabel4->setGeometry(QRect(180, 160, 160, 120));
         FilterLabel4->setStyleSheet(QStringLiteral("background-color: rgb(233, 255, 255);"));
         FilterLabel1 = new QLabel(tab_2);
         FilterLabel1->setObjectName(QStringLiteral("FilterLabel1"));
@@ -129,7 +138,7 @@ public:
         FilterLabel1->setStyleSheet(QStringLiteral("background-color: rgb(233, 255, 255);"));
         FilterLabel3 = new QLabel(tab_2);
         FilterLabel3->setObjectName(QStringLiteral("FilterLabel3"));
-        FilterLabel3->setGeometry(QRect(10, 150, 160, 120));
+        FilterLabel3->setGeometry(QRect(10, 160, 160, 120));
         FilterLabel3->setStyleSheet(QStringLiteral("background-color: rgb(233, 255, 255);"));
         tabWidget_2->addTab(tab_2, QString());
         tab_3 = new QWidget();
@@ -144,11 +153,11 @@ public:
         WarpFilterLabel2->setStyleSheet(QStringLiteral("background-color: rgb(233, 255, 255);"));
         WarpFilterLabel3 = new QLabel(tab_3);
         WarpFilterLabel3->setObjectName(QStringLiteral("WarpFilterLabel3"));
-        WarpFilterLabel3->setGeometry(QRect(10, 150, 160, 120));
+        WarpFilterLabel3->setGeometry(QRect(10, 160, 160, 120));
         WarpFilterLabel3->setStyleSheet(QStringLiteral("background-color: rgb(233, 255, 255);"));
         WarpFilterLabel4 = new QLabel(tab_3);
         WarpFilterLabel4->setObjectName(QStringLiteral("WarpFilterLabel4"));
-        WarpFilterLabel4->setGeometry(QRect(180, 150, 160, 120));
+        WarpFilterLabel4->setGeometry(QRect(180, 160, 160, 120));
         WarpFilterLabel4->setStyleSheet(QStringLiteral("background-color: rgb(233, 255, 255);"));
         label = new QLabel(tab_3);
         label->setObjectName(QStringLiteral("label"));
@@ -156,17 +165,17 @@ public:
         label->setStyleSheet(QStringLiteral("background-color: rgb(255, 0, 0);"));
         label_2 = new QLabel(tab_3);
         label_2->setObjectName(QStringLiteral("label_2"));
-        label_2->setGeometry(QRect(10, 270, 161, 16));
+        label_2->setGeometry(QRect(10, 280, 161, 16));
         label_2->setStyleSheet(QStringLiteral("background-color: rgb(0, 255, 0);"));
         label_3 = new QLabel(tab_3);
         label_3->setObjectName(QStringLiteral("label_3"));
-        label_3->setGeometry(QRect(180, 270, 161, 16));
+        label_3->setGeometry(QRect(180, 280, 161, 16));
         label_3->setStyleSheet(QStringLiteral("background-color: rgb(0, 0, 255);"));
         tabWidget_2->addTab(tab_3, QString());
         saveResultButtom = new QPushButton(DetectTab);
         saveResultButtom->setObjectName(QStringLiteral("saveResultButtom"));
         saveResultButtom->setEnabled(false);
-        saveResultButtom->setGeometry(QRect(370, 220, 241, 41));
+        saveResultButtom->setGeometry(QRect(370, 230, 241, 21));
         CapResultSlider = new QSlider(DetectTab);
         CapResultSlider->setObjectName(QStringLiteral("CapResultSlider"));
         CapResultSlider->setEnabled(false);
@@ -176,7 +185,7 @@ public:
         CapResultSlider->setOrientation(Qt::Horizontal);
         SaveCap = new QPushButton(DetectTab);
         SaveCap->setObjectName(QStringLiteral("SaveCap"));
-        SaveCap->setGeometry(QRect(530, 270, 80, 50));
+        SaveCap->setGeometry(QRect(369, 319, 241, 21));
         tabWidget->addTab(DetectTab, QString());
         CalibrationTab = new QWidget();
         CalibrationTab->setObjectName(QStringLiteral("CalibrationTab"));
@@ -280,10 +289,40 @@ public:
         SetUpButton = new QPushButton(centralWidget);
         SetUpButton->setObjectName(QStringLiteral("SetUpButton"));
         SetUpButton->setGeometry(QRect(540, 0, 75, 23));
+        cutButton = new QPushButton(centralWidget);
+        cutButton->setObjectName(QStringLiteral("cutButton"));
+        cutButton->setGeometry(QRect(170, 390, 91, 23));
+        shadowButton = new QPushButton(centralWidget);
+        shadowButton->setObjectName(QStringLiteral("shadowButton"));
+        shadowButton->setGeometry(QRect(80, 390, 81, 23));
+        checkBox1 = new QCheckBox(centralWidget);
+        checkBox1->setObjectName(QStringLiteral("checkBox1"));
+        checkBox1->setGeometry(QRect(20, 380, 16, 16));
+        checkBox2 = new QCheckBox(centralWidget);
+        checkBox2->setObjectName(QStringLiteral("checkBox2"));
+        checkBox2->setGeometry(QRect(50, 380, 16, 16));
+        checkBox3 = new QCheckBox(centralWidget);
+        checkBox3->setObjectName(QStringLiteral("checkBox3"));
+        checkBox3->setGeometry(QRect(20, 400, 16, 16));
+        checkBox4 = new QCheckBox(centralWidget);
+        checkBox4->setObjectName(QStringLiteral("checkBox4"));
+        checkBox4->setGeometry(QRect(50, 400, 16, 16));
+        hSlider01 = new QSlider(centralWidget);
+        hSlider01->setObjectName(QStringLiteral("hSlider01"));
+        hSlider01->setGeometry(QRect(290, 390, 160, 22));
+        hSlider01->setMaximum(255);
+        hSlider01->setValue(125);
+        hSlider01->setOrientation(Qt::Horizontal);
+        hSlider03 = new QSlider(centralWidget);
+        hSlider03->setObjectName(QStringLiteral("hSlider03"));
+        hSlider03->setGeometry(QRect(470, 390, 160, 22));
+        hSlider03->setMaximum(255);
+        hSlider03->setValue(100);
+        hSlider03->setOrientation(Qt::Horizontal);
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 640, 22));
+        menuBar->setGeometry(QRect(0, 0, 642, 21));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -295,7 +334,7 @@ public:
         retranslateUi(MainWindow);
 
         tabWidget->setCurrentIndex(0);
-        tabWidget_2->setCurrentIndex(1);
+        tabWidget_2->setCurrentIndex(0);
         stackedWidget->setCurrentIndex(0);
         ProgressList->setCurrentRow(0);
 
@@ -308,7 +347,7 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
         CapturePicture->setText(QApplication::translate("MainWindow", "Capture Picture", 0));
         CapResultLabel->setText(QString());
-        LoadCapPic->setText(QApplication::translate("MainWindow", "Load", 0));
+        LoadCapPic->setText(QApplication::translate("MainWindow", "Load Capture Pictures", 0));
         FilterLabel2->setText(QString());
         FilterLabel4->setText(QString());
         FilterLabel1->setText(QString());
@@ -322,8 +361,8 @@ public:
         label_2->setText(QString());
         label_3->setText(QString());
         tabWidget_2->setTabText(tabWidget_2->indexOf(tab_3), QApplication::translate("MainWindow", "Warping", 0));
-        saveResultButtom->setText(QApplication::translate("MainWindow", "SaveResult", 0));
-        SaveCap->setText(QApplication::translate("MainWindow", "Save", 0));
+        saveResultButtom->setText(QApplication::translate("MainWindow", "Save Result Picture", 0));
+        SaveCap->setText(QApplication::translate("MainWindow", "Save Capture Pictures", 0));
         tabWidget->setTabText(tabWidget->indexOf(DetectTab), QApplication::translate("MainWindow", "Detect Mode", 0));
         CalLabel2->setText(QString());
         CalLabel4->setText(QString());
@@ -358,7 +397,13 @@ public:
         SaveBlackRef->setText(QApplication::translate("MainWindow", "Save Black Ref", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Black Calibration", 0));
         AutoDetectButtom->setText(QApplication::translate("MainWindow", "Auto Detect Camera", 0));
-        SetUpButton->setText(QApplication::translate("MainWindow", "SetUp", 0));
+        SetUpButton->setText(QApplication::translate("MainWindow", "Set Up", 0));
+        cutButton->setText(QApplication::translate("MainWindow", "cut", 0));
+        shadowButton->setText(QApplication::translate("MainWindow", "Shadow", 0));
+        checkBox1->setText(QString());
+        checkBox2->setText(QString());
+        checkBox3->setText(QString());
+        checkBox4->setText(QString());
     } // retranslateUi
 
 };

@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusBar->addPermanentWidget(statusGap);
     ui->stackedWidget->setCurrentIndex(0);
 
+    setWindowTitle("Micro Capture ");
 }
 
 MainWindow::~MainWindow()
@@ -192,7 +193,7 @@ void MainWindow::on_LoadCapPic_clicked()
     CapWarp2.clear();
     for(int i=0;i<4;i++)
     {
-         CapWarp2.push_back(CapWarp[i]);
+        CapWarp2.push_back(CapWarp[i]);
     }
 
     cv::Size s = cv::Size(640,480);
@@ -275,6 +276,7 @@ void MainWindow::Stitch(int value)
 
     for(int number=0;number<CapWarp.size();number++)
     {
+
         int x = CorPoint[number].x;
         int y = CorPoint[number].y;
 
@@ -296,10 +298,10 @@ void MainWindow::Stitch(int value)
                     {
                         CapResult.at<cv::Vec3b>(j+y-t1.y,i+x-t1.x)[2] = 255;
                     }
-//                    else if(j+y-t1.y<CalResult.rows && i+x-t1.x<CalResult.cols && j+y-t1.y>=0 && i+x-t1.x>=0 && number == 0)
-//                    {
-//                        CapResult.at<cv::Vec3b>(j+y-t1.y,i+x-t1.x)[2] = 255;
-//                    }
+                    //                    else if(j+y-t1.y<CalResult.rows && i+x-t1.x<CalResult.cols && j+y-t1.y>=0 && i+x-t1.x>=0 && number == 0)
+                    //                    {
+                    //                        CapResult.at<cv::Vec3b>(j+y-t1.y,i+x-t1.x)[2] = 255;
+                    //                    }
                 }
             }
         }
@@ -519,8 +521,8 @@ void MainWindow::on_CaptureCalButtom_clicked()
 void MainWindow::on_saveResultButtom_clicked()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
-                               "D:/Code/FourCapture/utilited.jpg",
-                               tr("Images (*.png *.jpg)"));
+                                                    "D:/Code/FourCapture/utilited.jpg",
+                                                    tr("Images (*.png *.jpg)"));
     cv::imwrite(fileName.toStdString().c_str(),CapResult);
     cv::imwrite("1.jpg",CapMat[0]);
     cv::imwrite("2.jpg",CapMat[1]);
@@ -533,16 +535,6 @@ void MainWindow::on_AutoDetectButtom_clicked()
 {
 
     VideoName.clear();
-//    QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
-
-//    //std::vector<QString> name;
-//    for(int i=0;i<cameras.size();i++)
-//    {
-//        if(cameras[i].deviceName().contains("usb#vid_05ac&pid_8507&mi_02"))
-//            VideoName.push_back(cameras[i].deviceName());
-//        //name.push_back(cameras[i].deviceName());
-//    }
-
     autocamera.show();
 
 }
@@ -825,3 +817,91 @@ void MainWindow::on_SaveCap_clicked()
     cv::imwrite(fileName.toStdString()+std::string("3.jpg"),CalMat[2]);
     cv::imwrite(fileName.toStdString()+std::string("4.jpg"),CalMat[3]);
 }
+
+void MainWindow::on_cutButton_clicked()
+{
+
+}
+
+void MainWindow::on_shadowButton_clicked()
+{
+    cv::Mat shadow;
+
+    //RCapWarp.clear();
+    cv::Point t1(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
+    for(int i=0;i<CorPoint.size();i++)
+    {
+        t1.x = std::min(t1.x,CorPoint[i].x);
+        t1.y = std::min(t1.y,CorPoint[i].y);
+    }
+
+    cv::Size size(CalResult.cols,CalResult.rows);
+    shadow.create(size,CV_MAKETYPE(CapResult.type(),3));
+    shadow = cv::Scalar::all(0);
+
+    std::vector<cv::Mat> tempWarp;
+    for(int i=0;i<CapWarp.size();i++)
+    {
+        tempWarp.push_back(CapWarp[i]);
+    }
+
+    //    for(int number=0;number<CapWarp.size();number++)
+    //    {
+
+    int x1 = CorPoint[1].x;
+    int y1 = CorPoint[1].y;
+
+    int x3 = CorPoint[3].x;
+    int y3 = CorPoint[3].y;
+
+    int threv1 = ui->hSlider01->value();
+    int threv3 = ui->hSlider03->value();
+
+    for(int i = 0;i<tempWarp[1].cols;i++)
+    {
+        for(int j=0;j<tempWarp[1].rows;j++)
+        {
+            if((tempWarp[1].at<cv::Vec3b>(j,i)[0]+tempWarp[1].at<cv::Vec3b>(j,i)[1]+tempWarp[1].at<cv::Vec3b>(j,i)[2])/3 < threv1 )
+            {
+                if(j+y1-t1.y<CalResult.rows && i+x1-t1.x<CalResult.cols && j+y1-t1.y>=0 && i+x1-t1.x>=0)
+                {
+
+                    shadow.at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[0] = 255;
+                    shadow.at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[1] = 255;
+                    shadow.at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[2] = 255;
+
+                }
+            }
+        }
+    }
+
+    for(int i = 0;i<tempWarp[3].cols;i++)
+    {
+        for(int j=0;j<tempWarp[3].rows;j++)
+        {
+            if( (tempWarp[3].at<cv::Vec3b>(j,i)[0]+tempWarp[3].at<cv::Vec3b>(j,i)[1]+tempWarp[3].at<cv::Vec3b>(j,i)[2])/3 > threv3)
+            {
+
+                    //CapResult.at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[0] = 255;
+                if(shadow.at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[0] == 255 && j+y3-t1.y<CalResult.rows && i+x3-t1.x<CalResult.cols && j+y3-t1.y>=0 && i+x3-t1.x>=0)
+                {
+                    shadow.at<cv::Vec3b>(j+y3-t1.y,i+x3-t1.x)[0] = 255;
+                    shadow.at<cv::Vec3b>(j+y3-t1.y,i+x3-t1.x)[1] = 255;
+                    shadow.at<cv::Vec3b>(j+y3-t1.y,i+x3-t1.x)[2] = 255;
+                }
+                else
+                {
+                    shadow.at<cv::Vec3b>(j+y3-t1.y,i+x3-t1.x)[0] = 0;
+                    shadow.at<cv::Vec3b>(j+y3-t1.y,i+x3-t1.x)[1] = 0;
+                    shadow.at<cv::Vec3b>(j+y3-t1.y,i+x3-t1.x)[2] = 0;
+                }
+
+            }
+        }
+    }
+
+    cv::imshow("shadow",shadow);
+    //    }
+}
+
+

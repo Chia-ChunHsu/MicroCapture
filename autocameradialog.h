@@ -31,12 +31,10 @@ private slots:
 
     void on_CancelButtom_clicked();
 
-
     void on_OKButton_clicked();
 
-
-
     void on_LoadButtom_clicked();
+
 
 private:
     Ui::AutoCameraDialog *ui;

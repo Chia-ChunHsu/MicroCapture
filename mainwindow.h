@@ -68,7 +68,12 @@ private slots:
 
     void on_SaveCap_clicked();
 
+    void on_cutButton_clicked();
+
+    void on_shadowButton_clicked();
+
 private:
+
     Ui::MainWindow *ui;
     std::vector<cv::Mat> CalMat;
     std::vector<cv::Mat> CapMat;
@@ -91,6 +96,9 @@ private:
     std::vector<int> Device;
     AutoCameraDialog autocamera;
     std::vector<cv::Mat> nonDilateMask;
+
+
+    cv::Mat MaskResult;
 };
 
 #endif // MAINWINDOW_H
