@@ -820,6 +820,35 @@ void MainWindow::on_SaveCap_clicked()
 
 void MainWindow::on_cutButton_clicked()
 {
+    cv::Point t1(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
+    for(int i=0;i<CorPoint.size();i++)
+    {
+        t1.x = std::min(t1.x,CorPoint[i].x);
+        t1.y = std::min(t1.y,CorPoint[i].y);
+    }
+    std::vector<cv::Mat> temp;
+    for(int i=0;i<CapWarp.size();i++)
+    {
+        temp.push_back(CapWarp[i]);
+    }
+    for(int number = 0;number<temp.size();number++)
+    {
+        int x = CorPoint[number].x;
+        int y = CorPoint[number].y;
+        for(int i=0;i<temp[number].cols;i++)
+        {
+            for(int j=0;j<temp[number].rows;j++)
+            {
+                if(MaskResult.at<cv::Vec3b>(j-y+t1.y,i-x+t1.x)[0] != 255)
+                {
+                    temp[number].at<cv::Vec3b>(j,i)[0]=0;
+                    temp[number].at<cv::Vec3b>(j,i)[1]=0;
+                    temp[number].at<cv::Vec3b>(j,i)[2]=0;
+                }
+            }
+        }
+        cv::imshow(QString::number(number).toStdString(),temp[number]);
+    }
 
 }
 
@@ -857,51 +886,64 @@ void MainWindow::on_shadowButton_clicked()
     int threv1 = ui->hSlider01->value();
     int threv3 = ui->hSlider03->value();
 
-    for(int i = 0;i<tempWarp[1].cols;i++)
+
+    for(int i = 0;i<shadow.cols;i++)
     {
-        for(int j=0;j<tempWarp[1].rows;j++)
+        for(int j=0;j<shadow.rows;j++)
         {
-            if((tempWarp[1].at<cv::Vec3b>(j,i)[0]+tempWarp[1].at<cv::Vec3b>(j,i)[1]+tempWarp[1].at<cv::Vec3b>(j,i)[2])/3 < threv1 )
+            bool bool1 = false;
+            bool bool3 = false;
+            if(j-y1+t1.y >=0 && i-x1+t1.x >=0 && j-y1+t1.y <tempWarp[1].rows && i-x1+t1.x <tempWarp[1].cols)
             {
-                if(j+y1-t1.y<CalResult.rows && i+x1-t1.x<CalResult.cols && j+y1-t1.y>=0 && i+x1-t1.x>=0)
-                {
-
-                    shadow.at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[0] = 255;
-                    shadow.at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[1] = 255;
-                    shadow.at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[2] = 255;
-
-                }
+                bool1 = ( tempWarp[1].at<cv::Vec3b>(j-y1+t1.y,i-x1+t1.x)[0]+tempWarp[1].at<cv::Vec3b>(j-y1+t1.y,i-x1+t1.x)[1]+tempWarp[1].at<cv::Vec3b>(j-y1+t1.y,i-x1+t1.x)[2])/3 < threv1;
+            }
+            if(j-y3+t1.y >=0 && i-x3+t1.x >=0 && j-y3+t1.y <tempWarp[3].rows && i-x3+t1.x <tempWarp[3].cols)
+            {
+                bool3 = ( tempWarp[3].at<cv::Vec3b>(j-y3+t1.y,i-x3+t1.x)[0]+tempWarp[3].at<cv::Vec3b>(j-y3+t1.y,i-x3+t1.x)[1]+tempWarp[3].at<cv::Vec3b>(j-y3+t1.y,i-x3+t1.x)[2])/3 > threv3;
+            }
+            if(bool1==true && bool3 == true)
+            {
+                shadow.at<cv::Vec3b>(j,i)[0] = 255;
+                shadow.at<cv::Vec3b>(j,i)[1] = 255;
+                shadow.at<cv::Vec3b>(j,i)[2] = 255;
             }
         }
     }
 
-    for(int i = 0;i<tempWarp[3].cols;i++)
-    {
-        for(int j=0;j<tempWarp[3].rows;j++)
-        {
-            if( (tempWarp[3].at<cv::Vec3b>(j,i)[0]+tempWarp[3].at<cv::Vec3b>(j,i)[1]+tempWarp[3].at<cv::Vec3b>(j,i)[2])/3 > threv3)
-            {
 
-                    //CapResult.at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[0] = 255;
-                if(shadow.at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[0] == 255 && j+y3-t1.y<CalResult.rows && i+x3-t1.x<CalResult.cols && j+y3-t1.y>=0 && i+x3-t1.x>=0)
-                {
-                    shadow.at<cv::Vec3b>(j+y3-t1.y,i+x3-t1.x)[0] = 255;
-                    shadow.at<cv::Vec3b>(j+y3-t1.y,i+x3-t1.x)[1] = 255;
-                    shadow.at<cv::Vec3b>(j+y3-t1.y,i+x3-t1.x)[2] = 255;
-                }
-                else
-                {
-                    shadow.at<cv::Vec3b>(j+y3-t1.y,i+x3-t1.x)[0] = 0;
-                    shadow.at<cv::Vec3b>(j+y3-t1.y,i+x3-t1.x)[1] = 0;
-                    shadow.at<cv::Vec3b>(j+y3-t1.y,i+x3-t1.x)[2] = 0;
-                }
-
-            }
-        }
-    }
 
     cv::imshow("shadow",shadow);
-    //    }
+    int erosion_elem = 0;
+    int erosion_size = 8;
+    int dilation_elem = 0;
+    int dilation_size = 8;
+    int const max_elem = 2;
+    int const max_kernel_size = 21;
+
+    int erosion_type;
+    if( erosion_elem == 0 ){ erosion_type = cv::MORPH_RECT; }
+    else if( erosion_elem == 1 ){ erosion_type = cv::MORPH_CROSS; }
+    else if( erosion_elem == 2) { erosion_type = cv::MORPH_ELLIPSE; }
+
+    int dilation_type;
+    if( dilation_elem == 0 ){ dilation_type = cv::MORPH_RECT; }
+    else if( dilation_elem == 1 ){ dilation_type = cv::MORPH_CROSS; }
+    else if( dilation_elem == 2) { dilation_type = cv::MORPH_ELLIPSE; }
+
+    cv::Mat eroMat;
+    cv::Mat dilMat;
+    cv::Mat eroelement = getStructuringElement( erosion_type,
+                                         cv::Size( 2*erosion_size + 1, 2*erosion_size+1 ),
+                                         cv::Point( erosion_size, erosion_size ) );
+    cv::Mat dilelement = getStructuringElement( dilation_type,
+                                           cv::Size( 2*dilation_size + 1, 2*dilation_size+1 ),
+                                           cv::Point( dilation_size, dilation_size ) );
+    cv::erode(shadow,eroMat,eroelement);
+    cv::dilate(eroMat,dilMat,dilelement);
+    cv::imshow("dilate",dilMat);
+
+    MaskResult = dilMat.clone();
+
 }
 
 
