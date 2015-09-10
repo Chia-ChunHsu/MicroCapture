@@ -820,6 +820,11 @@ void MainWindow::on_SaveCap_clicked()
 
 void MainWindow::on_cutButton_clicked()
 {
+//    qDebug()<<CorPoint[0].x;
+//    qDebug()<<CorPoint[1].x;
+//    qDebug()<<CorPoint[2].x;
+//    qDebug()<<CorPoint[3].x;
+    //CorPoint[3].x = CorPoint[1].x;
     cv::Point t1(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
     for(int i=0;i<CorPoint.size();i++)
     {
@@ -831,24 +836,59 @@ void MainWindow::on_cutButton_clicked()
     {
         temp.push_back(CapWarp[i]);
     }
-    for(int number = 0;number<temp.size();number++)
+//    for(int number = 0;number<temp.size();number++)
+//    {
+//        int x = CorPoint[number].x;
+//        int y = CorPoint[number].y;
+//        for(int i=0;i<temp[number].cols;i++)
+//        {
+//            for(int j=0;j<temp[number].rows;j++)
+//            {
+//                if(MaskResult.at<cv::Vec3b>(j+y-t1.y,i+x-t1.x)[0] != 255)
+//                {
+//                    temp[number].at<cv::Vec3b>(j,i)[0]=0;
+//                    temp[number].at<cv::Vec3b>(j,i)[1]=0;
+//                    temp[number].at<cv::Vec3b>(j,i)[2]=0;
+//                }
+//            }
+//        }
+//        cv::imshow(QString::number(number).toStdString(),temp[number]);
+//    }
+//    int x = CorPoint[0].x;
+//    int y = CorPoint[0].y;
+    for(int i=0;i<temp[1].cols;i++)
     {
-        int x = CorPoint[number].x;
-        int y = CorPoint[number].y;
-        for(int i=0;i<temp[number].cols;i++)
+        for(int j=0;j<temp[1].rows;j++)
         {
-            for(int j=0;j<temp[number].rows;j++)
+            if(MaskResult.at<cv::Vec3b>(j+CorPoint[1].y-t1.y,i+CorPoint[1].x-t1.x)[0] != 255)
             {
-                if(MaskResult.at<cv::Vec3b>(j-y+t1.y,i-x+t1.x)[0] != 255)
-                {
-                    temp[number].at<cv::Vec3b>(j,i)[0]=0;
-                    temp[number].at<cv::Vec3b>(j,i)[1]=0;
-                    temp[number].at<cv::Vec3b>(j,i)[2]=0;
-                }
+                temp[1].at<cv::Vec3b>(j,i)[0]=0;
+                temp[1].at<cv::Vec3b>(j,i)[1]=0;
+                temp[1].at<cv::Vec3b>(j,i)[2]=0;
             }
         }
-        cv::imshow(QString::number(number).toStdString(),temp[number]);
     }
+    cv::imshow("1",temp[1]);
+
+
+    for(int i=0;i<temp[3].cols;i++)
+    {
+        for(int j=0;j<temp[3].rows;j++)
+        {
+            if(MaskResult.at<cv::Vec3b>(j+CorPoint[3].y-t1.y,i+CorPoint[0].x-CorPoint[3].x)[0] != 255)
+            {
+                temp[3].at<cv::Vec3b>(j,i)[0]=0;
+                temp[3].at<cv::Vec3b>(j,i)[1]=0;
+                temp[3].at<cv::Vec3b>(j,i)[2]=0;
+            }
+        }
+    }
+    cv::imshow("3",temp[3]);
+
+    qDebug()<<CorPoint[0].x<<CorPoint[0].y;
+    qDebug()<<CorPoint[1].x<<CorPoint[1].y;
+    qDebug()<<CorPoint[2].x<<CorPoint[2].y;
+    qDebug()<<CorPoint[3].x<<CorPoint[3].y;
 
 }
 
