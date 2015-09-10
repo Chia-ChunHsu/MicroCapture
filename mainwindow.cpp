@@ -820,11 +820,7 @@ void MainWindow::on_SaveCap_clicked()
 
 void MainWindow::on_cutButton_clicked()
 {
-//    qDebug()<<CorPoint[0].x;
-//    qDebug()<<CorPoint[1].x;
-//    qDebug()<<CorPoint[2].x;
-//    qDebug()<<CorPoint[3].x;
-    //CorPoint[3].x = CorPoint[1].x;
+    //cv::imshow("MaskResult",MaskResult);
     cv::Point t1(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
     for(int i=0;i<CorPoint.size();i++)
     {
@@ -832,35 +828,34 @@ void MainWindow::on_cutButton_clicked()
         t1.y = std::min(t1.y,CorPoint[i].y);
     }
     std::vector<cv::Mat> temp;
+    temp.clear();
     for(int i=0;i<CapWarp.size();i++)
     {
-        temp.push_back(CapWarp[i]);
+        cv::Mat tMat = CapWarp[i].clone();
+        temp.push_back(tMat);
+        //cv::imshow(QString::number(i).toStdString()+"CapWarp",CapWarp[i]);
     }
-//    for(int number = 0;number<temp.size();number++)
-//    {
-//        int x = CorPoint[number].x;
-//        int y = CorPoint[number].y;
-//        for(int i=0;i<temp[number].cols;i++)
-//        {
-//            for(int j=0;j<temp[number].rows;j++)
-//            {
-//                if(MaskResult.at<cv::Vec3b>(j+y-t1.y,i+x-t1.x)[0] != 255)
-//                {
-//                    temp[number].at<cv::Vec3b>(j,i)[0]=0;
-//                    temp[number].at<cv::Vec3b>(j,i)[1]=0;
-//                    temp[number].at<cv::Vec3b>(j,i)[2]=0;
-//                }
-//            }
-//        }
-//        cv::imshow(QString::number(number).toStdString(),temp[number]);
-//    }
-//    int x = CorPoint[0].x;
-//    int y = CorPoint[0].y;
+
+
+    for(int i=0;i<temp[0].cols;i++)
+    {
+        for(int j=0;j<temp[0].rows;j++)
+        {
+            if(MaskResult.at<cv::Vec3b>(j+CorPoint[0].y-t1.y-(CorPoint[0].y - t1.y),i-t1.x+CorPoint[0].x-(CorPoint[0].x - t1.x))[0] != 255)
+            {
+                temp[0].at<cv::Vec3b>(j,i)[0]=0;
+                temp[0].at<cv::Vec3b>(j,i)[1]=0;
+                temp[0].at<cv::Vec3b>(j,i)[2]=0;
+            }
+        }
+    }
+    //cv::imshow("0",temp[0]);
+
     for(int i=0;i<temp[1].cols;i++)
     {
         for(int j=0;j<temp[1].rows;j++)
         {
-            if(MaskResult.at<cv::Vec3b>(j+CorPoint[1].y-t1.y,i+CorPoint[1].x-t1.x)[0] != 255)
+            if(MaskResult.at<cv::Vec3b>(j+CorPoint[1].y-t1.y,i-t1.x+CorPoint[1].x)[0] != 255)
             {
                 temp[1].at<cv::Vec3b>(j,i)[0]=0;
                 temp[1].at<cv::Vec3b>(j,i)[1]=0;
@@ -868,14 +863,27 @@ void MainWindow::on_cutButton_clicked()
             }
         }
     }
-    cv::imshow("1",temp[1]);
+    //cv::imshow("1",temp[1]);
 
+    for(int i=0;i<temp[2].cols;i++)
+    {
+        for(int j=0;j<temp[2].rows;j++)
+        {
+            if(MaskResult.at<cv::Vec3b>(j+CorPoint[2].y-t1.y-(CorPoint[0].y - t1.y),i-t1.x+CorPoint[2].x-(CorPoint[0].x - t1.x))[0] != 255)
+            {
+                temp[2].at<cv::Vec3b>(j,i)[0]=0;
+                temp[2].at<cv::Vec3b>(j,i)[1]=0;
+                temp[2].at<cv::Vec3b>(j,i)[2]=0;
+            }
+        }
+    }
+    //cv::imshow("2",temp[2]);
 
     for(int i=0;i<temp[3].cols;i++)
     {
         for(int j=0;j<temp[3].rows;j++)
         {
-            if(MaskResult.at<cv::Vec3b>(j+CorPoint[3].y-t1.y,i+CorPoint[0].x-CorPoint[3].x)[0] != 255)
+            if(MaskResult.at<cv::Vec3b>(j+CorPoint[3].y-t1.y-(CorPoint[1].y - t1.y),i-t1.x+CorPoint[3].x-(CorPoint[2].x - t1.x))[0] != 255)
             {
                 temp[3].at<cv::Vec3b>(j,i)[0]=0;
                 temp[3].at<cv::Vec3b>(j,i)[1]=0;
@@ -883,13 +891,12 @@ void MainWindow::on_cutButton_clicked()
             }
         }
     }
-    cv::imshow("3",temp[3]);
+    //cv::imshow("3",temp[3]);
 
-    qDebug()<<CorPoint[0].x<<CorPoint[0].y;
-    qDebug()<<CorPoint[1].x<<CorPoint[1].y;
-    qDebug()<<CorPoint[2].x<<CorPoint[2].y;
-    qDebug()<<CorPoint[3].x<<CorPoint[3].y;
-
+    ShowOnLabel(temp[0],ui->WarpFilterLabel1);
+    ShowOnLabel(temp[1],ui->WarpFilterLabel2);
+    ShowOnLabel(temp[2],ui->WarpFilterLabel3);
+    ShowOnLabel(temp[3],ui->WarpFilterLabel4);
 }
 
 void MainWindow::on_shadowButton_clicked()
@@ -909,13 +916,11 @@ void MainWindow::on_shadowButton_clicked()
     shadow = cv::Scalar::all(0);
 
     std::vector<cv::Mat> tempWarp;
+    tempWarp.clear();
     for(int i=0;i<CapWarp.size();i++)
     {
         tempWarp.push_back(CapWarp[i]);
     }
-
-    //    for(int number=0;number<CapWarp.size();number++)
-    //    {
 
     int x1 = CorPoint[1].x;
     int y1 = CorPoint[1].y;
@@ -947,12 +952,18 @@ void MainWindow::on_shadowButton_clicked()
                 shadow.at<cv::Vec3b>(j,i)[1] = 255;
                 shadow.at<cv::Vec3b>(j,i)[2] = 255;
             }
+            else
+            {
+                shadow.at<cv::Vec3b>(j,i)[0] = 0;
+                shadow.at<cv::Vec3b>(j,i)[1] = 0;
+                shadow.at<cv::Vec3b>(j,i)[2] = 0;
+            }
         }
     }
 
 
 
-    cv::imshow("shadow",shadow);
+    //cv::imshow("shadow",shadow);
     int erosion_elem = 0;
     int erosion_size = 8;
     int dilation_elem = 0;
@@ -979,10 +990,12 @@ void MainWindow::on_shadowButton_clicked()
                                            cv::Size( 2*dilation_size + 1, 2*dilation_size+1 ),
                                            cv::Point( dilation_size, dilation_size ) );
     cv::erode(shadow,eroMat,eroelement);
-    cv::dilate(eroMat,dilMat,dilelement);
-    cv::imshow("dilate",dilMat);
+    cv::dilate(eroMat,MaskResult,dilelement);
+    cv::imshow("dilate",MaskResult);
 
-    MaskResult = dilMat.clone();
+//    MaskResult.release();
+
+//    MaskResult = dilMat.clone();
 
 }
 
