@@ -33,7 +33,7 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralWidget;
-    QTabWidget *tabWidget;
+    QTabWidget *tabClassifier;
     QWidget *DetectTab;
     QPushButton *CapturePicture;
     QLabel *CapResultLabel;
@@ -52,9 +52,23 @@ public:
     QLabel *label;
     QLabel *label_2;
     QLabel *label_3;
+    QWidget *tab_4;
+    QLabel *classlabel1;
+    QLabel *classlabel2;
+    QLabel *classlabel3;
+    QLabel *classlabel4;
+    QSlider *hclassslider1;
+    QSlider *hclassslider2;
+    QSlider *hclassslider3;
+    QSlider *hclassslider4;
+    QSlider *iclassslider1;
+    QSlider *iclassslider2;
+    QSlider *iclassslider3;
+    QSlider *iclassslider4;
     QPushButton *saveResultButtom;
     QSlider *CapResultSlider;
     QPushButton *SaveCap;
+    QPushButton *TestButton;
     QWidget *CalibrationTab;
     QStackedWidget *stackedWidget;
     QWidget *page_2;
@@ -91,6 +105,8 @@ public:
     QCheckBox *checkBox4;
     QSlider *hSlider01;
     QSlider *hSlider03;
+    QLabel *showlabel1;
+    QLabel *showlabel2;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -99,12 +115,12 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(642, 472);
+        MainWindow->resize(642, 532);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        tabWidget = new QTabWidget(centralWidget);
-        tabWidget->setObjectName(QStringLiteral("tabWidget"));
-        tabWidget->setGeometry(QRect(10, 10, 621, 371));
+        tabClassifier = new QTabWidget(centralWidget);
+        tabClassifier->setObjectName(QStringLiteral("tabClassifier"));
+        tabClassifier->setGeometry(QRect(10, 10, 621, 371));
         DetectTab = new QWidget();
         DetectTab->setObjectName(QStringLiteral("DetectTab"));
         CapturePicture = new QPushButton(DetectTab);
@@ -172,6 +188,65 @@ public:
         label_3->setGeometry(QRect(180, 280, 161, 16));
         label_3->setStyleSheet(QStringLiteral("background-color: rgb(0, 0, 255);"));
         tabWidget_2->addTab(tab_3, QString());
+        tab_4 = new QWidget();
+        tab_4->setObjectName(QStringLiteral("tab_4"));
+        classlabel1 = new QLabel(tab_4);
+        classlabel1->setObjectName(QStringLiteral("classlabel1"));
+        classlabel1->setGeometry(QRect(10, 10, 160, 120));
+        classlabel1->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
+        classlabel2 = new QLabel(tab_4);
+        classlabel2->setObjectName(QStringLiteral("classlabel2"));
+        classlabel2->setGeometry(QRect(180, 10, 160, 120));
+        classlabel2->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
+        classlabel3 = new QLabel(tab_4);
+        classlabel3->setObjectName(QStringLiteral("classlabel3"));
+        classlabel3->setGeometry(QRect(10, 150, 160, 120));
+        classlabel3->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
+        classlabel4 = new QLabel(tab_4);
+        classlabel4->setObjectName(QStringLiteral("classlabel4"));
+        classlabel4->setGeometry(QRect(180, 150, 160, 120));
+        classlabel4->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
+        hclassslider1 = new QSlider(tab_4);
+        hclassslider1->setObjectName(QStringLiteral("hclassslider1"));
+        hclassslider1->setGeometry(QRect(10, 130, 70, 22));
+        hclassslider1->setMaximum(255);
+        hclassslider1->setOrientation(Qt::Horizontal);
+        hclassslider2 = new QSlider(tab_4);
+        hclassslider2->setObjectName(QStringLiteral("hclassslider2"));
+        hclassslider2->setGeometry(QRect(180, 130, 70, 22));
+        hclassslider2->setMaximum(255);
+        hclassslider2->setOrientation(Qt::Horizontal);
+        hclassslider3 = new QSlider(tab_4);
+        hclassslider3->setObjectName(QStringLiteral("hclassslider3"));
+        hclassslider3->setGeometry(QRect(10, 270, 70, 22));
+        hclassslider3->setMaximum(255);
+        hclassslider3->setOrientation(Qt::Horizontal);
+        hclassslider4 = new QSlider(tab_4);
+        hclassslider4->setObjectName(QStringLiteral("hclassslider4"));
+        hclassslider4->setGeometry(QRect(180, 270, 70, 22));
+        hclassslider4->setMaximum(255);
+        hclassslider4->setOrientation(Qt::Horizontal);
+        iclassslider1 = new QSlider(tab_4);
+        iclassslider1->setObjectName(QStringLiteral("iclassslider1"));
+        iclassslider1->setGeometry(QRect(100, 130, 70, 22));
+        iclassslider1->setMaximum(255);
+        iclassslider1->setOrientation(Qt::Horizontal);
+        iclassslider2 = new QSlider(tab_4);
+        iclassslider2->setObjectName(QStringLiteral("iclassslider2"));
+        iclassslider2->setGeometry(QRect(270, 130, 70, 22));
+        iclassslider2->setMaximum(255);
+        iclassslider2->setOrientation(Qt::Horizontal);
+        iclassslider3 = new QSlider(tab_4);
+        iclassslider3->setObjectName(QStringLiteral("iclassslider3"));
+        iclassslider3->setGeometry(QRect(100, 270, 70, 22));
+        iclassslider3->setMaximum(255);
+        iclassslider3->setOrientation(Qt::Horizontal);
+        iclassslider4 = new QSlider(tab_4);
+        iclassslider4->setObjectName(QStringLiteral("iclassslider4"));
+        iclassslider4->setGeometry(QRect(270, 270, 70, 22));
+        iclassslider4->setMaximum(255);
+        iclassslider4->setOrientation(Qt::Horizontal);
+        tabWidget_2->addTab(tab_4, QString());
         saveResultButtom = new QPushButton(DetectTab);
         saveResultButtom->setObjectName(QStringLiteral("saveResultButtom"));
         saveResultButtom->setEnabled(false);
@@ -186,7 +261,10 @@ public:
         SaveCap = new QPushButton(DetectTab);
         SaveCap->setObjectName(QStringLiteral("SaveCap"));
         SaveCap->setGeometry(QRect(369, 319, 241, 21));
-        tabWidget->addTab(DetectTab, QString());
+        TestButton = new QPushButton(DetectTab);
+        TestButton->setObjectName(QStringLiteral("TestButton"));
+        TestButton->setGeometry(QRect(280, 10, 75, 23));
+        tabClassifier->addTab(DetectTab, QString());
         CalibrationTab = new QWidget();
         CalibrationTab->setObjectName(QStringLiteral("CalibrationTab"));
         stackedWidget = new QStackedWidget(CalibrationTab);
@@ -253,7 +331,7 @@ public:
         new QListWidgetItem(ProgressList);
         ProgressList->setObjectName(QStringLiteral("ProgressList"));
         ProgressList->setGeometry(QRect(10, 10, 191, 311));
-        tabWidget->addTab(CalibrationTab, QString());
+        tabClassifier->addTab(CalibrationTab, QString());
         tab = new QWidget();
         tab->setObjectName(QStringLiteral("tab"));
         BlackReflabel1 = new QLabel(tab);
@@ -282,7 +360,7 @@ public:
         SaveBlackRef = new QPushButton(tab);
         SaveBlackRef->setObjectName(QStringLiteral("SaveBlackRef"));
         SaveBlackRef->setGeometry(QRect(350, 270, 251, 41));
-        tabWidget->addTab(tab, QString());
+        tabClassifier->addTab(tab, QString());
         AutoDetectButtom = new QPushButton(centralWidget);
         AutoDetectButtom->setObjectName(QStringLiteral("AutoDetectButtom"));
         AutoDetectButtom->setGeometry(QRect(420, 0, 111, 23));
@@ -319,10 +397,16 @@ public:
         hSlider03->setMaximum(255);
         hSlider03->setValue(100);
         hSlider03->setOrientation(Qt::Horizontal);
+        showlabel1 = new QLabel(centralWidget);
+        showlabel1->setObjectName(QStringLiteral("showlabel1"));
+        showlabel1->setGeometry(QRect(70, 440, 47, 12));
+        showlabel2 = new QLabel(centralWidget);
+        showlabel2->setObjectName(QStringLiteral("showlabel2"));
+        showlabel2->setGeometry(QRect(190, 440, 47, 12));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 642, 22));
+        menuBar->setGeometry(QRect(0, 0, 642, 21));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -333,8 +417,8 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
-        tabWidget_2->setCurrentIndex(1);
+        tabClassifier->setCurrentIndex(0);
+        tabWidget_2->setCurrentIndex(2);
         stackedWidget->setCurrentIndex(0);
         ProgressList->setCurrentRow(0);
 
@@ -361,9 +445,15 @@ public:
         label_2->setText(QString());
         label_3->setText(QString());
         tabWidget_2->setTabText(tabWidget_2->indexOf(tab_3), QApplication::translate("MainWindow", "Warping", 0));
+        classlabel1->setText(QApplication::translate("MainWindow", "TextLabel", 0));
+        classlabel2->setText(QApplication::translate("MainWindow", "TextLabel", 0));
+        classlabel3->setText(QApplication::translate("MainWindow", "TextLabel", 0));
+        classlabel4->setText(QApplication::translate("MainWindow", "TextLabel", 0));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_4), QApplication::translate("MainWindow", "Classifier", 0));
         saveResultButtom->setText(QApplication::translate("MainWindow", "Save Result Picture", 0));
         SaveCap->setText(QApplication::translate("MainWindow", "Save Capture Pictures", 0));
-        tabWidget->setTabText(tabWidget->indexOf(DetectTab), QApplication::translate("MainWindow", "Detect Mode", 0));
+        TestButton->setText(QApplication::translate("MainWindow", "Test", 0));
+        tabClassifier->setTabText(tabClassifier->indexOf(DetectTab), QApplication::translate("MainWindow", "Detect Mode", 0));
         CalLabel2->setText(QString());
         CalLabel4->setText(QString());
         CalLabel3->setText(QString());
@@ -387,7 +477,7 @@ public:
         ___qlistwidgetitem2->setText(QApplication::translate("MainWindow", "The Stitching Result of the Calibration Photo", 0));
         ProgressList->setSortingEnabled(__sortingEnabled);
 
-        tabWidget->setTabText(tabWidget->indexOf(CalibrationTab), QApplication::translate("MainWindow", "Calibration Mode", 0));
+        tabClassifier->setTabText(tabClassifier->indexOf(CalibrationTab), QApplication::translate("MainWindow", "Calibration Mode", 0));
         BlackReflabel1->setText(QString());
         BlackReflabel2->setText(QString());
         BlackReflabel3->setText(QString());
@@ -395,7 +485,7 @@ public:
         LBlackRefButton->setText(QApplication::translate("MainWindow", "Load Black Ref", 0));
         CaptureBLRef->setText(QApplication::translate("MainWindow", "Capture Black Ref", 0));
         SaveBlackRef->setText(QApplication::translate("MainWindow", "Save Black Ref", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Black Calibration", 0));
+        tabClassifier->setTabText(tabClassifier->indexOf(tab), QApplication::translate("MainWindow", "Black Calibration", 0));
         AutoDetectButtom->setText(QApplication::translate("MainWindow", "Auto Detect Camera", 0));
         SetUpButton->setText(QApplication::translate("MainWindow", "Set Up", 0));
         cutButton->setText(QApplication::translate("MainWindow", "cut", 0));
@@ -404,6 +494,8 @@ public:
         checkBox2->setText(QString());
         checkBox3->setText(QString());
         checkBox4->setText(QString());
+        showlabel1->setText(QApplication::translate("MainWindow", "TextLabel", 0));
+        showlabel2->setText(QApplication::translate("MainWindow", "TextLabel", 0));
     } // retranslateUi
 
 };

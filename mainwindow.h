@@ -72,6 +72,14 @@ private slots:
 
     void on_shadowButton_clicked();
 
+    void on_TestButton_clicked();
+
+    void on_hclassslider1_sliderMoved(int position);
+
+    void on_hclassslider3_sliderMoved(int position);
+
+    void on_iclassslider3_sliderMoved(int position);
+
 private:
 
     Ui::MainWindow *ui;
@@ -99,6 +107,25 @@ private:
 
 
     cv::Mat MaskResult;
+
+    std::vector<cv::Mat> ClassMat;
+
+
+
+
+
+
+
+    std::vector<cv::Point> tempPoint;
+
+
+
+    int k();
+    cv::Mat gaussianDistance( cv::vector<cv::Point2f> points, float sigma = 1.0, float division_factor = 1.0 );
+    cv::Mat degreeMatrix( cv::Mat& adjacency );
+    void plot( cv::Mat& img, cv::Mat& points, cv::Mat& labels );
+    void plot( cv::Mat& img, std::vector<cv::Point2f>& points, cv::Scalar color = cv::Scalar(0) );
+    cv::vector<cv::Point2f> createCircles( int center_x, int center_y, float radius, int n_samples );
 };
 
 #endif // MAINWINDOW_H

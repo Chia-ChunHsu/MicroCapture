@@ -841,62 +841,116 @@ void MainWindow::on_cutButton_clicked()
     {
         for(int j=0;j<temp[0].rows;j++)
         {
+            int x,y;
             if(MaskResult.at<cv::Vec3b>(j+CorPoint[0].y-t1.y-(CorPoint[0].y - t1.y),i-t1.x+CorPoint[0].x-(CorPoint[0].x - t1.x))[0] != 255)
             {
                 temp[0].at<cv::Vec3b>(j,i)[0]=0;
                 temp[0].at<cv::Vec3b>(j,i)[1]=0;
                 temp[0].at<cv::Vec3b>(j,i)[2]=0;
             }
-        }
-    }
-    //cv::imshow("0",temp[0]);
-
-    for(int i=0;i<temp[1].cols;i++)
-    {
-        for(int j=0;j<temp[1].rows;j++)
-        {
             if(MaskResult.at<cv::Vec3b>(j+CorPoint[1].y-t1.y,i-t1.x+CorPoint[1].x)[0] != 255)
             {
                 temp[1].at<cv::Vec3b>(j,i)[0]=0;
                 temp[1].at<cv::Vec3b>(j,i)[1]=0;
                 temp[1].at<cv::Vec3b>(j,i)[2]=0;
             }
-        }
-    }
-    //cv::imshow("1",temp[1]);
-
-    for(int i=0;i<temp[2].cols;i++)
-    {
-        for(int j=0;j<temp[2].rows;j++)
-        {
             if(MaskResult.at<cv::Vec3b>(j+CorPoint[2].y-t1.y-(CorPoint[0].y - t1.y),i-t1.x+CorPoint[2].x-(CorPoint[0].x - t1.x))[0] != 255)
             {
                 temp[2].at<cv::Vec3b>(j,i)[0]=0;
                 temp[2].at<cv::Vec3b>(j,i)[1]=0;
                 temp[2].at<cv::Vec3b>(j,i)[2]=0;
             }
-        }
-    }
-    //cv::imshow("2",temp[2]);
-
-    for(int i=0;i<temp[3].cols;i++)
-    {
-        for(int j=0;j<temp[3].rows;j++)
-        {
+            else
+            {
+                x = (temp[1].at<cv::Vec3b>(j,i)[0]+temp[1].at<cv::Vec3b>(j,i)[1]+temp[1].at<cv::Vec3b>(j,i)[2])/3;
+                y = (temp[2].at<cv::Vec3b>(j,i)[0]+temp[2].at<cv::Vec3b>(j,i)[1]+temp[2].at<cv::Vec3b>(j,i)[2])/3;
+                cv::Point tmp = cv::Point(x,y);
+                tempPoint.push_back(tmp);
+            }
             if(MaskResult.at<cv::Vec3b>(j+CorPoint[3].y-t1.y-(CorPoint[1].y - t1.y),i-t1.x+CorPoint[3].x-(CorPoint[2].x - t1.x))[0] != 255)
             {
                 temp[3].at<cv::Vec3b>(j,i)[0]=0;
                 temp[3].at<cv::Vec3b>(j,i)[1]=0;
                 temp[3].at<cv::Vec3b>(j,i)[2]=0;
             }
+
         }
     }
+
+
+//    for(int i=0;i<temp[0].cols;i++)
+//    {
+//        for(int j=0;j<temp[0].rows;j++)
+//        {
+//            if(MaskResult.at<cv::Vec3b>(j+CorPoint[0].y-t1.y-(CorPoint[0].y - t1.y),i-t1.x+CorPoint[0].x-(CorPoint[0].x - t1.x))[0] != 255)
+//            {
+//                temp[0].at<cv::Vec3b>(j,i)[0]=0;
+//                temp[0].at<cv::Vec3b>(j,i)[1]=0;
+//                temp[0].at<cv::Vec3b>(j,i)[2]=0;
+//            }
+//        }
+//    }
+//    //cv::imshow("0",temp[0]);
+
+//    for(int i=0;i<temp[1].cols;i++)
+//    {
+//        for(int j=0;j<temp[1].rows;j++)
+//        {
+//            if(MaskResult.at<cv::Vec3b>(j+CorPoint[1].y-t1.y,i-t1.x+CorPoint[1].x)[0] != 255)
+//            {
+//                temp[1].at<cv::Vec3b>(j,i)[0]=0;
+//                temp[1].at<cv::Vec3b>(j,i)[1]=0;
+//                temp[1].at<cv::Vec3b>(j,i)[2]=0;
+//            }
+//        }
+//    }
+//    //cv::imshow("1",temp[1]);
+
+//    for(int i=0;i<temp[2].cols;i++)
+//    {
+//        for(int j=0;j<temp[2].rows;j++)
+//        {
+//            if(MaskResult.at<cv::Vec3b>(j+CorPoint[2].y-t1.y-(CorPoint[0].y - t1.y),i-t1.x+CorPoint[2].x-(CorPoint[0].x - t1.x))[0] != 255)
+//            {
+//                temp[2].at<cv::Vec3b>(j,i)[0]=0;
+//                temp[2].at<cv::Vec3b>(j,i)[1]=0;
+//                temp[2].at<cv::Vec3b>(j,i)[2]=0;
+//            }
+//        }
+//    }
+//    //cv::imshow("2",temp[2]);
+
+//    for(int i=0;i<temp[3].cols;i++)
+//    {
+//        for(int j=0;j<temp[3].rows;j++)
+//        {
+//            if(MaskResult.at<cv::Vec3b>(j+CorPoint[3].y-t1.y-(CorPoint[1].y - t1.y),i-t1.x+CorPoint[3].x-(CorPoint[2].x - t1.x))[0] != 255)
+//            {
+//                temp[3].at<cv::Vec3b>(j,i)[0]=0;
+//                temp[3].at<cv::Vec3b>(j,i)[1]=0;
+//                temp[3].at<cv::Vec3b>(j,i)[2]=0;
+//            }
+//        }
+//    }
     //cv::imshow("3",temp[3]);
 
-    ShowOnLabel(temp[0],ui->WarpFilterLabel1);
-    ShowOnLabel(temp[1],ui->WarpFilterLabel2);
-    ShowOnLabel(temp[2],ui->WarpFilterLabel3);
-    ShowOnLabel(temp[3],ui->WarpFilterLabel4);
+//    ShowOnLabel(temp[0],ui->WarpFilterLabel1);
+//    ShowOnLabel(temp[1],ui->WarpFilterLabel2);
+//    ShowOnLabel(temp[2],ui->WarpFilterLabel3);
+//    ShowOnLabel(temp[3],ui->WarpFilterLabel4);
+
+    ShowOnLabel(temp[0],ui->classlabel1);
+    ShowOnLabel(temp[1],ui->classlabel2);
+    ShowOnLabel(temp[2],ui->classlabel3);
+    ShowOnLabel(temp[3],ui->classlabel4);
+
+    ClassMat.clear();
+    for(int i=0;i<temp.size();i++)
+    {
+        ClassMat.push_back(temp[i]);
+    }
+
+
 }
 
 void MainWindow::on_shadowButton_clicked()
@@ -961,8 +1015,6 @@ void MainWindow::on_shadowButton_clicked()
         }
     }
 
-
-
     //cv::imshow("shadow",shadow);
     int erosion_elem = 0;
     int erosion_size = 8;
@@ -999,4 +1051,251 @@ void MainWindow::on_shadowButton_clicked()
 
 }
 
+void MainWindow::on_TestButton_clicked()
+{
+    cv::Mat temp;
+    temp.create(255,255,CV_MAKETYPE(temp.type(),3));
+    temp = cv::Scalar::all(0);
+    for(int number=0;number<tempPoint.size();number++)
+    {
+        cv::circle(temp,tempPoint[number],1,cv::Scalar(255,0,0),1,8,0);
+    }
+    cv::imshow("temp",temp);
 
+    int clusterCount =2;
+    int dimensions = 5;
+    int sampleCount = tempPoint.size();
+    cv::Mat points(sampleCount,dimensions,CV_32F);
+    cv::Mat labels;
+    cv::Mat centers(clusterCount,1,points.type());
+
+    for(int i=24;i<points.rows;i++)
+    {
+        for(int j =0 ;j<points.cols;j++)
+        {
+            points.at<float>(i,j) = 20;
+        }
+    }
+
+    cv::kmeans(points,clusterCount,labels,cv::TermCriteria( CV_TERMCRIT_EPS+CV_TERMCRIT_ITER, 10, 1.0), 3, cv::KMEANS_PP_CENTERS, centers);
+    cv::imshow("pints",points);
+    cv::imshow("Centers",centers);
+    cv::imshow("Labels ",labels);
+
+
+    //k();
+}
+
+//===========================================================
+cv::vector<cv::Point2f> MainWindow::createCircles( int center_x, int center_y, float radius, int n_samples ){
+    cv::vector<cv::Point2f> result;
+    cv::Point2f center ( center_x, center_y );
+
+    cv::RNG rng;
+
+    for( int i = 0; i < n_samples; i++ ) {
+        float x = rng.gaussian( radius ) *  (rand() % 2 == 0 ? 1.0 : -1.0 );
+        float y = rng.gaussian( radius ) *  (rand() % 2 == 0 ? 1.0 : -1.0 );
+
+        result.push_back( center + cv::Point2f(x, y) );
+    }
+
+    return result;
+}
+
+void MainWindow::plot( cv::Mat& img, cv::vector<cv::Point2f>& points, cv::Scalar color ) {
+    for( cv::Point2f point: points)
+        cv::circle( img, point, 2, color, 2 );
+}
+
+/**
+ * Plot points and color it based on the given labels
+ **/
+void MainWindow::plot( cv::Mat& img, cv::Mat& points, cv::Mat& labels ) {
+    int total = points.rows;
+
+    if( total < 1 )
+        return;
+
+    static cv::Scalar colors[] = {
+        cv::Scalar(255, 0, 0), cv::Scalar(0, 255, 0), cv::Scalar(0, 0, 255),
+        cv::Scalar(255, 255, 0), cv::Scalar(255, 0, 255), cv::Scalar(0, 255, 255)
+    };
+
+    int * labels_ptr = labels.ptr<int>(0);
+    cv::Point2f * points_ptr = points.ptr<cv::Point2f>( 0 );
+
+    for( int i = 0; i < total; i++ )
+        cv::circle( img, points_ptr[i], 2, colors[labels_ptr[i]], 2 );
+}
+
+/**
+ * Create a degree matrix out from the given adjacency matrix
+ **/
+cv::Mat MainWindow::degreeMatrix( cv::Mat& adjacency ) {
+    int cols = adjacency.cols;
+
+    cv::Mat degree( 1, cols, CV_32FC1 );
+    for( int col = 0; col < cols; col++ )
+        degree.at<float>(0, col) = sum(adjacency.col( col ))[0];
+
+    return degree;
+}
+
+/**
+ * Create an adjacency matrix based on the gaussian distance between the points
+ **/
+cv::Mat MainWindow::gaussianDistance( cv::vector<cv::Point2f> points, float sigma, float division_factor) {
+    int m = static_cast<int>(points.size());
+    cv::Mat adjacency(m, m, CV_32FC1, cv::Scalar(0.0));
+
+    for( int i = 0; i < m; i++ ) {
+        float * ptr = adjacency.ptr<float>(i);
+        for( int j = 0; j < m; j++ ) {
+            if( i >= j )
+                continue;
+            /* Yeah, this is because when the original coordinates is used, it's bound to overflow in later part */
+            cv::Point2f p1(points[i].x / division_factor, points[i].y / division_factor);
+            cv::Point2f p2(points[j].x / division_factor, points[j].y / division_factor);
+            ptr[j] = (p1 - p2).dot(p1 - p2);
+        }
+    }
+
+    completeSymm( adjacency );
+
+    adjacency = -adjacency / (2.0 * sigma * sigma);
+    cv::exp( adjacency, adjacency );
+    adjacency = adjacency - cv::Mat::eye(m, m, CV_32FC1 );
+
+    return adjacency;
+}
+
+
+int MainWindow::k() {
+    /* Create 2 blobs of points */
+//    std::vector<cv::Point2f> points1 = createCircles( 150, 150, 50.0f, 500 );
+//    std::vector<cv::Point2f> points2 = createCircles( 450, 450, 40.0f, 500 );
+    std::vector<cv::Point2f> points;
+//    points.insert( points.end(), points1.begin(), points1.end() );
+//    points.insert( points.end(), points2.begin(), points2.end() );
+    points.insert( points.end(),tempPoint.begin(),tempPoint.end());
+
+    /* Create adjacency and degree matrices */
+    cv::Mat adjacency = gaussianDistance( points, 0.1f, 500.0f );
+    cv::Mat degree = degreeMatrix( adjacency );
+
+    /* Create laplacian matrix */
+    cv::Mat L = cv::Mat::diag( degree ) - adjacency;
+    cv::Mat degree_05;
+    pow( degree, -0.5, degree_05 );
+    degree_05 = cv::Mat::diag( degree_05 );
+    L = (degree_05 * L) * degree_05;
+
+    /* Perform eigen decompositions */
+    cv::Mat eigenvalues, eigenvectors;
+    cv::eigen( L, eigenvalues, eigenvectors );
+
+    /* Since it's automatically sorted in descending order, take the last two entries of eigenvectors */
+    eigenvectors = eigenvectors.rowRange( eigenvectors.rows - 2, eigenvectors.rows ).t();
+
+    /* Perform K-means on eigenvectors */
+    cv::Mat labels;
+    cv::kmeans( eigenvectors, 2, labels, cv::TermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 1000, 1e-5), 2, cv::KMEANS_RANDOM_CENTERS );
+
+    /* Plot it out */
+    cv::Mat img(600, 600, CV_8UC3, cv::Scalar(255, 255, 255) );
+    plot( img, points );
+
+    cv::Mat points_mat( points );
+    plot( img, points_mat, labels );
+
+    cv::namedWindow( "Spectral Clustering on OpenCV" );
+    cv::moveWindow( "Spectral Clustering on OpenCV", 0, 0 );
+    cv::imshow( "Spectral Clustering on OpenCV", img );
+    cv::waitKey();
+
+    return 0;
+}
+
+void MainWindow::on_hclassslider1_sliderMoved(int position)
+{
+    cv::Mat temp;
+
+    //temp.create(ClassMat[0].rows,ClassMat[0].cols,CV_MAKETYPE(ClassMat[0].type(),3));
+    temp = ClassMat[0].clone();
+    for(int i=0;i<ClassMat[0].cols;i++)
+    {
+        for(int j=0;j<ClassMat[0].rows;j++)
+        {
+            if(ClassMat[0].at<cv::Vec3b>(j,i)[0] <position +5  && ClassMat[0].at<cv::Vec3b>(j,i)[0] > position-5)
+            {
+                temp.at<cv::Vec3b>(j,i)[0] = 0;
+                temp.at<cv::Vec3b>(j,i)[1] = 255;
+                temp.at<cv::Vec3b>(j,i)[2] = 0;
+            }
+        }
+    }
+    ShowOnLabel(temp,ui->classlabel1);
+}
+
+void MainWindow::on_hclassslider3_sliderMoved(int position)
+{
+    cv::Mat temp;
+
+    //temp.create(ClassMat[0].rows,ClassMat[0].cols,CV_MAKETYPE(ClassMat[0].type(),3));
+    temp = ClassMat[2].clone();
+    int v = ui->iclassslider3->value();
+    for(int i=0;i<ClassMat[2].cols;i++)
+    {
+        for(int j=0;j<ClassMat[2].rows;j++)
+        {
+
+            if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <position+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > position-10)
+            {
+                temp.at<cv::Vec3b>(j,i)[0] = 0;
+                temp.at<cv::Vec3b>(j,i)[1] = 255;
+                temp.at<cv::Vec3b>(j,i)[2] = 0;
+            }
+            else if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <v+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > v-10)
+            {
+                temp.at<cv::Vec3b>(j,i)[0] = 255;
+                temp.at<cv::Vec3b>(j,i)[1] = 0;
+                temp.at<cv::Vec3b>(j,i)[2] = 0;
+            }
+        }
+    }
+    ShowOnLabel(temp,ui->classlabel3);
+    ui->showlabel1->setText(QString::number(position));
+    ui->showlabel2->setText(QString::number(v));
+}
+
+void MainWindow::on_iclassslider3_sliderMoved(int position)
+{
+    cv::Mat temp;
+
+    //temp.create(ClassMat[0].rows,ClassMat[0].cols,CV_MAKETYPE(ClassMat[0].type(),3));
+    temp = ClassMat[2].clone();
+    int v = ui->hclassslider3->value();
+    for(int i=0;i<ClassMat[2].cols;i++)
+    {
+        for(int j=0;j<ClassMat[2].rows;j++)
+        {
+
+            if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <position+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > position-10)
+            {
+                temp.at<cv::Vec3b>(j,i)[0] = 255;
+                temp.at<cv::Vec3b>(j,i)[1] = 0;
+                temp.at<cv::Vec3b>(j,i)[2] = 0;
+            }
+            else if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <v+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > v-10)
+            {
+                temp.at<cv::Vec3b>(j,i)[0] = 0;
+                temp.at<cv::Vec3b>(j,i)[1] = 255;
+                temp.at<cv::Vec3b>(j,i)[2] = 0;
+            }
+        }
+    }
+    ShowOnLabel(temp,ui->classlabel3);
+    ui->showlabel2->setText(QString::number(position));
+    ui->showlabel1->setText(QString::number(v));
+}
