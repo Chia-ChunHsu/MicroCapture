@@ -16,14 +16,12 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     thread_stitch.cpp \
     stitch.cpp \
-    autocameradialog.cpp \
-    information.cpp
+    autocameradialog.cpp
 
 HEADERS  += mainwindow.h \
     thread_stitch.h \
     stitch.h \
-    autocameradialog.h \
-    information.h
+    autocameradialog.h
 
 FORMS    += mainwindow.ui \
     autocameradialog.ui
@@ -40,7 +38,8 @@ LIBS+= $$OPENCVLIB/opencv_core249d.lib\
        $$OPENCVLIB/opencv_nonfree249d.lib\
        $$OPENCVLIB/opencv_imgproc249d.lib\
        $$OPENCVLIB/opencv_ocl249d.lib\
-       $$OPENCVLIB/opencv_stitching249d.lib
+       $$OPENCVLIB/opencv_stitching249d.lib\
+       $$OPENCVLIB/opencv_ml249d.lib
 }
 
 CONFIG(release, debug|release){
@@ -51,7 +50,8 @@ LIBS+= $$OPENCVLIB/opencv_core249.lib\
        $$OPENCVLIB/opencv_nonfree249.lib\
        $$OPENCVLIB/opencv_imgproc249.lib\
        $$OPENCVLIB/opencv_ocl249.lib\
-       $$OPENCVLIB/opencv_stitching249.lib
+       $$OPENCVLIB/opencv_stitching249.lib\
+       $$OPENCVLIB/opencv_ml249.lib
 }
 
 DEFINES += HAVE_OPENCV

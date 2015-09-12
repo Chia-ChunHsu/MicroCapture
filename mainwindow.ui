@@ -83,8 +83,8 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>351</width>
-        <height>321</height>
+        <width>361</width>
+        <height>341</height>
        </rect>
       </property>
       <property name="currentIndex">
@@ -472,6 +472,44 @@
          <enum>Qt::Horizontal</enum>
         </property>
        </widget>
+       <widget class="QSlider" name="hSlider">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>290</y>
+          <width>331</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="pageStep">
+         <number>1</number>
+        </property>
+        <property name="value">
+         <number>10</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QSlider" name="vSlider">
+        <property name="geometry">
+         <rect>
+          <x>340</x>
+          <y>10</y>
+          <width>19</width>
+          <height>291</height>
+         </rect>
+        </property>
+        <property name="pageStep">
+         <number>1</number>
+        </property>
+        <property name="value">
+         <number>10</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
       </widget>
      </widget>
      <widget class="QPushButton" name="saveResultButtom">
@@ -529,7 +567,7 @@
       <property name="geometry">
        <rect>
         <x>280</x>
-        <y>10</y>
+        <y>0</y>
         <width>75</width>
         <height>23</height>
        </rect>
@@ -1057,6 +1095,48 @@
      <string>TextLabel</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="trainButton">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>440</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>train</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="getDataButton">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>440</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>GetTrainData</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="SetButtom">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>410</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Set</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -1064,7 +1144,7 @@
      <x>0</x>
      <y>0</y>
      <width>642</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

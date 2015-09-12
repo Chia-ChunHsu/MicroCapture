@@ -65,6 +65,8 @@ public:
     QSlider *iclassslider2;
     QSlider *iclassslider3;
     QSlider *iclassslider4;
+    QSlider *hSlider;
+    QSlider *vSlider;
     QPushButton *saveResultButtom;
     QSlider *CapResultSlider;
     QPushButton *SaveCap;
@@ -107,6 +109,9 @@ public:
     QSlider *hSlider03;
     QLabel *showlabel1;
     QLabel *showlabel2;
+    QPushButton *trainButton;
+    QPushButton *getDataButton;
+    QPushButton *SetButtom;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -137,7 +142,7 @@ public:
         LoadCapPic->setGeometry(QRect(370, 290, 241, 21));
         tabWidget_2 = new QTabWidget(DetectTab);
         tabWidget_2->setObjectName(QStringLiteral("tabWidget_2"));
-        tabWidget_2->setGeometry(QRect(10, 10, 351, 321));
+        tabWidget_2->setGeometry(QRect(10, 10, 361, 341));
         tab_2 = new QWidget();
         tab_2->setObjectName(QStringLiteral("tab_2"));
         FilterLabel2 = new QLabel(tab_2);
@@ -246,6 +251,18 @@ public:
         iclassslider4->setGeometry(QRect(270, 270, 70, 22));
         iclassslider4->setMaximum(255);
         iclassslider4->setOrientation(Qt::Horizontal);
+        hSlider = new QSlider(tab_4);
+        hSlider->setObjectName(QStringLiteral("hSlider"));
+        hSlider->setGeometry(QRect(10, 290, 331, 19));
+        hSlider->setPageStep(1);
+        hSlider->setValue(10);
+        hSlider->setOrientation(Qt::Horizontal);
+        vSlider = new QSlider(tab_4);
+        vSlider->setObjectName(QStringLiteral("vSlider"));
+        vSlider->setGeometry(QRect(340, 10, 19, 291));
+        vSlider->setPageStep(1);
+        vSlider->setValue(10);
+        vSlider->setOrientation(Qt::Vertical);
         tabWidget_2->addTab(tab_4, QString());
         saveResultButtom = new QPushButton(DetectTab);
         saveResultButtom->setObjectName(QStringLiteral("saveResultButtom"));
@@ -263,7 +280,7 @@ public:
         SaveCap->setGeometry(QRect(369, 319, 241, 21));
         TestButton = new QPushButton(DetectTab);
         TestButton->setObjectName(QStringLiteral("TestButton"));
-        TestButton->setGeometry(QRect(280, 10, 75, 23));
+        TestButton->setGeometry(QRect(280, 0, 75, 23));
         tabClassifier->addTab(DetectTab, QString());
         CalibrationTab = new QWidget();
         CalibrationTab->setObjectName(QStringLiteral("CalibrationTab"));
@@ -403,10 +420,20 @@ public:
         showlabel2 = new QLabel(centralWidget);
         showlabel2->setObjectName(QStringLiteral("showlabel2"));
         showlabel2->setGeometry(QRect(190, 440, 47, 12));
+        trainButton = new QPushButton(centralWidget);
+        trainButton->setObjectName(QStringLiteral("trainButton"));
+        trainButton->setGeometry(QRect(280, 440, 75, 23));
+        getDataButton = new QPushButton(centralWidget);
+        getDataButton->setObjectName(QStringLiteral("getDataButton"));
+        getDataButton->setEnabled(false);
+        getDataButton->setGeometry(QRect(370, 440, 75, 23));
+        SetButtom = new QPushButton(centralWidget);
+        SetButtom->setObjectName(QStringLiteral("SetButtom"));
+        SetButtom->setGeometry(QRect(370, 410, 75, 23));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 642, 21));
+        menuBar->setGeometry(QRect(0, 0, 642, 22));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -496,6 +523,9 @@ public:
         checkBox4->setText(QString());
         showlabel1->setText(QApplication::translate("MainWindow", "TextLabel", 0));
         showlabel2->setText(QApplication::translate("MainWindow", "TextLabel", 0));
+        trainButton->setText(QApplication::translate("MainWindow", "train", 0));
+        getDataButton->setText(QApplication::translate("MainWindow", "GetTrainData", 0));
+        SetButtom->setText(QApplication::translate("MainWindow", "Set", 0));
     } // retranslateUi
 
 };

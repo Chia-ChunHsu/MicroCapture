@@ -16,6 +16,7 @@
 #include "opencv2/stitching/detail/blenders.hpp"
 #include <QTextCodec>
 #include "opencv2/imgproc/imgproc.hpp"
+#include "ml/ml.hpp"
 #include <QList>
 #include <QCameraInfo>
 #include <QProgressBar>
@@ -80,6 +81,17 @@ private slots:
 
     void on_iclassslider3_sliderMoved(int position);
 
+    void on_trainButton_clicked();
+
+    void on_hSlider_sliderMoved(int position);
+
+    void on_vSlider_sliderMoved(int position);
+
+    void on_SetButtom_clicked();
+
+
+    void on_getDataButton_clicked();
+
 private:
 
     Ui::MainWindow *ui;
@@ -119,13 +131,20 @@ private:
     std::vector<cv::Point> tempPoint;
 
 
+    std::vector<cv::Mat> cutTempMat;
 
-    int k();
-    cv::Mat gaussianDistance( cv::vector<cv::Point2f> points, float sigma = 1.0, float division_factor = 1.0 );
-    cv::Mat degreeMatrix( cv::Mat& adjacency );
-    void plot( cv::Mat& img, cv::Mat& points, cv::Mat& labels );
-    void plot( cv::Mat& img, std::vector<cv::Point2f>& points, cv::Scalar color = cv::Scalar(0) );
-    cv::vector<cv::Point2f> createCircles( int center_x, int center_y, float radius, int n_samples );
+    std::vector<cv::Mat> savetrainMat;
+
+    cv::Mat saveMat;
+
+
+
+//    int k();
+//    cv::Mat gaussianDistance( cv::vector<cv::Point2f> points, float sigma = 1.0, float division_factor = 1.0 );
+//    cv::Mat degreeMatrix( cv::Mat& adjacency );
+//    void plot( cv::Mat& img, cv::Mat& points, cv::Mat& labels );
+//    void plot( cv::Mat& img, std::vector<cv::Point2f>& points, cv::Scalar color = cv::Scalar(0) );
+//    cv::vector<cv::Point2f> createCircles( int center_x, int center_y, float radius, int n_samples );
 };
 
 #endif // MAINWINDOW_H
