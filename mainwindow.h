@@ -23,6 +23,7 @@
 #include <QDialog>
 #include "thread_stitch.h"
 #include "autocameradialog.h"
+#include <opencv2/core/core.hpp>
 
 namespace Ui {
 class MainWindow;
@@ -38,6 +39,7 @@ public:
     void ShowOnLabel(cv::Mat mat,QLabel *k);
     int Cal();
     void Stitch(int value);
+    void predictresult(int y,int x);
 
 
 private slots:
@@ -92,6 +94,8 @@ private slots:
 
     void on_getDataButton_clicked();
 
+    void on_PredictButton_clicked();
+
 private:
 
     Ui::MainWindow *ui;
@@ -138,13 +142,11 @@ private:
     cv::Mat saveMat;
 
 
+    CvSVM svm;
 
-//    int k();
-//    cv::Mat gaussianDistance( cv::vector<cv::Point2f> points, float sigma = 1.0, float division_factor = 1.0 );
-//    cv::Mat degreeMatrix( cv::Mat& adjacency );
-//    void plot( cv::Mat& img, cv::Mat& points, cv::Mat& labels );
-//    void plot( cv::Mat& img, std::vector<cv::Point2f>& points, cv::Scalar color = cv::Scalar(0) );
-//    cv::vector<cv::Point2f> createCircles( int center_x, int center_y, float radius, int n_samples );
+    cv::Mat predict;
+
+
 };
 
 #endif // MAINWINDOW_H

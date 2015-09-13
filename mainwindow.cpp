@@ -550,11 +550,8 @@ void MainWindow::on_CapturePicture_clicked()
 
     statusProgressBar->setValue(0);
 
-    //QStringList fileNames = QFileDialog::getOpenFileNames(this,tr("Open Image"), "D:/Code/FourCapture/", tr("Image Files (*.jpg)"));
-
     int DeviceID[4]={-1,-1,-1,-1};
     QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
-
 
     if(VideoName.size() == 0)
     {
@@ -675,11 +672,7 @@ void MainWindow::on_CapturePicture_clicked()
     statusProgressBar->setValue(100);
     ui->CapResultSlider->setEnabled(true);
     ui->saveResultButtom->setEnabled(true);
-
-
 }
-
-
 
 void MainWindow::on_CaptureBLRef_clicked()
 {
@@ -977,13 +970,13 @@ void MainWindow::on_shadowButton_clicked()
         {
             bool bool1 = false;
             bool bool3 = false;
-            if(j-y1+t1.y >=0 && i-x1+t1.x >=0 && j-y1+t1.y <tempWarp[1].rows && i-x1+t1.x <tempWarp[1].cols)
+            if(j-y1+t1.y+(CorPoint[0].y-t1.y) >=0 && i-x1+t1.x+(CorPoint[0].x-t1.x) >=0 && j-y1+t1.y+(CorPoint[0].y-t1.y) <tempWarp[1].rows && i-x1+t1.x+(CorPoint[0].x-t1.x) <tempWarp[1].cols)
             {
-                bool1 = ( tempWarp[1].at<cv::Vec3b>(j-y1+t1.y,i-x1+t1.x)[0]+tempWarp[1].at<cv::Vec3b>(j-y1+t1.y,i-x1+t1.x)[1]+tempWarp[1].at<cv::Vec3b>(j-y1+t1.y,i-x1+t1.x)[2])/3 < threv1;
+                bool1 = ( tempWarp[1].at<cv::Vec3b>(j-y1+t1.y+(CorPoint[0].y-t1.y),i-x1+t1.x+(CorPoint[0].x-t1.x))[0]+tempWarp[1].at<cv::Vec3b>(j-y1+t1.y+(CorPoint[0].y-t1.y),i-x1+t1.x+(CorPoint[0].x-t1.x))[1]+tempWarp[1].at<cv::Vec3b>(j-y1+t1.y+(CorPoint[0].y-t1.y),i-x1+t1.x+(CorPoint[0].x-t1.x))[2])/3 < threv1;
             }
-            if(j-y3+t1.y >=0 && i-x3+t1.x >=0 && j-y3+t1.y <tempWarp[3].rows && i-x3+t1.x <tempWarp[3].cols)
+            if(j-y3+t1.y+(CorPoint[1].y-t1.y) >=0 && i-x3+t1.x+(CorPoint[2].x-t1.x) >=0 && j-y3+t1.y+(CorPoint[1].y-t1.y) <tempWarp[3].rows && i-x3+t1.x+(CorPoint[2].x-t1.x) <tempWarp[3].cols)
             {
-                bool3 = ( tempWarp[3].at<cv::Vec3b>(j-y3+t1.y,i-x3+t1.x)[0]+tempWarp[3].at<cv::Vec3b>(j-y3+t1.y,i-x3+t1.x)[1]+tempWarp[3].at<cv::Vec3b>(j-y3+t1.y,i-x3+t1.x)[2])/3 > threv3;
+                bool3 = ( tempWarp[3].at<cv::Vec3b>(j-y3+t1.y+(CorPoint[1].y-t1.y),i-x3+t1.x+(CorPoint[2].x-t1.x))[0]+tempWarp[3].at<cv::Vec3b>(j-y3+t1.y+(CorPoint[1].y-t1.y),i-x3+t1.x+(CorPoint[2].x-t1.x))[1]+tempWarp[3].at<cv::Vec3b>(j-y3+t1.y+(CorPoint[1].y-t1.y),i-x3+t1.x+(CorPoint[2].x-t1.x))[2])/3 > threv3;
             }
             if(bool1==true && bool3 == true)
             {
@@ -1002,9 +995,9 @@ void MainWindow::on_shadowButton_clicked()
 
     //cv::imshow("shadow",shadow);
     int erosion_elem = 0;
-    int erosion_size = 8;
+    int erosion_size = 11;
     int dilation_elem = 0;
-    int dilation_size = 8;
+    int dilation_size = 10;
     int const max_elem = 2;
     int const max_kernel_size = 21;
 
@@ -1029,11 +1022,6 @@ void MainWindow::on_shadowButton_clicked()
     cv::erode(shadow,eroMat,eroelement);
     cv::dilate(eroMat,MaskResult,dilelement);
     cv::imshow("dilate",MaskResult);
-
-    //    MaskResult.release();
-
-    //    MaskResult = dilMat.clone();
-
 }
 
 void MainWindow::on_TestButton_clicked()
@@ -1046,161 +1034,7 @@ void MainWindow::on_TestButton_clicked()
         cv::circle(temp,tempPoint[number],1,cv::Scalar(255,0,0),1,8,0);
     }
     cv::imshow("temp",temp);
-
-    //    int clusterCount =2;
-    //    int dimensions = 5;
-    //    int sampleCount = tempPoint.size();
-    //    cv::Mat points(sampleCount,dimensions,CV_32F);
-    //    cv::Mat labels;
-    //    cv::Mat centers(clusterCount,1,points.type());
-
-    //    for(int i=24;i<points.rows;i++)
-    //    {
-    //        for(int j =0 ;j<points.cols;j++)
-    //        {
-    //            points.at<float>(i,j) = 20;
-    //        }
-    //    }
-
-    //    cv::kmeans(points,clusterCount,labels,cv::TermCriteria( CV_TERMCRIT_EPS+CV_TERMCRIT_ITER, 10, 1.0), 3, cv::KMEANS_PP_CENTERS, centers);
-    //    cv::imshow("pints",points);
-    //    cv::imshow("Centers",centers);
-    //    cv::imshow("Labels ",labels);
-
-
-    //k();
 }
-
-////===========================================================
-//cv::vector<cv::Point2f> MainWindow::createCircles( int center_x, int center_y, float radius, int n_samples ){
-//    cv::vector<cv::Point2f> result;
-//    cv::Point2f center ( center_x, center_y );
-
-//    cv::RNG rng;
-
-//    for( int i = 0; i < n_samples; i++ ) {
-//        float x = rng.gaussian( radius ) *  (rand() % 2 == 0 ? 1.0 : -1.0 );
-//        float y = rng.gaussian( radius ) *  (rand() % 2 == 0 ? 1.0 : -1.0 );
-
-//        result.push_back( center + cv::Point2f(x, y) );
-//    }
-
-//    return result;
-//}
-
-//void MainWindow::plot( cv::Mat& img, cv::vector<cv::Point2f>& points, cv::Scalar color ) {
-//    for( cv::Point2f point: points)
-//        cv::circle( img, point, 2, color, 2 );
-//}
-
-///**
-// * Plot points and color it based on the given labels
-// **/
-//void MainWindow::plot( cv::Mat& img, cv::Mat& points, cv::Mat& labels ) {
-//    int total = points.rows;
-
-//    if( total < 1 )
-//        return;
-
-//    static cv::Scalar colors[] = {
-//        cv::Scalar(255, 0, 0), cv::Scalar(0, 255, 0), cv::Scalar(0, 0, 255),
-//        cv::Scalar(255, 255, 0), cv::Scalar(255, 0, 255), cv::Scalar(0, 255, 255)
-//    };
-
-//    int * labels_ptr = labels.ptr<int>(0);
-//    cv::Point2f * points_ptr = points.ptr<cv::Point2f>( 0 );
-
-//    for( int i = 0; i < total; i++ )
-//        cv::circle( img, points_ptr[i], 2, colors[labels_ptr[i]], 2 );
-//}
-
-///**
-// * Create a degree matrix out from the given adjacency matrix
-// **/
-//cv::Mat MainWindow::degreeMatrix( cv::Mat& adjacency ) {
-//    int cols = adjacency.cols;
-
-//    cv::Mat degree( 1, cols, CV_32FC1 );
-//    for( int col = 0; col < cols; col++ )
-//        degree.at<float>(0, col) = sum(adjacency.col( col ))[0];
-
-//    return degree;
-//}
-
-///**
-// * Create an adjacency matrix based on the gaussian distance between the points
-// **/
-//cv::Mat MainWindow::gaussianDistance( cv::vector<cv::Point2f> points, float sigma, float division_factor) {
-//    int m = static_cast<int>(points.size());
-//    cv::Mat adjacency(m, m, CV_32FC1, cv::Scalar(0.0));
-
-//    for( int i = 0; i < m; i++ ) {
-//        float * ptr = adjacency.ptr<float>(i);
-//        for( int j = 0; j < m; j++ ) {
-//            if( i >= j )
-//                continue;
-//            /* Yeah, this is because when the original coordinates is used, it's bound to overflow in later part */
-//            cv::Point2f p1(points[i].x / division_factor, points[i].y / division_factor);
-//            cv::Point2f p2(points[j].x / division_factor, points[j].y / division_factor);
-//            ptr[j] = (p1 - p2).dot(p1 - p2);
-//        }
-//    }
-
-//    completeSymm( adjacency );
-
-//    adjacency = -adjacency / (2.0 * sigma * sigma);
-//    cv::exp( adjacency, adjacency );
-//    adjacency = adjacency - cv::Mat::eye(m, m, CV_32FC1 );
-
-//    return adjacency;
-//}
-
-
-//int MainWindow::k() {
-//    /* Create 2 blobs of points */
-//    //    std::vector<cv::Point2f> points1 = createCircles( 150, 150, 50.0f, 500 );
-//    //    std::vector<cv::Point2f> points2 = createCircles( 450, 450, 40.0f, 500 );
-//    std::vector<cv::Point2f> points;
-//    //    points.insert( points.end(), points1.begin(), points1.end() );
-//    //    points.insert( points.end(), points2.begin(), points2.end() );
-//    points.insert( points.end(),tempPoint.begin(),tempPoint.end());
-
-//    /* Create adjacency and degree matrices */
-//    cv::Mat adjacency = gaussianDistance( points, 0.1f, 500.0f );
-//    cv::Mat degree = degreeMatrix( adjacency );
-
-//    /* Create laplacian matrix */
-//    cv::Mat L = cv::Mat::diag( degree ) - adjacency;
-//    cv::Mat degree_05;
-//    pow( degree, -0.5, degree_05 );
-//    degree_05 = cv::Mat::diag( degree_05 );
-//    L = (degree_05 * L) * degree_05;
-
-//    /* Perform eigen decompositions */
-//    cv::Mat eigenvalues, eigenvectors;
-//    cv::eigen( L, eigenvalues, eigenvectors );
-
-//    /* Since it's automatically sorted in descending order, take the last two entries of eigenvectors */
-//    eigenvectors = eigenvectors.rowRange( eigenvectors.rows - 2, eigenvectors.rows ).t();
-
-//    /* Perform K-means on eigenvectors */
-//    cv::Mat labels;
-//    cv::kmeans( eigenvectors, 2, labels, cv::TermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 1000, 1e-5), 2, cv::KMEANS_RANDOM_CENTERS );
-
-//    /* Plot it out */
-//    cv::Mat img(600, 600, CV_8UC3, cv::Scalar(255, 255, 255) );
-//    plot( img, points );
-
-//    cv::Mat points_mat( points );
-//    plot( img, points_mat, labels );
-
-//    cv::namedWindow( "Spectral Clustering on OpenCV" );
-//    cv::moveWindow( "Spectral Clustering on OpenCV", 0, 0 );
-//    cv::imshow( "Spectral Clustering on OpenCV", img );
-//    cv::waitKey();
-
-//    return 0;
-//}
 
 void MainWindow::on_hclassslider1_sliderMoved(int position)
 {
@@ -1291,13 +1125,6 @@ void MainWindow::on_trainButton_clicked()
     int img_area = 3*3;
     cv::Mat training_mat(num_files,img_area,CV_32FC1);
 
-//    Mat img_mat = imread(imgname,0); // I used 0 for greyscale
-//    int ii = 0; // Current column in training_mat
-//    for (int i = 0; i<img_mat.rows; i++) {
-//        for (int j = 0; j < img_mat.cols; j++) {
-//            training_mat.at<float>(file_num,ii++) = img_mat.at<uchar>(i,j);
-//        }
-//    }
     std::vector<cv::Mat> img_mat;// = cv::imread()
     QStringList filenames = QFileDialog::getOpenFileNames(this,
                                                           tr("Open Train Image"), "/D", tr("Image Files (*.jpg)"));
@@ -1317,11 +1144,6 @@ void MainWindow::on_trainButton_clicked()
             }
         }
     }
-
-    CvSVMParams params;
-    params.svm_type = CvSVM::C_SVC;
-    params.kernel_type = CvSVM::POLY;
-    params.gamma = 3;
 
 
 }
@@ -1349,7 +1171,7 @@ void MainWindow::on_vSlider_sliderMoved(int position)
         t1.y = std::min(t1.y,CorPoint[i].y);
     }
 
-    int size = 1;
+    int size = 3;
     cv::rectangle(cutTempMat[0],cv::Point(x-(CorPoint[0].x-t1.x)-size,y-(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[0].x-t1.x)+size,y-(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
     //qDebug()<<"0==  "<<x-(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[0].y-t1.y)-10;
     cv::rectangle(cutTempMat[1],cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
@@ -1370,30 +1192,31 @@ void MainWindow::on_vSlider_sliderMoved(int position)
 
     savetrainMat.clear();
 
-    if(x-(CorPoint[0].x-t1.x)-size>1 && x-(CorPoint[0].x-t1.x)+size <ClassMat[0].cols-1 && y-(CorPoint[0].y-t1.y)-size >1 && y-(CorPoint[0].y-t1.y)+size<ClassMat[0].rows-1)
+    int cutsize = 1;
+    if(x-(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[0].x-t1.x)+cutsize <ClassMat[0].cols-1 && y-(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[0].y-t1.y)+cutsize<ClassMat[0].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[0].x-t1.x)-size,y-(CorPoint[0].y-t1.y)-size,3,3);
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[0].y-t1.y)-cutsize,cutsize,cutsize);
         cv::Mat temp = ClassMat[0](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
-    if(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-size>1 && x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+size <ClassMat[1].cols-1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-size >1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+size<ClassMat[1].rows-1)
+    if(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[1].cols-1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[1].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-size,3,3);
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,cutsize,cutsize);
         cv::Mat temp = ClassMat[1](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
-    if(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-size>1 && x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)+size <ClassMat[2].cols-1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-size >1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)+size<ClassMat[2].rows-1)
+    if(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[2].cols-1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[2].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-size,3,3);
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,cutsize,cutsize);
         cv::Mat temp = ClassMat[2](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
-    if(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-size>1 && x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)+size <ClassMat[3].cols-1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-size >1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)+size<ClassMat[3].rows-1)
+    if(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize>1 && x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)+cutsize <ClassMat[3].cols-1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize >1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)+cutsize<ClassMat[3].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-size,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-size,3,3);
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize,cutsize,cutsize);
         cv::Mat temp = ClassMat[3](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
@@ -1402,16 +1225,16 @@ void MainWindow::on_vSlider_sliderMoved(int position)
     {
         cv::Mat temp;
 
-        temp.create(12,3,CV_MAKETYPE(temp.type(),3));
+        temp.create(4*cutsize,cutsize,CV_MAKETYPE(temp.type(),3));
         for(int number =0;number<4;number++)
         {
-            for(int i=0;i<3;i++)
+            for(int i=0;i<1;i++)
             {
-                for(int j=0;j<3;j++)
+                for(int j=0;j<1;j++)
                 {
-                    temp.at<cv::Vec3b>(j+3*number,i)[0] = savetrainMat[number].at<cv::Vec3b>(j,i)[0];
-                    temp.at<cv::Vec3b>(j+3*number,i)[1] = savetrainMat[number].at<cv::Vec3b>(j,i)[1];
-                    temp.at<cv::Vec3b>(j+3*number,i)[2] = savetrainMat[number].at<cv::Vec3b>(j,i)[2];
+                    temp.at<cv::Vec3b>(j+cutsize*number,i)[0] = savetrainMat[number].at<cv::Vec3b>(j,i)[0];
+                    temp.at<cv::Vec3b>(j+cutsize*number,i)[1] = savetrainMat[number].at<cv::Vec3b>(j,i)[1];
+                    temp.at<cv::Vec3b>(j+cutsize*number,i)[2] = savetrainMat[number].at<cv::Vec3b>(j,i)[2];
                 }
             }
         }
@@ -1422,9 +1245,6 @@ void MainWindow::on_vSlider_sliderMoved(int position)
     {
         ui->getDataButton->setEnabled(false);
     }
-
-
-
 }
 
 void MainWindow::on_SetButtom_clicked()
@@ -1442,11 +1262,147 @@ void MainWindow::on_SetButtom_clicked()
     }
 }
 
-
 void MainWindow::on_getDataButton_clicked()
 {
     QString name = QFileDialog::getSaveFileName(this, tr("Save File"),
-                                                "/untitled.png",
+                                                "/untitled.jpg",
                                                 tr("Images (*.jpg)"));
     cv::imwrite(name.toStdString(),saveMat);
+}
+
+void MainWindow::on_PredictButton_clicked()
+{
+    predict.create(CapResult.rows,CapResult.cols,CV_MAKETYPE(predict.type(),3));
+    predict = cv::Scalar::all(0);
+    svm.load("SVM.txt");
+    for(int i=0;i<CapResult.cols;i++)
+    {
+        for(int j=0;j<CapResult.rows;j++)
+        {
+            if(MaskResult.at<cv::Vec3b>(j,i)[0] != 0)
+                predictresult(j,i);
+        }
+    }
+    cv::imshow("Result Predict",predict);
+    QString saveResultFile = QFileDialog::getSaveFileName(this, tr("Save File"),
+                                                          "untitled.jpg",
+                                                          tr("Images (*.jpg)"));
+    if(saveResultFile.isEmpty())
+    {
+        return;
+    }
+    else
+    {
+        cv::imwrite(saveResultFile.toStdString(),predict);
+    }
+
+
+}
+
+void MainWindow::predictresult(int y,int x)
+{
+    for(int i=0;i<ClassMat.size();i++)
+    {
+         cutTempMat[i] = ClassMat[i].clone();
+    }
+    cv::Point t1(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
+    for(int i=0;i<CorPoint.size();i++)
+    {
+        t1.x = std::min(t1.x,CorPoint[i].x);
+        t1.y = std::min(t1.y,CorPoint[i].y);
+    }
+
+    int size = 3;
+    cv::rectangle(cutTempMat[0],cv::Point(x-(CorPoint[0].x-t1.x)-size,y-(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[0].x-t1.x)+size,y-(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
+    //qDebug()<<"0==  "<<x-(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[0].y-t1.y)-10;
+    cv::rectangle(cutTempMat[1],cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
+    //qDebug()<<"1==  "<<x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-10;
+    cv::rectangle(cutTempMat[2],cv::Point(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)+size,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
+    //qDebug()<<"2==  "<<x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-10;
+    cv::rectangle(cutTempMat[3],cv::Point(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-size,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-size),cv::Point(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)+size,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
+
+
+
+    savetrainMat.clear();
+
+    int cutsize = 1;
+    if(x-(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[0].x-t1.x)+cutsize <ClassMat[0].cols-1 && y-(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[0].y-t1.y)+cutsize<ClassMat[0].rows-1)
+    {
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[0].y-t1.y)-cutsize,cutsize,cutsize);
+        cv::Mat temp = cutTempMat[0](rect_roi);
+        //cv::imshow("temp",temp);
+        savetrainMat.push_back(temp);
+    }
+    if(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[1].cols-1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[1].rows-1)
+    {
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,cutsize,cutsize);
+        cv::Mat temp = cutTempMat[1](rect_roi);
+        //cv::imshow("temp",temp);
+        savetrainMat.push_back(temp);
+    }
+    if(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[2].cols-1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[2].rows-1)
+    {
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,cutsize,cutsize);
+        cv::Mat temp = cutTempMat[2](rect_roi);
+        //cv::imshow("temp",temp);
+        savetrainMat.push_back(temp);
+    }
+    if(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize>1 && x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)+cutsize <ClassMat[3].cols-1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize >1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)+cutsize<ClassMat[3].rows-1)
+    {
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize,cutsize,cutsize);
+        cv::Mat temp = cutTempMat[3](rect_roi);
+        //cv::imshow("temp",temp);
+        savetrainMat.push_back(temp);
+    }
+    cv::Mat cut;
+    if(savetrainMat.size()==4)
+    {
+        cv::Mat temp;
+
+        temp.create(4*cutsize,cutsize,CV_MAKETYPE(temp.type(),3));
+        for(int number =0;number<4;number++)
+        {
+            for(int i=0;i<1;i++)
+            {
+                for(int j=0;j<1;j++)
+                {
+                    temp.at<cv::Vec3b>(j+cutsize*number,i)[0] = savetrainMat[number].at<cv::Vec3b>(j,i)[0];
+                    temp.at<cv::Vec3b>(j+cutsize*number,i)[1] = savetrainMat[number].at<cv::Vec3b>(j,i)[1];
+                    temp.at<cv::Vec3b>(j+cutsize*number,i)[2] = savetrainMat[number].at<cv::Vec3b>(j,i)[2];
+                }
+            }
+        }
+        ui->getDataButton->setEnabled(true);
+        cut = temp.clone();
+    }
+
+    int ii=0;
+    cv::Mat Result1D(1,1*4,CV_32FC1);
+    //cv::Mat trainingImage;
+    for(int i=0;i<cut.rows;i++)
+    {
+        for(int j=0;j<cut.cols;j++)
+        {
+            Result1D.at<float>(0,ii++) = cut.at<uchar>(i,j);
+        }
+    }
+
+    svm.load("SVM.txt");
+    float resultclass = svm.predict(Result1D);
+    //qDebug()<<"Resut: "<< resultclass;
+    if(y<predict.rows && x<predict.cols && y>=0 && x>=0)
+    if(resultclass == 0)
+    {
+        predict.at<cv::Vec3b>(y,x)[0] = 0;
+        predict.at<cv::Vec3b>(y,x)[1] = 255;
+        predict.at<cv::Vec3b>(y,x)[2] = 0;
+    }
+    else if(resultclass == 2)
+    {
+        predict.at<cv::Vec3b>(y,x)[0] = 0;
+        predict.at<cv::Vec3b>(y,x)[1] = 0;
+        predict.at<cv::Vec3b>(y,x)[2] = 255;
+    }
+
+
 }

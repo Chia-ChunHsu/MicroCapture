@@ -42,6 +42,7 @@ LIBS+= $$OPENCVLIB/opencv_core249d.lib\
        $$OPENCVLIB/opencv_ocl249d.lib\
        $$OPENCVLIB/opencv_stitching249d.lib\
        $$OPENCVLIB/opencv_ml249d.lib
+
 }
 
 CONFIG(release, debug|release){
@@ -53,7 +54,8 @@ LIBS+= $$OPENCVLIB/opencv_core249.lib\
        $$OPENCVLIB/opencv_imgproc249.lib\
        $$OPENCVLIB/opencv_ocl249.lib\
        $$OPENCVLIB/opencv_stitching249.lib\
-       $$OPENCVLIB/opencv_ml249.lib
+       $$OPENCVLIB/opencv_ml249.lib\
+
 }
 
 DEFINES += HAVE_OPENCV
