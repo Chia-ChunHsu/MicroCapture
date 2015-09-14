@@ -113,6 +113,7 @@ public:
     QPushButton *getDataButton;
     QPushButton *SetButtom;
     QPushButton *PredictButton;
+    QPushButton *getData3x3Button;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -423,14 +424,14 @@ public:
         showlabel2->setGeometry(QRect(190, 440, 47, 12));
         trainButton = new QPushButton(centralWidget);
         trainButton->setObjectName(QStringLiteral("trainButton"));
-        trainButton->setGeometry(QRect(280, 440, 75, 23));
+        trainButton->setGeometry(QRect(130, 450, 75, 23));
         getDataButton = new QPushButton(centralWidget);
         getDataButton->setObjectName(QStringLiteral("getDataButton"));
         getDataButton->setEnabled(false);
-        getDataButton->setGeometry(QRect(370, 440, 75, 23));
+        getDataButton->setGeometry(QRect(370, 420, 75, 23));
         SetButtom = new QPushButton(centralWidget);
         SetButtom->setObjectName(QStringLiteral("SetButtom"));
-        SetButtom->setGeometry(QRect(370, 410, 75, 23));
+        SetButtom->setGeometry(QRect(280, 420, 75, 23));
         PredictButton = new QPushButton(centralWidget);
         PredictButton->setObjectName(QStringLiteral("PredictButton"));
         PredictButton->setGeometry(QRect(470, 420, 161, 51));
@@ -439,6 +440,10 @@ public:
         font.setBold(true);
         font.setWeight(75);
         PredictButton->setFont(font);
+        getData3x3Button = new QPushButton(centralWidget);
+        getData3x3Button->setObjectName(QStringLiteral("getData3x3Button"));
+        getData3x3Button->setEnabled(false);
+        getData3x3Button->setGeometry(QRect(370, 450, 75, 23));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -536,6 +541,7 @@ public:
         getDataButton->setText(QApplication::translate("MainWindow", "GetTrainData", 0));
         SetButtom->setText(QApplication::translate("MainWindow", "Set", 0));
         PredictButton->setText(QApplication::translate("MainWindow", "Predict", 0));
+        getData3x3Button->setText(QApplication::translate("MainWindow", "Get Data3*3", 0));
     } // retranslateUi
 
 };

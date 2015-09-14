@@ -1195,28 +1195,28 @@ void MainWindow::on_vSlider_sliderMoved(int position)
     int cutsize = 1;
     if(x-(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[0].x-t1.x)+cutsize <ClassMat[0].cols-1 && y-(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[0].y-t1.y)+cutsize<ClassMat[0].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[0].y-t1.y)-cutsize,cutsize,cutsize);
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[0].y-t1.y)-cutsize,size,size);
         cv::Mat temp = ClassMat[0](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
     if(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[1].cols-1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[1].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,cutsize,cutsize);
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,size,size);
         cv::Mat temp = ClassMat[1](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
     if(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[2].cols-1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[2].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,cutsize,cutsize);
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,size,size);
         cv::Mat temp = ClassMat[2](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
     if(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize>1 && x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)+cutsize <ClassMat[3].cols-1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize >1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)+cutsize<ClassMat[3].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize,cutsize,cutsize);
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize,size,size);
         cv::Mat temp = ClassMat[3](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
@@ -1225,16 +1225,22 @@ void MainWindow::on_vSlider_sliderMoved(int position)
     {
         cv::Mat temp;
 
-        temp.create(4*cutsize,cutsize,CV_MAKETYPE(temp.type(),3));
+        temp.create(4*cutsize*cutsize,1,CV_MAKETYPE(temp.type(),3));
         for(int number =0;number<4;number++)
         {
-            for(int i=0;i<1;i++)
+            for(int i=1;i<=cutsize;i++)
             {
-                for(int j=0;j<1;j++)
+                for(int j=1;j<=cutsize;j++)
                 {
-                    temp.at<cv::Vec3b>(j+cutsize*number,i)[0] = savetrainMat[number].at<cv::Vec3b>(j,i)[0];
-                    temp.at<cv::Vec3b>(j+cutsize*number,i)[1] = savetrainMat[number].at<cv::Vec3b>(j,i)[1];
-                    temp.at<cv::Vec3b>(j+cutsize*number,i)[2] = savetrainMat[number].at<cv::Vec3b>(j,i)[2];
+                    temp.at<cv::Vec3b>(j+cutsize*number,i)[0] =( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[0]
+                                                               +savetrainMat[number].at<cv::Vec3b>(j,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j,i)[0]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[0]
+                                                               +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[0])/9;
+                    temp.at<cv::Vec3b>(j+cutsize*number,i)[1] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[1]
+                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j,i)[1]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[1]
+                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[1])/9;
+                    temp.at<cv::Vec3b>(j+cutsize*number,i)[2] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[2]
+                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j,i)[2]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[2]
+                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[2])/9;
                 }
             }
         }
@@ -1366,9 +1372,15 @@ void MainWindow::predictresult(int y,int x)
             {
                 for(int j=0;j<1;j++)
                 {
-                    temp.at<cv::Vec3b>(j+cutsize*number,i)[0] = savetrainMat[number].at<cv::Vec3b>(j,i)[0];
-                    temp.at<cv::Vec3b>(j+cutsize*number,i)[1] = savetrainMat[number].at<cv::Vec3b>(j,i)[1];
-                    temp.at<cv::Vec3b>(j+cutsize*number,i)[2] = savetrainMat[number].at<cv::Vec3b>(j,i)[2];
+                    temp.at<cv::Vec3b>(j+cutsize*number,i)[0] =( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[0]
+                                                               +savetrainMat[number].at<cv::Vec3b>(j,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j,i)[0]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[0]
+                                                               +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[0])/9;
+                    temp.at<cv::Vec3b>(j+cutsize*number,i)[1] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[1]
+                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j,i)[1]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[1]
+                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[1])/9;
+                    temp.at<cv::Vec3b>(j+cutsize*number,i)[2] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[2]
+                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j,i)[2]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[2]
+                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[2])/9;
                 }
             }
         }
@@ -1377,7 +1389,7 @@ void MainWindow::predictresult(int y,int x)
     }
 
     int ii=0;
-    cv::Mat Result1D(1,1*4,CV_32FC1);
+    cv::Mat Result1D(1,4,CV_32FC1);
     //cv::Mat trainingImage;
     for(int i=0;i<cut.rows;i++)
     {
@@ -1405,4 +1417,12 @@ void MainWindow::predictresult(int y,int x)
     }
 
 
+}
+
+void MainWindow::on_getData3x3Button_clicked()
+{
+    QString name = QFileDialog::getSaveFileName(this, tr("Save File"),
+                                                "/untitled.jpg",
+                                                tr("Images (*.jpg)"));
+    cv::imwrite(name.toStdString(),saveMat3);
 }

@@ -96,6 +96,8 @@ private slots:
 
     void on_PredictButton_clicked();
 
+    void on_getData3x3Button_clicked();
+
 private:
 
     Ui::MainWindow *ui;
@@ -139,7 +141,9 @@ private:
 
     std::vector<cv::Mat> savetrainMat;
 
+
     cv::Mat saveMat;
+    cv::Mat saveMat3;
 
 
     CvSVM svm;
