@@ -447,7 +447,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 642, 21));
+        menuBar->setGeometry(QRect(0, 0, 642, 22));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -459,7 +459,7 @@ public:
         retranslateUi(MainWindow);
 
         tabClassifier->setCurrentIndex(0);
-        tabWidget_2->setCurrentIndex(1);
+        tabWidget_2->setCurrentIndex(2);
         stackedWidget->setCurrentIndex(0);
         ProgressList->setCurrentRow(0);
 

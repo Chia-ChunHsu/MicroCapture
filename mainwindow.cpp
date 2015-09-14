@@ -1150,18 +1150,12 @@ void MainWindow::on_trainButton_clicked()
 
 void MainWindow::on_hSlider_sliderMoved(int position)
 {
-
-}
-
-void MainWindow::on_vSlider_sliderMoved(int position)
-{
-
     for(int i=0;i<ClassMat.size();i++)
     {
          cutTempMat[i] = ClassMat[i].clone();
     }
     int x = ui->hSlider->value();
-    int y = ui->vSlider->maximum() - position;
+    int y = ui->vSlider->maximum() - ui->vSlider->value();
 
     //=======
     cv::Point t1(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
@@ -1171,7 +1165,7 @@ void MainWindow::on_vSlider_sliderMoved(int position)
         t1.y = std::min(t1.y,CorPoint[i].y);
     }
 
-    int size = 3;
+    int size = 1;
     cv::rectangle(cutTempMat[0],cv::Point(x-(CorPoint[0].x-t1.x)-size,y-(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[0].x-t1.x)+size,y-(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
     //qDebug()<<"0==  "<<x-(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[0].y-t1.y)-10;
     cv::rectangle(cutTempMat[1],cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
@@ -1232,15 +1226,126 @@ void MainWindow::on_vSlider_sliderMoved(int position)
             {
                 for(int j=1;j<=cutsize;j++)
                 {
-                    temp.at<cv::Vec3b>(j+cutsize*number,i)[0] =( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[0]
-                                                               +savetrainMat[number].at<cv::Vec3b>(j,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j,i)[0]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[0]
-                                                               +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[0])/9;
-                    temp.at<cv::Vec3b>(j+cutsize*number,i)[1] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[1]
-                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j,i)[1]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[1]
-                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[1])/9;
-                    temp.at<cv::Vec3b>(j+cutsize*number,i)[2] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[2]
-                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j,i)[2]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[2]
-                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[2])/9;
+//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[0] =( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[0]
+//                                                               +savetrainMat[number].at<cv::Vec3b>(j,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j,i)[0]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[0]
+//                                                               +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[0])/9;
+//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[1] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[1]
+//                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j,i)[1]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[1]
+//                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[1])/9;
+//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[2] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[2]
+//                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j,i)[2]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[2]
+//                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[2])/9;
+                    temp.at<cv::Vec3b>(j+cutsize*number,0)[0] = savetrainMat[number].at<cv::Vec3b>(j,i)[0];
+
+                    temp.at<cv::Vec3b>(j+cutsize*number,0)[1] = savetrainMat[number].at<cv::Vec3b>(j,i)[1];
+
+                    temp.at<cv::Vec3b>(j+cutsize*number,0)[2] = savetrainMat[number].at<cv::Vec3b>(j,i)[2];
+
+
+                }
+            }
+        }
+        ui->getDataButton->setEnabled(true);
+        saveMat = temp.clone();
+    }
+    else
+    {
+        ui->getDataButton->setEnabled(false);
+    }
+}
+
+void MainWindow::on_vSlider_sliderMoved(int position)
+{
+
+    for(int i=0;i<ClassMat.size();i++)
+    {
+         cutTempMat[i] = ClassMat[i].clone();
+    }
+    int x = ui->hSlider->value();
+    int y = ui->vSlider->maximum() - ui->vSlider->value();
+
+    //=======
+    cv::Point t1(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
+    for(int i=0;i<CorPoint.size();i++)
+    {
+        t1.x = std::min(t1.x,CorPoint[i].x);
+        t1.y = std::min(t1.y,CorPoint[i].y);
+    }
+
+    int size = 3;
+    cv::rectangle(cutTempMat[0],cv::Point(x-(CorPoint[0].x-t1.x)-size,y-(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[0].x-t1.x)+size,y-(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
+    //qDebug()<<"0==  "<<x-(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[0].y-t1.y)-10;
+    cv::rectangle(cutTempMat[1],cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
+    //qDebug()<<"1==  "<<x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-10;
+    cv::rectangle(cutTempMat[2],cv::Point(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)+size,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
+    //qDebug()<<"2==  "<<x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-10;
+    cv::rectangle(cutTempMat[3],cv::Point(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-size,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-size),cv::Point(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)+size,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
+    //qDebug()<<"3==  "<<x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-10<<" "<<y-(CorPoint[3].y-t1.y)+(CorPoint[2].y-t1.y)-10;
+
+    cv::imshow("cutTempMat[0]",cutTempMat[0]);
+    cv::imshow("cutTempMat[1]",cutTempMat[1]);
+    cv::imshow("cutTempMat[2]",cutTempMat[2]);
+    cv::imshow("cutTempMat[3]",cutTempMat[3]);
+    ShowOnLabel(cutTempMat[0],ui->classlabel1);
+    ShowOnLabel(cutTempMat[1],ui->classlabel2);
+    ShowOnLabel(cutTempMat[2],ui->classlabel3);
+    ShowOnLabel(cutTempMat[3],ui->classlabel4);
+
+    savetrainMat.clear();
+
+    int cutsize = 1;
+    if(x-(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[0].x-t1.x)+cutsize <ClassMat[0].cols-1 && y-(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[0].y-t1.y)+cutsize<ClassMat[0].rows-1)
+    {
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[0].y-t1.y)-cutsize,size,size);
+        cv::Mat temp = ClassMat[0](rect_roi);
+        //cv::imshow("temp",temp);
+        savetrainMat.push_back(temp);
+    }
+    if(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[1].cols-1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[1].rows-1)
+    {
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,size,size);
+        cv::Mat temp = ClassMat[1](rect_roi);
+        //cv::imshow("temp",temp);
+        savetrainMat.push_back(temp);
+    }
+    if(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[2].cols-1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[2].rows-1)
+    {
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,size,size);
+        cv::Mat temp = ClassMat[2](rect_roi);
+        //cv::imshow("temp",temp);
+        savetrainMat.push_back(temp);
+    }
+    if(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize>1 && x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)+cutsize <ClassMat[3].cols-1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize >1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)+cutsize<ClassMat[3].rows-1)
+    {
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize,size,size);
+        cv::Mat temp = ClassMat[3](rect_roi);
+        savetrainMat.push_back(temp);
+    }
+    if(savetrainMat.size()==4)
+    {
+        cv::Mat temp;
+
+        temp.create(4*cutsize*cutsize,1,CV_MAKETYPE(temp.type(),3));
+        for(int number =0;number<4;number++)
+        {
+            for(int i=0;i<cutsize;i++)
+            {
+                for(int j=0;j<cutsize;j++)
+                {
+//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[0] =( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[0]
+//                                                               +savetrainMat[number].at<cv::Vec3b>(j,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j,i)[0]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[0]
+//                                                               +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[0])/9;
+//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[1] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[1]
+//                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j,i)[1]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[1]
+//                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[1])/9;
+//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[2] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[2]
+//                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j,i)[2]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[2]
+//                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[2])/9;
+                    temp.at<cv::Vec3b>(j+cutsize*number,0)[0] = savetrainMat[number].at<cv::Vec3b>(j,i)[0];
+
+                    temp.at<cv::Vec3b>(j+cutsize*number,0)[1] = savetrainMat[number].at<cv::Vec3b>(j,i)[1];
+
+                    temp.at<cv::Vec3b>(j+cutsize*number,0)[2] = savetrainMat[number].at<cv::Vec3b>(j,i)[2];
                 }
             }
         }
@@ -1319,43 +1424,32 @@ void MainWindow::predictresult(int y,int x)
     }
 
     int size = 3;
-    cv::rectangle(cutTempMat[0],cv::Point(x-(CorPoint[0].x-t1.x)-size,y-(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[0].x-t1.x)+size,y-(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
-    //qDebug()<<"0==  "<<x-(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[0].y-t1.y)-10;
-    cv::rectangle(cutTempMat[1],cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
-    //qDebug()<<"1==  "<<x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-10;
-    cv::rectangle(cutTempMat[2],cv::Point(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)+size,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
-    //qDebug()<<"2==  "<<x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-10;
-    cv::rectangle(cutTempMat[3],cv::Point(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-size,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-size),cv::Point(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)+size,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
-
-
 
     savetrainMat.clear();
 
     int cutsize = 1;
     if(x-(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[0].x-t1.x)+cutsize <ClassMat[0].cols-1 && y-(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[0].y-t1.y)+cutsize<ClassMat[0].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[0].y-t1.y)-cutsize,cutsize,cutsize);
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[0].y-t1.y)-cutsize,size,size);
         cv::Mat temp = cutTempMat[0](rect_roi);
-        //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
     if(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[1].cols-1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[1].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,cutsize,cutsize);
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,size,size);
         cv::Mat temp = cutTempMat[1](rect_roi);
-        //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
     if(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[2].cols-1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[2].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,cutsize,cutsize);
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,size,size);
         cv::Mat temp = cutTempMat[2](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
     if(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize>1 && x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)+cutsize <ClassMat[3].cols-1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize >1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)+cutsize<ClassMat[3].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize,cutsize,cutsize);
+        cv::Rect rect_roi = cv::Rect(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize,size,size);
         cv::Mat temp = cutTempMat[3](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
@@ -1372,24 +1466,31 @@ void MainWindow::predictresult(int y,int x)
             {
                 for(int j=0;j<1;j++)
                 {
-                    temp.at<cv::Vec3b>(j+cutsize*number,i)[0] =( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[0]
-                                                               +savetrainMat[number].at<cv::Vec3b>(j,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j,i)[0]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[0]
-                                                               +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[0])/9;
-                    temp.at<cv::Vec3b>(j+cutsize*number,i)[1] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[1]
-                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j,i)[1]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[1]
-                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[1])/9;
-                    temp.at<cv::Vec3b>(j+cutsize*number,i)[2] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[2]
-                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j,i)[2]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[2]
-                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[2])/9;
+//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[0] =( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[0]
+//                                                               +savetrainMat[number].at<cv::Vec3b>(j,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j,i)[0]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[0]
+//                                                               +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[0])/9;
+//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[1] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[1]
+//                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j,i)[1]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[1]
+//                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[1])/9;
+//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[2] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[2]
+//                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j,i)[2]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[2]
+//                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[2])/9;
+                    temp.at<cv::Vec3b>(j+cutsize*number,0)[0] = savetrainMat[number].at<cv::Vec3b>(j,i)[0];
+
+                    temp.at<cv::Vec3b>(j+cutsize*number,0)[1] = savetrainMat[number].at<cv::Vec3b>(j,i)[1];
+
+                    temp.at<cv::Vec3b>(j+cutsize*number,0)[2] = savetrainMat[number].at<cv::Vec3b>(j,i)[2];
                 }
             }
         }
-        ui->getDataButton->setEnabled(true);
+//        ui->getDataButton->setEnabled(true);
         cut = temp.clone();
     }
 
     int ii=0;
     cv::Mat Result1D(1,4,CV_32FC1);
+    cv::cvtColor(cut,cut,CV_RGB2GRAY);
+
     //cv::Mat trainingImage;
     for(int i=0;i<cut.rows;i++)
     {
