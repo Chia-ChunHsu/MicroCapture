@@ -240,8 +240,12 @@ void MainWindow::on_LoadCapPic_clicked()
     statusProgressBar->setValue(40);
     Stitch(200);
     statusProgressBar->setValue(100);
-    ui->CapResultSlider->setEnabled(true);
-    ui->saveResultButtom->setEnabled(true);
+    cv::imwrite("w1.jpg",CapWarp[0]);
+    cv::imwrite("w2.jpg",CapWarp[1]);
+    cv::imwrite("w3.jpg",CapWarp[2]);
+    cv::imwrite("w4.jpg",CapWarp[3]);
+    //ui->CapResultSlider->setEnabled(true);
+    //ui->saveResultButtom->setEnabled(true);
 }
 
 int MainWindow::Cal()
@@ -312,11 +316,11 @@ void MainWindow::Stitch(int value)
 
 }
 
-void MainWindow::on_CapResultSlider_sliderMoved(int position)
-{
-    Stitch(position);
-    ui->CapResultSlider->setValue(position);
-}
+//void MainWindow::on_CapResultSlider_sliderMoved(int position)
+//{
+//    Stitch(position);
+//    ui->CapResultSlider->setValue(position);
+//}
 
 void MainWindow::on_LBlackRefButton_clicked()
 {
@@ -929,6 +933,10 @@ void MainWindow::on_cutButton_clicked()
     {
         ClassMat.push_back(temp[i]);
     }
+    cv::imwrite("cut1.jpg",temp[0]);
+    cv::imwrite("cut2.jpg",temp[1]);
+    cv::imwrite("cut3.jpg",temp[2]);
+    cv::imwrite("cut4.jpg",temp[3]);
 }
 
 void MainWindow::on_shadowButton_clicked()
@@ -995,7 +1003,7 @@ void MainWindow::on_shadowButton_clicked()
 
     //cv::imshow("shadow",shadow);
     int erosion_elem = 0;
-    int erosion_size = 11;
+    int erosion_size = 10;
     int dilation_elem = 0;
     int dilation_size = 10;
     int const max_elem = 2;
@@ -1022,6 +1030,9 @@ void MainWindow::on_shadowButton_clicked()
     cv::erode(shadow,eroMat,eroelement);
     cv::dilate(eroMat,MaskResult,dilelement);
     cv::imshow("dilate",MaskResult);
+    cv::imwrite("shadow.jpg",shadow);
+    cv::imwrite("erode.jpg",eroMat);
+    cv::imwrite("dilate.jpg",MaskResult);
 }
 
 void MainWindow::on_TestButton_clicked()
@@ -1036,88 +1047,88 @@ void MainWindow::on_TestButton_clicked()
     cv::imshow("temp",temp);
 }
 
-void MainWindow::on_hclassslider1_sliderMoved(int position)
-{
-    cv::Mat temp;
+//void MainWindow::on_hclassslider1_sliderMoved(int position)
+//{
+//    cv::Mat temp;
 
-    //temp.create(ClassMat[0].rows,ClassMat[0].cols,CV_MAKETYPE(ClassMat[0].type(),3));
-    temp = ClassMat[0].clone();
-    for(int i=0;i<ClassMat[0].cols;i++)
-    {
-        for(int j=0;j<ClassMat[0].rows;j++)
-        {
-            if(ClassMat[0].at<cv::Vec3b>(j,i)[0] <position +5  && ClassMat[0].at<cv::Vec3b>(j,i)[0] > position-5)
-            {
-                temp.at<cv::Vec3b>(j,i)[0] = 0;
-                temp.at<cv::Vec3b>(j,i)[1] = 255;
-                temp.at<cv::Vec3b>(j,i)[2] = 0;
-            }
-        }
-    }
-    ShowOnLabel(temp,ui->classlabel1);
-}
+//    //temp.create(ClassMat[0].rows,ClassMat[0].cols,CV_MAKETYPE(ClassMat[0].type(),3));
+//    temp = ClassMat[0].clone();
+//    for(int i=0;i<ClassMat[0].cols;i++)
+//    {
+//        for(int j=0;j<ClassMat[0].rows;j++)
+//        {
+//            if(ClassMat[0].at<cv::Vec3b>(j,i)[0] <position +5  && ClassMat[0].at<cv::Vec3b>(j,i)[0] > position-5)
+//            {
+//                temp.at<cv::Vec3b>(j,i)[0] = 0;
+//                temp.at<cv::Vec3b>(j,i)[1] = 255;
+//                temp.at<cv::Vec3b>(j,i)[2] = 0;
+//            }
+//        }
+//    }
+//    ShowOnLabel(temp,ui->classlabel1);
+//}
 
-void MainWindow::on_hclassslider3_sliderMoved(int position)
-{
-    cv::Mat temp;
+//void MainWindow::on_hclassslider3_sliderMoved(int position)
+//{
+//    cv::Mat temp;
 
-    //temp.create(ClassMat[0].rows,ClassMat[0].cols,CV_MAKETYPE(ClassMat[0].type(),3));
-    temp = ClassMat[2].clone();
-    int v = ui->iclassslider3->value();
-    for(int i=0;i<ClassMat[2].cols;i++)
-    {
-        for(int j=0;j<ClassMat[2].rows;j++)
-        {
+//    //temp.create(ClassMat[0].rows,ClassMat[0].cols,CV_MAKETYPE(ClassMat[0].type(),3));
+//    temp = ClassMat[2].clone();
+//    int v = ui->iclassslider3->value();
+//    for(int i=0;i<ClassMat[2].cols;i++)
+//    {
+//        for(int j=0;j<ClassMat[2].rows;j++)
+//        {
 
-            if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <position+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > position-10)
-            {
-                temp.at<cv::Vec3b>(j,i)[0] = 0;
-                temp.at<cv::Vec3b>(j,i)[1] = 255;
-                temp.at<cv::Vec3b>(j,i)[2] = 0;
-            }
-            else if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <v+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > v-10)
-            {
-                temp.at<cv::Vec3b>(j,i)[0] = 255;
-                temp.at<cv::Vec3b>(j,i)[1] = 0;
-                temp.at<cv::Vec3b>(j,i)[2] = 0;
-            }
-        }
-    }
-    ShowOnLabel(temp,ui->classlabel3);
-    ui->showlabel1->setText(QString::number(position));
-    ui->showlabel2->setText(QString::number(v));
-}
+//            if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <position+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > position-10)
+//            {
+//                temp.at<cv::Vec3b>(j,i)[0] = 0;
+//                temp.at<cv::Vec3b>(j,i)[1] = 255;
+//                temp.at<cv::Vec3b>(j,i)[2] = 0;
+//            }
+//            else if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <v+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > v-10)
+//            {
+//                temp.at<cv::Vec3b>(j,i)[0] = 255;
+//                temp.at<cv::Vec3b>(j,i)[1] = 0;
+//                temp.at<cv::Vec3b>(j,i)[2] = 0;
+//            }
+//        }
+//    }
+//    ShowOnLabel(temp,ui->classlabel3);
+//    ui->showlabel1->setText(QString::number(position));
+//    ui->showlabel2->setText(QString::number(v));
+//}
 
-void MainWindow::on_iclassslider3_sliderMoved(int position)
-{
-    cv::Mat temp;
+//void MainWindow::on_iclassslider3_sliderMoved(int position)
+//{
+//    cv::Mat temp;
 
-    //temp.create(ClassMat[0].rows,ClassMat[0].cols,CV_MAKETYPE(ClassMat[0].type(),3));
-    temp = ClassMat[2].clone();
-    int v = ui->hclassslider3->value();
-    for(int i=0;i<ClassMat[2].cols;i++)
-    {
-        for(int j=0;j<ClassMat[2].rows;j++)
-        {
+//    //temp.create(ClassMat[0].rows,ClassMat[0].cols,CV_MAKETYPE(ClassMat[0].type(),3));
+//    temp = ClassMat[2].clone();
+//    int v = ui->hclassslider3->value();
+//    for(int i=0;i<ClassMat[2].cols;i++)
+//    {
+//        for(int j=0;j<ClassMat[2].rows;j++)
+//        {
 
-            if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <position+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > position-10)
-            {
-                temp.at<cv::Vec3b>(j,i)[0] = 255;
-                temp.at<cv::Vec3b>(j,i)[1] = 0;
-                temp.at<cv::Vec3b>(j,i)[2] = 0;
-            }
-            else if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <v+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > v-10)
-            {
-                temp.at<cv::Vec3b>(j,i)[0] = 0;
-                temp.at<cv::Vec3b>(j,i)[1] = 255;
-                temp.at<cv::Vec3b>(j,i)[2] = 0;
-            }
-        }
-    }
-    ShowOnLabel(temp,ui->classlabel3);
-    ui->showlabel2->setText(QString::number(position));
-    ui->showlabel1->setText(QString::number(v));
-}
+//            if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <position+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > position-10)
+//            {
+//                temp.at<cv::Vec3b>(j,i)[0] = 255;
+//                temp.at<cv::Vec3b>(j,i)[1] = 0;
+//                temp.at<cv::Vec3b>(j,i)[2] = 0;
+//            }
+//            else if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <v+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > v-10)
+//            {
+//                temp.at<cv::Vec3b>(j,i)[0] = 0;
+//                temp.at<cv::Vec3b>(j,i)[1] = 255;
+//                temp.at<cv::Vec3b>(j,i)[2] = 0;
+//            }
+//        }
+//    }
+//    ShowOnLabel(temp,ui->classlabel3);
+//    ui->showlabel2->setText(QString::number(position));
+//    ui->showlabel1->setText(QString::number(v));
+//}
 
 void MainWindow::on_trainButton_clicked()
 {
@@ -1154,7 +1165,8 @@ void MainWindow::on_hSlider_sliderMoved(int position)
     {
          cutTempMat[i] = ClassMat[i].clone();
     }
-    int x = ui->hSlider->value();
+    //int x = ui->hSlider->value();
+    int x = position;
     int y = ui->vSlider->maximum() - ui->vSlider->value();
 
     //=======
@@ -1262,7 +1274,8 @@ void MainWindow::on_vSlider_sliderMoved(int position)
          cutTempMat[i] = ClassMat[i].clone();
     }
     int x = ui->hSlider->value();
-    int y = ui->vSlider->maximum() - ui->vSlider->value();
+    //int y = ui->vSlider->maximum() - ui->vSlider->value();
+    int y = ui->vSlider->maximum() - position;
 
     //=======
     cv::Point t1(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
@@ -1272,7 +1285,7 @@ void MainWindow::on_vSlider_sliderMoved(int position)
         t1.y = std::min(t1.y,CorPoint[i].y);
     }
 
-    int size = 3;
+    int size = 1;
     cv::rectangle(cutTempMat[0],cv::Point(x-(CorPoint[0].x-t1.x)-size,y-(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[0].x-t1.x)+size,y-(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
     //qDebug()<<"0==  "<<x-(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[0].y-t1.y)-10;
     cv::rectangle(cutTempMat[1],cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
@@ -1280,6 +1293,7 @@ void MainWindow::on_vSlider_sliderMoved(int position)
     cv::rectangle(cutTempMat[2],cv::Point(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)+size,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
     //qDebug()<<"2==  "<<x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-10;
     cv::rectangle(cutTempMat[3],cv::Point(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-size,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-size),cv::Point(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)+size,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
+
     //qDebug()<<"3==  "<<x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-10<<" "<<y-(CorPoint[3].y-t1.y)+(CorPoint[2].y-t1.y)-10;
 
     cv::imshow("cutTempMat[0]",cutTempMat[0]);
@@ -1376,7 +1390,7 @@ void MainWindow::on_SetButtom_clicked()
 void MainWindow::on_getDataButton_clicked()
 {
     QString name = QFileDialog::getSaveFileName(this, tr("Save File"),
-                                                "/untitled.jpg",
+                                                "D:/Data/MultiSpectral_Device_Data/0903_0904_set/0903_0904trainData/",
                                                 tr("Images (*.jpg)"));
     cv::imwrite(name.toStdString(),saveMat);
 }

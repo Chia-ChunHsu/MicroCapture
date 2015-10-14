@@ -13,10 +13,6 @@ AutoCameraDialog::~AutoCameraDialog()
     delete ui;
 }
 
-
-
-
-
 void AutoCameraDialog::on_saveCameraNameButtom_clicked()
 {
     devicename.clear();

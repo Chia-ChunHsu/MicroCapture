@@ -49,7 +49,7 @@ private slots:
 
     void on_LoadCapPic_clicked();
 
-    void on_CapResultSlider_sliderMoved(int position);
+//    void on_CapResultSlider_sliderMoved(int position);
 
     void on_LBlackRefButton_clicked();
 
@@ -77,11 +77,11 @@ private slots:
 
     void on_TestButton_clicked();
 
-    void on_hclassslider1_sliderMoved(int position);
+//    void on_hclassslider1_sliderMoved(int position);
 
-    void on_hclassslider3_sliderMoved(int position);
+//    void on_hclassslider3_sliderMoved(int position);
 
-    void on_iclassslider3_sliderMoved(int position);
+//    void on_iclassslider3_sliderMoved(int position);
 
     void on_trainButton_clicked();
 
