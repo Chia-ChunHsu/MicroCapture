@@ -16,14 +16,12 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     thread_stitch.cpp \
     stitch.cpp \
-    autocameradialog.cpp \
-    classifier.cpp
+    autocameradialog.cpp
 
 HEADERS  += mainwindow.h \
     thread_stitch.h \
     stitch.h \
-    autocameradialog.h \
-    classifier.h
+    autocameradialog.h
 
 FORMS    += mainwindow.ui \
     autocameradialog.ui
