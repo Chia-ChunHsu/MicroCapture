@@ -26,10 +26,27 @@ MainWindow::~MainWindow()
 
 void MainWindow::ShowOnLabel(cv::Mat mat, QLabel *k)
 {
-    QImage qtemp = QImage((const unsigned char*)(mat.data),mat.cols,mat.rows,mat.step,QImage::Format_RGB888);
-    k->clear();
-    k->setPixmap(QPixmap::fromImage(qtemp.scaled(k->width(),k->height(),Qt::KeepAspectRatio)));
-    k->show();
+    if(mat.channels()==3)
+    {
+        QImage qtemp = QImage((const unsigned char*)(mat.data),mat.cols,mat.rows,mat.step,QImage::Format_RGB888);
+        k->clear();
+        k->setPixmap(QPixmap::fromImage(qtemp.scaled(k->width(),k->height(),Qt::KeepAspectRatio)));
+        k->show();
+    }
+    else if(mat.channels() == 1)
+   {
+        QVector<QRgb> colorTable;
+        for(int i=0;i<256;i++)
+        {
+            colorTable.push_back(qRgb(i,i,i));
+        }
+        //const uchar *qImageBuffer = (const uchar*)mat.data;
+        QImage qtemp = QImage((const unsigned char*)(mat.data),mat.cols,mat.rows,mat.step,QImage::Format_Indexed8);
+        qtemp.setColorTable(colorTable);
+        k->clear();
+        k->setPixmap(QPixmap::fromImage(qtemp.scaled(k->width(),k->height(),Qt::KeepAspectRatio)));
+        k->show();
+    }
 }
 
 void MainWindow::on_ProgressList_currentRowChanged(int currentRow)
@@ -171,6 +188,10 @@ void MainWindow::on_LoadCapPic_clicked()
     for(int i=0;i<4;i++)
     {
         CapMat[i] = CapMat[i] -BlackRef[i];
+        Equal();
+
+        CapMat[i] = CapWEual[i].clone();
+
     }
 
     ShowOnLabel(CapMat[0],ui->FilterLabel1);
@@ -179,6 +200,7 @@ void MainWindow::on_LoadCapPic_clicked()
     ShowOnLabel(CapMat[3],ui->FilterLabel4);
     statusLabel->setText("Load Capture Pictures Success!");
     statusProgressBar->setValue(20);
+    //qDebug()<<CapWEual[0].channels();
     if(Cal()==1)
     {
         statusLabel->setText("Success!");
@@ -187,6 +209,8 @@ void MainWindow::on_LoadCapPic_clicked()
     {
         statusLabel->setAcceptDrops("Fail!");
     }
+    qDebug()<<"test";
+
 
     std::vector<cv::Mat> CapWarp2;
 
@@ -240,12 +264,10 @@ void MainWindow::on_LoadCapPic_clicked()
     statusProgressBar->setValue(40);
     Stitch(200);
     statusProgressBar->setValue(100);
-    cv::imwrite("w1.jpg",CapWarp[0]);
-    cv::imwrite("w2.jpg",CapWarp[1]);
-    cv::imwrite("w3.jpg",CapWarp[2]);
-    cv::imwrite("w4.jpg",CapWarp[3]);
-    //ui->CapResultSlider->setEnabled(true);
-    //ui->saveResultButtom->setEnabled(true);
+//    cv::imwrite("w1.jpg",CapWarp[0]);
+//    cv::imwrite("w2.jpg",CapWarp[1]);
+//    cv::imwrite("w3.jpg",CapWarp[2]);
+//    cv::imwrite("w4.jpg",CapWarp[3]);
 }
 
 int MainWindow::Cal()
@@ -302,10 +324,6 @@ void MainWindow::Stitch(int value)
                     {
                         CapResult.at<cv::Vec3b>(j+y-t1.y,i+x-t1.x)[2] = 255;
                     }
-                    //                    else if(j+y-t1.y<CalResult.rows && i+x-t1.x<CalResult.cols && j+y-t1.y>=0 && i+x-t1.x>=0 && number == 0)
-                    //                    {
-                    //                        CapResult.at<cv::Vec3b>(j+y-t1.y,i+x-t1.x)[2] = 255;
-                    //                    }
                 }
             }
         }
@@ -315,12 +333,6 @@ void MainWindow::Stitch(int value)
     ShowOnLabel(CapResult,ui->CapResultLabel);
 
 }
-
-//void MainWindow::on_CapResultSlider_sliderMoved(int position)
-//{
-//    Stitch(position);
-//    ui->CapResultSlider->setValue(position);
-//}
 
 void MainWindow::on_LBlackRefButton_clicked()
 {
@@ -1047,89 +1059,6 @@ void MainWindow::on_TestButton_clicked()
     cv::imshow("temp",temp);
 }
 
-//void MainWindow::on_hclassslider1_sliderMoved(int position)
-//{
-//    cv::Mat temp;
-
-//    //temp.create(ClassMat[0].rows,ClassMat[0].cols,CV_MAKETYPE(ClassMat[0].type(),3));
-//    temp = ClassMat[0].clone();
-//    for(int i=0;i<ClassMat[0].cols;i++)
-//    {
-//        for(int j=0;j<ClassMat[0].rows;j++)
-//        {
-//            if(ClassMat[0].at<cv::Vec3b>(j,i)[0] <position +5  && ClassMat[0].at<cv::Vec3b>(j,i)[0] > position-5)
-//            {
-//                temp.at<cv::Vec3b>(j,i)[0] = 0;
-//                temp.at<cv::Vec3b>(j,i)[1] = 255;
-//                temp.at<cv::Vec3b>(j,i)[2] = 0;
-//            }
-//        }
-//    }
-//    ShowOnLabel(temp,ui->classlabel1);
-//}
-
-//void MainWindow::on_hclassslider3_sliderMoved(int position)
-//{
-//    cv::Mat temp;
-
-//    //temp.create(ClassMat[0].rows,ClassMat[0].cols,CV_MAKETYPE(ClassMat[0].type(),3));
-//    temp = ClassMat[2].clone();
-//    int v = ui->iclassslider3->value();
-//    for(int i=0;i<ClassMat[2].cols;i++)
-//    {
-//        for(int j=0;j<ClassMat[2].rows;j++)
-//        {
-
-//            if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <position+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > position-10)
-//            {
-//                temp.at<cv::Vec3b>(j,i)[0] = 0;
-//                temp.at<cv::Vec3b>(j,i)[1] = 255;
-//                temp.at<cv::Vec3b>(j,i)[2] = 0;
-//            }
-//            else if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <v+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > v-10)
-//            {
-//                temp.at<cv::Vec3b>(j,i)[0] = 255;
-//                temp.at<cv::Vec3b>(j,i)[1] = 0;
-//                temp.at<cv::Vec3b>(j,i)[2] = 0;
-//            }
-//        }
-//    }
-//    ShowOnLabel(temp,ui->classlabel3);
-//    ui->showlabel1->setText(QString::number(position));
-//    ui->showlabel2->setText(QString::number(v));
-//}
-
-//void MainWindow::on_iclassslider3_sliderMoved(int position)
-//{
-//    cv::Mat temp;
-
-//    //temp.create(ClassMat[0].rows,ClassMat[0].cols,CV_MAKETYPE(ClassMat[0].type(),3));
-//    temp = ClassMat[2].clone();
-//    int v = ui->hclassslider3->value();
-//    for(int i=0;i<ClassMat[2].cols;i++)
-//    {
-//        for(int j=0;j<ClassMat[2].rows;j++)
-//        {
-
-//            if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <position+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > position-10)
-//            {
-//                temp.at<cv::Vec3b>(j,i)[0] = 255;
-//                temp.at<cv::Vec3b>(j,i)[1] = 0;
-//                temp.at<cv::Vec3b>(j,i)[2] = 0;
-//            }
-//            else if(ClassMat[2].at<cv::Vec3b>(j,i)[0] <v+10  && ClassMat[2].at<cv::Vec3b>(j,i)[0] > v-10)
-//            {
-//                temp.at<cv::Vec3b>(j,i)[0] = 0;
-//                temp.at<cv::Vec3b>(j,i)[1] = 255;
-//                temp.at<cv::Vec3b>(j,i)[2] = 0;
-//            }
-//        }
-//    }
-//    ShowOnLabel(temp,ui->classlabel3);
-//    ui->showlabel2->setText(QString::number(position));
-//    ui->showlabel1->setText(QString::number(v));
-//}
-
 void MainWindow::on_trainButton_clicked()
 {
     int num_files = 4;
@@ -1238,22 +1167,11 @@ void MainWindow::on_hSlider_sliderMoved(int position)
             {
                 for(int j=1;j<=cutsize;j++)
                 {
-//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[0] =( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[0]
-//                                                               +savetrainMat[number].at<cv::Vec3b>(j,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j,i)[0]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[0]
-//                                                               +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[0])/9;
-//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[1] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[1]
-//                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j,i)[1]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[1]
-//                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[1])/9;
-//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[2] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[2]
-//                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j,i)[2]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[2]
-//                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[2])/9;
                     temp.at<cv::Vec3b>(j+cutsize*number,0)[0] = savetrainMat[number].at<cv::Vec3b>(j,i)[0];
 
                     temp.at<cv::Vec3b>(j+cutsize*number,0)[1] = savetrainMat[number].at<cv::Vec3b>(j,i)[1];
 
                     temp.at<cv::Vec3b>(j+cutsize*number,0)[2] = savetrainMat[number].at<cv::Vec3b>(j,i)[2];
-
-
                 }
             }
         }
@@ -1346,15 +1264,6 @@ void MainWindow::on_vSlider_sliderMoved(int position)
             {
                 for(int j=0;j<cutsize;j++)
                 {
-//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[0] =( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[0]
-//                                                               +savetrainMat[number].at<cv::Vec3b>(j,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j,i)[0]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[0]
-//                                                               +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[0])/9;
-//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[1] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[1]
-//                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j,i)[1]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[1]
-//                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[1])/9;
-//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[2] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[2]
-//                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j,i)[2]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[2]
-//                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[2])/9;
                     temp.at<cv::Vec3b>(j+cutsize*number,0)[0] = savetrainMat[number].at<cv::Vec3b>(j,i)[0];
 
                     temp.at<cv::Vec3b>(j+cutsize*number,0)[1] = savetrainMat[number].at<cv::Vec3b>(j,i)[1];
@@ -1420,8 +1329,6 @@ void MainWindow::on_PredictButton_clicked()
     {
         cv::imwrite(saveResultFile.toStdString(),predict);
     }
-
-
 }
 
 void MainWindow::predictresult(int y,int x)
@@ -1480,15 +1387,6 @@ void MainWindow::predictresult(int y,int x)
             {
                 for(int j=0;j<1;j++)
                 {
-//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[0] =( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[0] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[0]
-//                                                               +savetrainMat[number].at<cv::Vec3b>(j,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j,i)[0]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[0]
-//                                                               +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[0]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[0])/9;
-//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[1] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[1] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[1]
-//                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j,i)[1]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[1]
-//                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[1]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[1])/9;
-//                    temp.at<cv::Vec3b>(j+cutsize*number,0)[2] = ( savetrainMat[number].at<cv::Vec3b>(j-1,i-1)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i)[2] + savetrainMat[number].at<cv::Vec3b>(j-1,i+1)[2]
-//                                                                +savetrainMat[number].at<cv::Vec3b>(j,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j,i)[2]+savetrainMat[number].at<cv::Vec3b>(j,i+1)[2]
-//                                                                +savetrainMat[number].at<cv::Vec3b>(j+1,i-1)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i)[2]+savetrainMat[number].at<cv::Vec3b>(j+1,i+1)[2])/9;
                     temp.at<cv::Vec3b>(j+cutsize*number,0)[0] = savetrainMat[number].at<cv::Vec3b>(j,i)[0];
 
                     temp.at<cv::Vec3b>(j+cutsize*number,0)[1] = savetrainMat[number].at<cv::Vec3b>(j,i)[1];
@@ -1534,10 +1432,39 @@ void MainWindow::predictresult(int y,int x)
 
 }
 
+void MainWindow::Equal()
+{
+    qDebug()<<"Hello";
+    CapWEual.clear();
+    for(int i=0;i<4;i++)
+    {
+        cv::Mat temp ;
+        //temp.channels()
+        //qDebug()<<"show "<<CapWarp[0].channels();
+        cv::cvtColor(CapMat[i],temp,CV_BGR2GRAY);
+        //qDebug()<<" "<<temp.channels();
+        cv::Mat temp1;
+        cv::normalize(temp,temp1,0,255,CV_MINMAX);
+        cv::Mat out;
+        cv::cvtColor(temp1,out,CV_GRAY2BGR);
+        CapWEual.push_back(out);
+    }
+    qDebug()<<"Hi";
+    ShowOnLabel(CapWEual[0],ui->equalLabel1);
+    ShowOnLabel(CapWEual[1],ui->equalLabel2);
+    ShowOnLabel(CapWEual[2],ui->equalLabel3);
+    ShowOnLabel(CapWEual[3],ui->equalLabel4);
+}
+
 void MainWindow::on_getData3x3Button_clicked()
 {
     QString name = QFileDialog::getSaveFileName(this, tr("Save File"),
                                                 "/untitled.jpg",
                                                 tr("Images (*.jpg)"));
     cv::imwrite(name.toStdString(),saveMat3);
+}
+
+void MainWindow::on_EqualButton_clicked()
+{
+    Equal();
 }

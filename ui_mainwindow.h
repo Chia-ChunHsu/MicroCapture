@@ -59,6 +59,12 @@ public:
     QLabel *classlabel4;
     QSlider *hSlider;
     QSlider *vSlider;
+    QWidget *tab_5;
+    QLabel *equalLabel1;
+    QLabel *equalLabel2;
+    QLabel *equalLabel3;
+    QLabel *equalLabel4;
+    QPushButton *EqualButton;
     QPushButton *saveResultButtom;
     QSlider *CapResultSlider;
     QPushButton *SaveCap;
@@ -99,9 +105,6 @@ public:
     QCheckBox *checkBox4;
     QSlider *hSlider01;
     QSlider *hSlider03;
-    QLabel *showlabel1;
-    QLabel *showlabel2;
-    QPushButton *trainButton;
     QPushButton *getDataButton;
     QPushButton *SetButtom;
     QPushButton *PredictButton;
@@ -114,7 +117,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(642, 532);
+        MainWindow->resize(659, 532);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         tabClassifier = new QTabWidget(centralWidget);
@@ -218,6 +221,29 @@ public:
         vSlider->setValue(10);
         vSlider->setOrientation(Qt::Vertical);
         tabWidget_2->addTab(tab_4, QString());
+        tab_5 = new QWidget();
+        tab_5->setObjectName(QStringLiteral("tab_5"));
+        equalLabel1 = new QLabel(tab_5);
+        equalLabel1->setObjectName(QStringLiteral("equalLabel1"));
+        equalLabel1->setGeometry(QRect(10, 10, 160, 120));
+        equalLabel1->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
+        equalLabel2 = new QLabel(tab_5);
+        equalLabel2->setObjectName(QStringLiteral("equalLabel2"));
+        equalLabel2->setGeometry(QRect(180, 10, 160, 120));
+        equalLabel2->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
+        equalLabel3 = new QLabel(tab_5);
+        equalLabel3->setObjectName(QStringLiteral("equalLabel3"));
+        equalLabel3->setGeometry(QRect(10, 150, 160, 120));
+        equalLabel3->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
+        equalLabel4 = new QLabel(tab_5);
+        equalLabel4->setObjectName(QStringLiteral("equalLabel4"));
+        equalLabel4->setGeometry(QRect(180, 150, 160, 120));
+        equalLabel4->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
+        EqualButton = new QPushButton(tab_5);
+        EqualButton->setObjectName(QStringLiteral("EqualButton"));
+        EqualButton->setEnabled(false);
+        EqualButton->setGeometry(QRect(10, 280, 331, 31));
+        tabWidget_2->addTab(tab_5, QString());
         saveResultButtom = new QPushButton(DetectTab);
         saveResultButtom->setObjectName(QStringLiteral("saveResultButtom"));
         saveResultButtom->setEnabled(false);
@@ -340,10 +366,10 @@ public:
         SetUpButton->setGeometry(QRect(540, 0, 75, 23));
         cutButton = new QPushButton(centralWidget);
         cutButton->setObjectName(QStringLiteral("cutButton"));
-        cutButton->setGeometry(QRect(170, 390, 91, 23));
+        cutButton->setGeometry(QRect(170, 390, 91, 31));
         shadowButton = new QPushButton(centralWidget);
         shadowButton->setObjectName(QStringLiteral("shadowButton"));
-        shadowButton->setGeometry(QRect(80, 390, 81, 23));
+        shadowButton->setGeometry(QRect(80, 390, 81, 31));
         checkBox1 = new QCheckBox(centralWidget);
         checkBox1->setObjectName(QStringLiteral("checkBox1"));
         checkBox1->setGeometry(QRect(20, 380, 16, 16));
@@ -368,22 +394,13 @@ public:
         hSlider03->setMaximum(255);
         hSlider03->setValue(100);
         hSlider03->setOrientation(Qt::Horizontal);
-        showlabel1 = new QLabel(centralWidget);
-        showlabel1->setObjectName(QStringLiteral("showlabel1"));
-        showlabel1->setGeometry(QRect(70, 440, 47, 12));
-        showlabel2 = new QLabel(centralWidget);
-        showlabel2->setObjectName(QStringLiteral("showlabel2"));
-        showlabel2->setGeometry(QRect(190, 440, 47, 12));
-        trainButton = new QPushButton(centralWidget);
-        trainButton->setObjectName(QStringLiteral("trainButton"));
-        trainButton->setGeometry(QRect(130, 450, 75, 23));
         getDataButton = new QPushButton(centralWidget);
         getDataButton->setObjectName(QStringLiteral("getDataButton"));
         getDataButton->setEnabled(false);
         getDataButton->setGeometry(QRect(370, 420, 75, 23));
         SetButtom = new QPushButton(centralWidget);
         SetButtom->setObjectName(QStringLiteral("SetButtom"));
-        SetButtom->setGeometry(QRect(280, 420, 75, 23));
+        SetButtom->setGeometry(QRect(80, 430, 181, 41));
         PredictButton = new QPushButton(centralWidget);
         PredictButton->setObjectName(QStringLiteral("PredictButton"));
         PredictButton->setGeometry(QRect(470, 420, 161, 51));
@@ -399,7 +416,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 642, 21));
+        menuBar->setGeometry(QRect(0, 0, 659, 21));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -411,7 +428,7 @@ public:
         retranslateUi(MainWindow);
 
         tabClassifier->setCurrentIndex(0);
-        tabWidget_2->setCurrentIndex(2);
+        tabWidget_2->setCurrentIndex(3);
         stackedWidget->setCurrentIndex(0);
         ProgressList->setCurrentRow(0);
 
@@ -443,6 +460,12 @@ public:
         classlabel3->setText(QApplication::translate("MainWindow", "TextLabel", 0));
         classlabel4->setText(QApplication::translate("MainWindow", "TextLabel", 0));
         tabWidget_2->setTabText(tabWidget_2->indexOf(tab_4), QApplication::translate("MainWindow", "Classifier", 0));
+        equalLabel1->setText(QApplication::translate("MainWindow", "TextLabel", 0));
+        equalLabel2->setText(QApplication::translate("MainWindow", "TextLabel", 0));
+        equalLabel3->setText(QApplication::translate("MainWindow", "TextLabel", 0));
+        equalLabel4->setText(QApplication::translate("MainWindow", "TextLabel", 0));
+        EqualButton->setText(QApplication::translate("MainWindow", "Equal", 0));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_5), QApplication::translate("MainWindow", "Equalize", 0));
         saveResultButtom->setText(QApplication::translate("MainWindow", "Save Result Picture", 0));
         SaveCap->setText(QApplication::translate("MainWindow", "Save Capture Pictures", 0));
         TestButton->setText(QApplication::translate("MainWindow", "Test", 0));
@@ -487,9 +510,6 @@ public:
         checkBox2->setText(QString());
         checkBox3->setText(QString());
         checkBox4->setText(QString());
-        showlabel1->setText(QApplication::translate("MainWindow", "TextLabel", 0));
-        showlabel2->setText(QApplication::translate("MainWindow", "TextLabel", 0));
-        trainButton->setText(QApplication::translate("MainWindow", "train", 0));
         getDataButton->setText(QApplication::translate("MainWindow", "GetTrainData", 0));
         SetButtom->setText(QApplication::translate("MainWindow", "Set", 0));
         PredictButton->setText(QApplication::translate("MainWindow", "Predict", 0));

@@ -40,6 +40,7 @@ public:
     int Cal();
     void Stitch(int value);
     void predictresult(int y,int x);
+    void Equal();
 
 
 private slots:
@@ -98,6 +99,8 @@ private slots:
 
     void on_getData3x3Button_clicked();
 
+    void on_EqualButton_clicked();
+
 private:
 
     Ui::MainWindow *ui;
@@ -107,6 +110,7 @@ private:
     QLabel *statusLabel;
     QLabel *statusGap;
     std::vector<cv::Mat> CapWarp;
+    std::vector<cv::Mat> CapWEual;
     std::vector<cv::Mat> RCapWarp;
 
     Thread_Stitch TS;
