@@ -106,6 +106,7 @@ private:
     Ui::MainWindow *ui;
     std::vector<cv::Mat> CalMat;
     std::vector<cv::Mat> CapMat;
+    std::vector<cv::Mat> CapOMat;
     QProgressBar *statusProgressBar;
     QLabel *statusLabel;
     QLabel *statusGap;

@@ -189,15 +189,16 @@ void MainWindow::on_LoadCapPic_clicked()
     {
         CapMat[i] = CapMat[i] -BlackRef[i];
         Equal();
+        CapOMat.push_back(CapMat[i]);
 
         CapMat[i] = CapWEual[i].clone();
 
     }
 
-    ShowOnLabel(CapMat[0],ui->FilterLabel1);
-    ShowOnLabel(CapMat[1],ui->FilterLabel2);
-    ShowOnLabel(CapMat[2],ui->FilterLabel3);
-    ShowOnLabel(CapMat[3],ui->FilterLabel4);
+    ShowOnLabel(CapOMat[0],ui->FilterLabel1);
+    ShowOnLabel(CapOMat[1],ui->FilterLabel2);
+    ShowOnLabel(CapOMat[2],ui->FilterLabel3);
+    ShowOnLabel(CapOMat[3],ui->FilterLabel4);
     statusLabel->setText("Load Capture Pictures Success!");
     statusProgressBar->setValue(20);
     //qDebug()<<CapWEual[0].channels();
