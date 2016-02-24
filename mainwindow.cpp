@@ -141,6 +141,7 @@ void MainWindow::on_LoadCalButtom_clicked()
 
     ui->stackedWidget->setCurrentIndex(2);
     ShowOnLabel(CalResult,ui->CalResultLabel);
+    cv::imshow("CalResult",CalResult);
 
     statusProgressBar->setValue(100);
     ui->LoadCapPic->setEnabled(true);
@@ -157,11 +158,17 @@ void MainWindow::on_LoadCalButtom_clicked()
         BlackRef.push_back(temp);
     }
     ui->LBlackRefButton->setEnabled(true);
+
+    cv::imwrite("001.jpg",WarpM[0]);
+    cv::imwrite("002.jpg",WarpM[1]);
+    cv::imwrite("003.jpg",WarpM[2]);
+    cv::imwrite("004.jpg",WarpM[3]);
 }
 
 void MainWindow::on_LoadCapPic_clicked()
 {
     CapMat.clear();
+    CapOMat.clear();
     statusProgressBar->setValue(0);
     QStringList fileNames = QFileDialog::getOpenFileNames(this,tr("Open Image"), "D:/Code/FourCapture/", tr("Image Files (*.jpg)"));
 
@@ -219,12 +226,14 @@ void MainWindow::on_LoadCapPic_clicked()
     for(int i=0;i<4;i++)
     {
         CapWarp2.push_back(CapWarp[i]);
+
     }
 
-    cv::Size s = cv::Size(640,480);
+
     for(int i=0;i<4;i++)
     {
-        cv::resize(CapWarp2[i],CapWarp[i],s);
+        cv::Size s = nonDilateMask[i].size();
+        cv::resize(CapWarp2[i],CapWarp[i],nonDilateMask[i].size());
         cv::Mat temp = nonDilateMask[i];
         cv::resize(temp,nonDilateMask[i],s);
     }
@@ -265,10 +274,10 @@ void MainWindow::on_LoadCapPic_clicked()
     statusProgressBar->setValue(40);
     Stitch(200);
     statusProgressBar->setValue(100);
-//    cv::imwrite("w1.jpg",CapWarp[0]);
-//    cv::imwrite("w2.jpg",CapWarp[1]);
-//    cv::imwrite("w3.jpg",CapWarp[2]);
-//    cv::imwrite("w4.jpg",CapWarp[3]);
+    cv::imwrite("w1.jpg",CapWarp[0]);
+    cv::imwrite("w2.jpg",CapWarp[1]);
+    cv::imwrite("w3.jpg",CapWarp[2]);
+    cv::imwrite("w4.jpg",CapWarp[3]);
 }
 
 int MainWindow::Cal()
@@ -851,40 +860,66 @@ void MainWindow::on_cutButton_clicked()
     tk.create(MaskResult.rows,MaskResult.cols,CV_MAKETYPE(tk.type(),3));
     tk = cv::Scalar::all(0);
     qDebug()<<"003";
-    for(int i=0;i<temp[0].cols;i++)
+    //cv::imshow("temp10",temp[1]);
+    qDebug()<<"-t1.y+CorPoint[2].y = "<<-t1.y+CorPoint[2].y;
+    qDebug()<<"-t1.x+CorPoint[2].x = "<<-t1.x+CorPoint[2].x;
+
+    int dy0 = -t1.y+CorPoint[0].y;
+    int dx0 = -t1.x+CorPoint[0].x;
+    int dy1 = -t1.y+CorPoint[1].y;
+    int dx1 = -t1.x+CorPoint[1].x;
+    int dy2 = -t1.y+CorPoint[2].y;
+    int dx2 = -t1.x+CorPoint[2].x;
+    int dy3 = -t1.y+CorPoint[3].y;
+    int dx3 = -t1.x+CorPoint[3].x;
+    qDebug()<<0<<dy0<<" "<<dx0;
+    qDebug()<<1<<dy1<<" "<<dx1;
+    qDebug()<<2<<dy2<<" "<<dx2;
+    qDebug()<<3<<dy3<<" "<<dx3;
+    for(int i=0;i<MaskResult.cols;i++)
     {
-        for(int j=0;j<temp[0].rows;j++)
+        for(int j=0;j<MaskResult.rows;j++)
         {
-            int x=-1;
-            int y=-1;
-            if(MaskResult.at<cv::Vec3b>(j+CorPoint[0].y-t1.y+y-(CorPoint[0].y - t1.y+y),i-t1.x+x+CorPoint[0].x-(CorPoint[0].x - t1.x+x))[0] != 255)
+            //int x=-1;
+            //int y=-1;
+
+
+            if(MaskResult.at<cv::Vec3b>(j,i)[0] != 255 && j-dy0>=0 && j-dy0<temp[0].rows && i-dx0>=0 && i-dx0<temp[0].cols)
             {
-                temp[0].at<cv::Vec3b>(j,i)[0]=0;
-                temp[0].at<cv::Vec3b>(j,i)[1]=0;
-                temp[0].at<cv::Vec3b>(j,i)[2]=0;
-            }
-            if(MaskResult.at<cv::Vec3b>(j+CorPoint[1].y-t1.y+y,i-t1.x+x+CorPoint[1].x)[0] != 255)
-            {
-                temp[1].at<cv::Vec3b>(j,i)[0]=0;
-                temp[1].at<cv::Vec3b>(j,i)[1]=0;
-                temp[1].at<cv::Vec3b>(j,i)[2]=0;
+                temp[0].at<cv::Vec3b>(j-dy0,i-dx0)[0]=0;
+                temp[0].at<cv::Vec3b>(j-dy0,i-dx0)[1]=0;
+                temp[0].at<cv::Vec3b>(j-dy0,i-dx0)[2]=0;
             }
 
-            if(MaskResult.at<cv::Vec3b>(j+CorPoint[2].y-t1.y+y-(CorPoint[0].y - t1.y+y),i-t1.x+x+CorPoint[2].x-(CorPoint[0].x - t1.x+x))[0] != 255)
+            if(MaskResult.at<cv::Vec3b>(j,i)[0] != 255 && j-dy1>=0 && j-dy1<temp[1].rows && i-dx1>=0 && i-dx1<temp[1].cols)
             {
-                temp[2].at<cv::Vec3b>(j,i)[0]=0;
-                temp[2].at<cv::Vec3b>(j,i)[1]=0;
-                temp[2].at<cv::Vec3b>(j,i)[2]=0;
+                temp[1].at<cv::Vec3b>(j-dy1,i-dx1)[0]=0;
+                temp[1].at<cv::Vec3b>(j-dy1,i-dx1)[1]=0;
+                temp[1].at<cv::Vec3b>(j-dy1,i-dx1)[2]=0;
             }
-            if(MaskResult.at<cv::Vec3b>(j+CorPoint[3].y-t1.y+y-(CorPoint[1].y - t1.y+y),i-t1.x+x+CorPoint[3].x-(CorPoint[2].x - t1.x+x))[0] != 255)
+            //qDebug()<<j-dy2<<" "<<i-dx2;
+            if(MaskResult.at<cv::Vec3b>(j,i)[0] != 255 && j-dy2>=0 && j-dy2<temp[2].rows && i-dx2>=0 && i-dx2<temp[2].cols)
             {
-                temp[3].at<cv::Vec3b>(j,i)[0]=0;
-                temp[3].at<cv::Vec3b>(j,i)[1]=0;
-                temp[3].at<cv::Vec3b>(j,i)[2]=0;
+
+                temp[2].at<cv::Vec3b>(j-dy2,i-dx2)[0]=0;
+                temp[2].at<cv::Vec3b>(j-dy2,i-dx2)[1]=0;
+                temp[2].at<cv::Vec3b>(j-dy2,i-dx2)[2]=0;
+            }
+
+            if(MaskResult.at<cv::Vec3b>(j,i)[0] != 255 && j-dy3>=0 && j-dy3<temp[3].rows && i-dx3>=0 && i-dx3<temp[3].cols)
+            {
+                temp[3].at<cv::Vec3b>(j-dy3,i-dx3)[0]=0;
+                temp[3].at<cv::Vec3b>(j-dy3,i-dx3)[1]=0;
+                temp[3].at<cv::Vec3b>(j-dy3,i-dx3)[2]=0;
             }
 
         }
     }
+    cv::imshow("temp0",temp[0]);
+    cv::imshow("temp1",temp[1]);
+    cv::imshow("temp2",temp[2]);
+    cv::imshow("temp3",temp[3]);
+    //cv::waitKey(0);
     qDebug()<<"004";
     std::vector<int> tx;
     std::vector<int> ty;
@@ -959,13 +994,22 @@ void MainWindow::on_shadowButton_clicked()
 
     //RCapWarp.clear();
     cv::Point t1(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
+    cv::Point m1(std::numeric_limits<int>::min(), std::numeric_limits<int>::min());
     for(int i=0;i<CorPoint.size();i++)
     {
         t1.x = std::min(t1.x,CorPoint[i].x);
         t1.y = std::min(t1.y,CorPoint[i].y);
+        m1.x = std::max(m1.x,CorPoint[i].x);
+        m1.y = std::max(m1.y,CorPoint[i].y);
     }
 
     cv::Size size(CalResult.cols,CalResult.rows);
+    qDebug()<<CalResult.cols<<CalResult.rows;
+    qDebug()<<CapWarp[0].cols<<CapWarp[0].rows;
+    qDebug()<<CapWarp[1].cols<<CapWarp[1].rows;
+    qDebug()<<CapWarp[2].cols<<CapWarp[2].rows;
+    qDebug()<<CapWarp[3].cols<<CapWarp[3].rows;
+    qDebug()<<m1.x<<m1.y;
     shadow.create(size,CV_MAKETYPE(CapResult.type(),3));
     shadow = cv::Scalar::all(0);
 
@@ -976,15 +1020,21 @@ void MainWindow::on_shadowButton_clicked()
         tempWarp.push_back(CapWarp[i]);
     }
 
-    int x1 = CorPoint[1].x;
-    int y1 = CorPoint[1].y;
+//    int x2 = CorPoint[2].x;
+//    int y2 = CorPoint[2].y;
 
-    int x3 = CorPoint[3].x;
-    int y3 = CorPoint[3].y;
+    int x1 = CorPoint[0].x;
+    int y1 = CorPoint[0].y;
 
     int threv1 = ui->hSlider01->value();
     int threv3 = ui->hSlider03->value();
-
+//    qDebug()<<"t1.x = "<<t1.x<<" t1.y = "<<t1.y;
+//    qDebug()<<CorPoint[0].x<<" "<<CorPoint[0].y;
+//    qDebug()<<CorPoint[1].x<<" "<<CorPoint[1].y;
+//    qDebug()<<CorPoint[2].x<<" "<<CorPoint[2].y;
+//    qDebug()<<CorPoint[3].x<<" "<<CorPoint[3].y;
+    int dy2 = CorPoint[2].y-t1.y;
+    int dx2 = CorPoint[2].x-t1.x;
 
     for(int i = 0;i<shadow.cols;i++)
     {
@@ -992,15 +1042,16 @@ void MainWindow::on_shadowButton_clicked()
         {
             bool bool1 = false;
             bool bool3 = false;
-            if(j-y1+t1.y+(CorPoint[0].y-t1.y) >=0 && i-x1+t1.x+(CorPoint[0].x-t1.x) >=0 && j-y1+t1.y+(CorPoint[0].y-t1.y) <tempWarp[1].rows && i-x1+t1.x+(CorPoint[0].x-t1.x) <tempWarp[1].cols)
+            if(j>=dy2 && i >=dx2 && j <tempWarp[2].rows+dy2 && i <tempWarp[2].cols+dx2)
             {
-                bool1 = ( tempWarp[1].at<cv::Vec3b>(j-y1+t1.y+(CorPoint[0].y-t1.y),i-x1+t1.x+(CorPoint[0].x-t1.x))[0]+tempWarp[1].at<cv::Vec3b>(j-y1+t1.y+(CorPoint[0].y-t1.y),i-x1+t1.x+(CorPoint[0].x-t1.x))[1]+tempWarp[1].at<cv::Vec3b>(j-y1+t1.y+(CorPoint[0].y-t1.y),i-x1+t1.x+(CorPoint[0].x-t1.x))[2])/3 < threv1;
+                bool1 = ( tempWarp[2].at<cv::Vec3b>(j-dy2,i-dx2)[0]+tempWarp[2].at<cv::Vec3b>(j-dy2,i-dx2)[1]+tempWarp[2].at<cv::Vec3b>(j-dy2,i-dx2)[2])/3 > threv1;
             }
-            if(j-y3+t1.y+(CorPoint[1].y-t1.y) >=0 && i-x3+t1.x+(CorPoint[2].x-t1.x) >=0 && j-y3+t1.y+(CorPoint[1].y-t1.y) <tempWarp[3].rows && i-x3+t1.x+(CorPoint[2].x-t1.x) <tempWarp[3].cols)
+            if(j+y1-t1.y >=0 && i+x1-t1.x >=0 && j+y1-t1.y <tempWarp[3].rows && i+x1-t1.x <tempWarp[3].cols)
             {
-                bool3 = ( tempWarp[3].at<cv::Vec3b>(j-y3+t1.y+(CorPoint[1].y-t1.y),i-x3+t1.x+(CorPoint[2].x-t1.x))[0]+tempWarp[3].at<cv::Vec3b>(j-y3+t1.y+(CorPoint[1].y-t1.y),i-x3+t1.x+(CorPoint[2].x-t1.x))[1]+tempWarp[3].at<cv::Vec3b>(j-y3+t1.y+(CorPoint[1].y-t1.y),i-x3+t1.x+(CorPoint[2].x-t1.x))[2])/3 > threv3;
+                //bool3 = ( tempWarp[1].at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[0]+tempWarp[1].at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[1]+tempWarp[1].at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[2])/3 < threv3;
+                bool3 = ( tempWarp[0].at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[0]+tempWarp[0].at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[1]+tempWarp[0].at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[2])/3 < threv3;
             }
-            if(bool1==true && bool3 == true)
+            if(bool1==true  && bool3 == true )//(bool1==true && bool3 == true)
             {
                 shadow.at<cv::Vec3b>(j,i)[0] = 255;
                 shadow.at<cv::Vec3b>(j,i)[1] = 255;
@@ -1108,15 +1159,20 @@ void MainWindow::on_hSlider_sliderMoved(int position)
         t1.y = std::min(t1.y,CorPoint[i].y);
     }
 
+    int dy0 = -t1.y+CorPoint[0].y;
+    int dx0 = -t1.x+CorPoint[0].x;
+    int dy1 = -t1.y+CorPoint[1].y;
+    int dx1 = -t1.x+CorPoint[1].x;
+    int dy2 = -t1.y+CorPoint[2].y;
+    int dx2 = -t1.x+CorPoint[2].x;
+    int dy3 = -t1.y+CorPoint[3].y;
+    int dx3 = -t1.x+CorPoint[3].x;
+
     int size = 1;
-    cv::rectangle(cutTempMat[0],cv::Point(x-(CorPoint[0].x-t1.x)-size,y-(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[0].x-t1.x)+size,y-(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
-    //qDebug()<<"0==  "<<x-(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[0].y-t1.y)-10;
-    cv::rectangle(cutTempMat[1],cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
-    //qDebug()<<"1==  "<<x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-10;
-    cv::rectangle(cutTempMat[2],cv::Point(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)+size,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
-    //qDebug()<<"2==  "<<x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-10;
-    cv::rectangle(cutTempMat[3],cv::Point(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-size,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-size),cv::Point(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)+size,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
-    //qDebug()<<"3==  "<<x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-10<<" "<<y-(CorPoint[3].y-t1.y)+(CorPoint[2].y-t1.y)-10;
+    cv::rectangle(cutTempMat[0],cv::Point(x-dx0-size,y-dy0-size),cv::Point(x-dx0+size,y-dy0+size),cv::Scalar(255,0,0),1,8,0);
+    cv::rectangle(cutTempMat[1],cv::Point(x-dx1-size,y-dy1-size),cv::Point(x-dx1+size,y-dy1+size),cv::Scalar(255,0,0),1,8,0);
+    cv::rectangle(cutTempMat[2],cv::Point(x-dx2-size,y-dy2-size),cv::Point(x-dx2+size,y-dy2+size),cv::Scalar(255,0,0),1,8,0);
+    cv::rectangle(cutTempMat[3],cv::Point(x-dx3-size,y-dy3-size),cv::Point(x-dx3+size,y-dy3+size),cv::Scalar(255,0,0),1,8,0);
 
     cv::imshow("cutTempMat[0]",cutTempMat[0]);
     cv::imshow("cutTempMat[1]",cutTempMat[1]);
@@ -1130,30 +1186,30 @@ void MainWindow::on_hSlider_sliderMoved(int position)
     savetrainMat.clear();
 
     int cutsize = 1;
-    if(x-(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[0].x-t1.x)+cutsize <ClassMat[0].cols-1 && y-(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[0].y-t1.y)+cutsize<ClassMat[0].rows-1)
+    if(x-dx0-cutsize>1 && x-dx0+cutsize <ClassMat[0].cols-1 && y-dy0-cutsize >1 && y-dy0+cutsize<ClassMat[0].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[0].y-t1.y)-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx0-cutsize,y-dy0-cutsize,size,size);
         cv::Mat temp = ClassMat[0](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
-    if(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[1].cols-1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[1].rows-1)
+    if(x-dx1-cutsize>1 && x-dx1+cutsize <ClassMat[1].cols-1 && y-dy1-cutsize >1 && y-dy1+cutsize<ClassMat[1].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx1-cutsize,y-dy1-cutsize,size,size);
         cv::Mat temp = ClassMat[1](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
-    if(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[2].cols-1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[2].rows-1)
+    if(x-dx2-cutsize>1 && x-dx2+cutsize <ClassMat[2].cols-1 && y-dy2-cutsize >1 && y-dy2+cutsize<ClassMat[2].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx2-cutsize,y-dy2-cutsize,size,size);
         cv::Mat temp = ClassMat[2](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
-    if(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize>1 && x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)+cutsize <ClassMat[3].cols-1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize >1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)+cutsize<ClassMat[3].rows-1)
+    if(x-dx3-cutsize>1 && x-dx3+cutsize <ClassMat[3].cols-1 && y-dy3-cutsize >1 && y-dy3+cutsize<ClassMat[3].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx3-cutsize,y-dy3-cutsize,size,size);
         cv::Mat temp = ClassMat[3](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
@@ -1205,14 +1261,19 @@ void MainWindow::on_vSlider_sliderMoved(int position)
         t1.y = std::min(t1.y,CorPoint[i].y);
     }
 
+    int dy0 = -t1.y+CorPoint[0].y;
+    int dx0 = -t1.x+CorPoint[0].x;
+    int dy1 = -t1.y+CorPoint[1].y;
+    int dx1 = -t1.x+CorPoint[1].x;
+    int dy2 = -t1.y+CorPoint[2].y;
+    int dx2 = -t1.x+CorPoint[2].x;
+    int dy3 = -t1.y+CorPoint[3].y;
+    int dx3 = -t1.x+CorPoint[3].x;
     int size = 1;
-    cv::rectangle(cutTempMat[0],cv::Point(x-(CorPoint[0].x-t1.x)-size,y-(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[0].x-t1.x)+size,y-(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
-    //qDebug()<<"0==  "<<x-(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[0].y-t1.y)-10;
-    cv::rectangle(cutTempMat[1],cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+size,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
-    //qDebug()<<"1==  "<<x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-10;
-    cv::rectangle(cutTempMat[2],cv::Point(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-size,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-size),cv::Point(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)+size,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
-    //qDebug()<<"2==  "<<x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-10<<" "<<y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-10;
-    cv::rectangle(cutTempMat[3],cv::Point(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-size,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-size),cv::Point(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)+size,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)+size),cv::Scalar(255,0,0),1,8,0);
+    cv::rectangle(cutTempMat[0],cv::Point(x-dx0-size,y-dy0-size),cv::Point(x-dx0+size,y-dy0+size),cv::Scalar(255,0,0),1,8,0);
+    cv::rectangle(cutTempMat[1],cv::Point(x-dx1-size,y-dy1-size),cv::Point(x-dx1+size,y-dy1+size),cv::Scalar(255,0,0),1,8,0);
+    cv::rectangle(cutTempMat[2],cv::Point(x-dx2-size,y-dy2-size),cv::Point(x-dx2+size,y-dy2+size),cv::Scalar(255,0,0),1,8,0);
+    cv::rectangle(cutTempMat[3],cv::Point(x-dx3-size,y-dy3-size),cv::Point(x-dx3+size,y-dy3+size),cv::Scalar(255,0,0),1,8,0);
 
     //qDebug()<<"3==  "<<x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-10<<" "<<y-(CorPoint[3].y-t1.y)+(CorPoint[2].y-t1.y)-10;
 
@@ -1228,30 +1289,30 @@ void MainWindow::on_vSlider_sliderMoved(int position)
     savetrainMat.clear();
 
     int cutsize = 1;
-    if(x-(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[0].x-t1.x)+cutsize <ClassMat[0].cols-1 && y-(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[0].y-t1.y)+cutsize<ClassMat[0].rows-1)
+    if(x-dx0-cutsize>1 && x-dx0+cutsize <ClassMat[0].cols-1 && y-dy0-cutsize >1 && y-dy0+cutsize<ClassMat[0].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[0].y-t1.y)-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx0-cutsize,y-dy0-cutsize,size,size);
         cv::Mat temp = ClassMat[0](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
-    if(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[1].cols-1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[1].rows-1)
+    if(x-dx1-cutsize>1 && x-dx1+cutsize <ClassMat[1].cols-1 && y-dy1-cutsize >1 && y-dy1+cutsize<ClassMat[1].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx1-cutsize,y-dy1-cutsize,size,size);
         cv::Mat temp = ClassMat[1](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
-    if(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[2].cols-1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[2].rows-1)
+    if(x-dx2-cutsize>1 && x-dx2+cutsize <ClassMat[2].cols-1 && y-dy2-cutsize >1 && y-dy2+cutsize<ClassMat[2].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx2-cutsize,y-dy2-cutsize,size,size);
         cv::Mat temp = ClassMat[2](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
-    if(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize>1 && x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)+cutsize <ClassMat[3].cols-1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize >1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)+cutsize<ClassMat[3].rows-1)
+    if(x-dx3-cutsize>1 && x-dx3+cutsize <ClassMat[3].cols-1 && y-dy3-cutsize >1 && y-dy3+cutsize<ClassMat[3].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx3-cutsize,y-dy3-cutsize,size,size);
         cv::Mat temp = ClassMat[3](rect_roi);
         savetrainMat.push_back(temp);
     }
@@ -1346,33 +1407,41 @@ void MainWindow::predictresult(int y,int x)
         t1.y = std::min(t1.y,CorPoint[i].y);
     }
 
-    int size = 3;
+    int size = 1;
+    int dy0 = -t1.y+CorPoint[0].y;
+    int dx0 = -t1.x+CorPoint[0].x;
+    int dy1 = -t1.y+CorPoint[1].y;
+    int dx1 = -t1.x+CorPoint[1].x;
+    int dy2 = -t1.y+CorPoint[2].y;
+    int dx2 = -t1.x+CorPoint[2].x;
+    int dy3 = -t1.y+CorPoint[3].y;
+    int dx3 = -t1.x+CorPoint[3].x;
 
     savetrainMat.clear();
 
     int cutsize = 1;
-    if(x-(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[0].x-t1.x)+cutsize <ClassMat[0].cols-1 && y-(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[0].y-t1.y)+cutsize<ClassMat[0].rows-1)
+    if(x-dx0-cutsize>1 && x-dx0+cutsize <ClassMat[0].cols-1 && y-dy0-cutsize >1 && y-dy0+cutsize<ClassMat[0].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[0].y-t1.y)-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx0-cutsize,y-dy0-cutsize,size,size);
         cv::Mat temp = cutTempMat[0](rect_roi);
         savetrainMat.push_back(temp);
     }
-    if(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[1].cols-1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[1].rows-1)
+    if(x-dx1-cutsize>1 && x-dx1+cutsize <ClassMat[1].cols-1 && y-dy1-cutsize >1 && y-dy1+cutsize<ClassMat[1].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[1].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[1].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx1-cutsize,y-dy1-cutsize,size,size);
         cv::Mat temp = cutTempMat[1](rect_roi);
         savetrainMat.push_back(temp);
     }
-    if(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize>1 && x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)+cutsize <ClassMat[2].cols-1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize >1 && y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)+cutsize<ClassMat[2].rows-1)
+    if(x-dx2-cutsize>1 && x-dx2+cutsize <ClassMat[2].cols-1 && y-dy2-cutsize >1 && y-dy2+cutsize<ClassMat[2].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[2].x-t1.x)+(CorPoint[0].x-t1.x)-cutsize,y-(CorPoint[2].y-t1.y)+(CorPoint[0].y-t1.y)-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx2-cutsize,y-dy2-cutsize,size,size);
         cv::Mat temp = cutTempMat[2](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
     }
-    if(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize>1 && x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)+cutsize <ClassMat[3].cols-1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize >1 && y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)+cutsize<ClassMat[3].rows-1)
+    if(x-dx3-cutsize>1 && x-dx3+cutsize <ClassMat[3].cols-1 && y-dy3-cutsize >1 && y-dy3+cutsize<ClassMat[3].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-cutsize,y-(CorPoint[3].y-t1.y)+(CorPoint[1].y-t1.y)-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx3-cutsize,y-dy3-cutsize,size,size);
         cv::Mat temp = cutTempMat[3](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);

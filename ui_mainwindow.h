@@ -428,7 +428,7 @@ public:
         retranslateUi(MainWindow);
 
         tabClassifier->setCurrentIndex(0);
-        tabWidget_2->setCurrentIndex(3);
+        tabWidget_2->setCurrentIndex(2);
         stackedWidget->setCurrentIndex(0);
         ProgressList->setCurrentRow(0);
 
