@@ -12,7 +12,6 @@
 #include "nonfree/nonfree.hpp"
 #include <QDebug>
 #include <string>
-//#include "stitch.h"
 #include "opencv2/stitching/detail/blenders.hpp"
 #include <QTextCodec>
 #include "opencv2/imgproc/imgproc.hpp"
@@ -24,6 +23,9 @@
 #include "thread_stitch.h"
 #include "autocameradialog.h"
 #include <opencv2/core/core.hpp>
+#include <QAxObject>
+
+
 
 namespace Ui {
 class MainWindow;
@@ -50,8 +52,6 @@ private slots:
 
     void on_LoadCapPic_clicked();
 
-//    void on_CapResultSlider_sliderMoved(int position);
-
     void on_LBlackRefButton_clicked();
 
     void on_CaptureCalButtom_clicked();
@@ -77,12 +77,6 @@ private slots:
     void on_shadowButton_clicked();
 
     void on_TestButton_clicked();
-
-//    void on_hclassslider1_sliderMoved(int position);
-
-//    void on_hclassslider3_sliderMoved(int position);
-
-//    void on_iclassslider3_sliderMoved(int position);
 
     void on_trainButton_clicked();
 
@@ -133,12 +127,6 @@ private:
 
     std::vector<cv::Mat> ClassMat;
 
-
-
-
-
-
-
     std::vector<cv::Point> tempPoint;
 
 
@@ -146,15 +134,11 @@ private:
 
     std::vector<cv::Mat> savetrainMat;
 
-
     cv::Mat saveMat;
     cv::Mat saveMat3;
 
-
     CvSVM svm;
-
     cv::Mat predict;
-
 
 };
 

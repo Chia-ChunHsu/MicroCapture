@@ -109,6 +109,10 @@ public:
     QPushButton *SetButtom;
     QPushButton *PredictButton;
     QPushButton *getData3x3Button;
+    QLabel *L1;
+    QLabel *L2;
+    QLabel *L3;
+    QLabel *L4;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -413,6 +417,18 @@ public:
         getData3x3Button->setObjectName(QStringLiteral("getData3x3Button"));
         getData3x3Button->setEnabled(false);
         getData3x3Button->setGeometry(QRect(370, 450, 75, 23));
+        L1 = new QLabel(centralWidget);
+        L1->setObjectName(QStringLiteral("L1"));
+        L1->setGeometry(QRect(270, 420, 47, 12));
+        L2 = new QLabel(centralWidget);
+        L2->setObjectName(QStringLiteral("L2"));
+        L2->setGeometry(QRect(320, 420, 47, 12));
+        L3 = new QLabel(centralWidget);
+        L3->setObjectName(QStringLiteral("L3"));
+        L3->setGeometry(QRect(270, 450, 47, 12));
+        L4 = new QLabel(centralWidget);
+        L4->setObjectName(QStringLiteral("L4"));
+        L4->setGeometry(QRect(320, 450, 47, 12));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -427,7 +443,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabClassifier->setCurrentIndex(0);
+        tabClassifier->setCurrentIndex(2);
         tabWidget_2->setCurrentIndex(2);
         stackedWidget->setCurrentIndex(0);
         ProgressList->setCurrentRow(0);
@@ -514,6 +530,10 @@ public:
         SetButtom->setText(QApplication::translate("MainWindow", "Set", 0));
         PredictButton->setText(QApplication::translate("MainWindow", "Predict", 0));
         getData3x3Button->setText(QApplication::translate("MainWindow", "Get Data3*3", 0));
+        L1->setText(QApplication::translate("MainWindow", "TextLabel", 0));
+        L2->setText(QApplication::translate("MainWindow", "TextLabel", 0));
+        L3->setText(QApplication::translate("MainWindow", "TextLabel", 0));
+        L4->setText(QApplication::translate("MainWindow", "TextLabel", 0));
     } // retranslateUi
 
 };

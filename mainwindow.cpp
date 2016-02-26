@@ -1188,10 +1188,13 @@ void MainWindow::on_hSlider_sliderMoved(int position)
     int cutsize = 1;
     if(x-dx0-cutsize>1 && x-dx0+cutsize <ClassMat[0].cols-1 && y-dy0-cutsize >1 && y-dy0+cutsize<ClassMat[0].rows-1)
     {
+
         cv::Rect rect_roi = cv::Rect(x-dx0-cutsize,y-dy0-cutsize,size,size);
         cv::Mat temp = ClassMat[0](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
+        int n = cutTempMat[0].at<cv::Vec3b>(y-dy0,x-dx0)[0];
+        ui->L1->setText(QString::number(n));
     }
     if(x-dx1-cutsize>1 && x-dx1+cutsize <ClassMat[1].cols-1 && y-dy1-cutsize >1 && y-dy1+cutsize<ClassMat[1].rows-1)
     {
@@ -1199,6 +1202,8 @@ void MainWindow::on_hSlider_sliderMoved(int position)
         cv::Mat temp = ClassMat[1](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
+        int n = cutTempMat[1].at<cv::Vec3b>(y-dy1,x-dx1)[0];
+        ui->L2->setText(QString::number(n));
     }
     if(x-dx2-cutsize>1 && x-dx2+cutsize <ClassMat[2].cols-1 && y-dy2-cutsize >1 && y-dy2+cutsize<ClassMat[2].rows-1)
     {
@@ -1206,6 +1211,8 @@ void MainWindow::on_hSlider_sliderMoved(int position)
         cv::Mat temp = ClassMat[2](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
+        int n = cutTempMat[2].at<cv::Vec3b>(y-dy2,x-dx2)[0];
+        ui->L3->setText(QString::number(n));
     }
     if(x-dx3-cutsize>1 && x-dx3+cutsize <ClassMat[3].cols-1 && y-dy3-cutsize >1 && y-dy3+cutsize<ClassMat[3].rows-1)
     {
@@ -1213,6 +1220,8 @@ void MainWindow::on_hSlider_sliderMoved(int position)
         cv::Mat temp = ClassMat[3](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
+        int n = cutTempMat[3].at<cv::Vec3b>(y-dy3,x-dx3)[0];
+        ui->L4->setText(QString::number(n));
     }
     if(savetrainMat.size()==4)
     {
@@ -1295,6 +1304,8 @@ void MainWindow::on_vSlider_sliderMoved(int position)
         cv::Mat temp = ClassMat[0](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
+        int n = cutTempMat[0].at<cv::Vec3b>(y-dy0,x-dx0)[0];
+        ui->L1->setText(QString::number(n));
     }
     if(x-dx1-cutsize>1 && x-dx1+cutsize <ClassMat[1].cols-1 && y-dy1-cutsize >1 && y-dy1+cutsize<ClassMat[1].rows-1)
     {
@@ -1302,6 +1313,8 @@ void MainWindow::on_vSlider_sliderMoved(int position)
         cv::Mat temp = ClassMat[1](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
+        int n = cutTempMat[1].at<cv::Vec3b>(y-dy1,x-dx1)[0];
+        ui->L2->setText(QString::number(n));
     }
     if(x-dx2-cutsize>1 && x-dx2+cutsize <ClassMat[2].cols-1 && y-dy2-cutsize >1 && y-dy2+cutsize<ClassMat[2].rows-1)
     {
@@ -1309,12 +1322,16 @@ void MainWindow::on_vSlider_sliderMoved(int position)
         cv::Mat temp = ClassMat[2](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
+        int n = cutTempMat[2].at<cv::Vec3b>(y-dy2,x-dx2)[0];
+        ui->L3->setText(QString::number(n));
     }
     if(x-dx3-cutsize>1 && x-dx3+cutsize <ClassMat[3].cols-1 && y-dy3-cutsize >1 && y-dy3+cutsize<ClassMat[3].rows-1)
     {
         cv::Rect rect_roi = cv::Rect(x-dx3-cutsize,y-dy3-cutsize,size,size);
         cv::Mat temp = ClassMat[3](rect_roi);
         savetrainMat.push_back(temp);
+        int n = cutTempMat[3].at<cv::Vec3b>(y-dy3,x-dx3)[0];
+        ui->L4->setText(QString::number(n));
     }
     if(savetrainMat.size()==4)
     {
@@ -1363,8 +1380,18 @@ void MainWindow::on_getDataButton_clicked()
 {
     QString name = QFileDialog::getSaveFileName(this, tr("Save File"),
                                                 "D:/Data/MultiSpectral_Device_Data/0903_0904_set/0903_0904trainData/",
-                                                tr("Images (*.jpg)"));
-    cv::imwrite(name.toStdString(),saveMat);
+                                                tr("Images "));
+    cv::imwrite(name.toStdString()+".jpg",saveMat);
+
+    cv::imshow("saveMat",saveMat);
+    QFile file(name+".tab");
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
+    QTextStream out(&file);
+
+    //int tmp =  saveMat.at<cv::Vec3b>(0,i)[0];
+    out <<ui->L1->text()<<"\t"<<ui->L2->text()<<"\t"<<ui->L3->text()<<"\t"<<ui->L4->text();
+
+    file.close();
 }
 
 void MainWindow::on_PredictButton_clicked()
