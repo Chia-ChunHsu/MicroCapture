@@ -195,10 +195,10 @@ void MainWindow::on_LoadCapPic_clicked()
     for(int i=0;i<4;i++)
     {
         CapMat[i] = CapMat[i] -BlackRef[i];
-        Equal();
+        //Equal();
         CapOMat.push_back(CapMat[i]);
 
-        CapMat[i] = CapWEual[i].clone();
+        //CapMat[i] = CapWEual[i].clone();
 
     }
 
@@ -839,6 +839,7 @@ void MainWindow::on_SaveCap_clicked()
 
 void MainWindow::on_cutButton_clicked()
 {
+
     //cv::imshow("MaskResult",MaskResult);
     qDebug()<<"001";
     cv::Point t1(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
@@ -882,35 +883,33 @@ void MainWindow::on_cutButton_clicked()
         {
             //int x=-1;
             //int y=-1;
-
-
             if(MaskResult.at<cv::Vec3b>(j,i)[0] != 255 && j-dy0>=0 && j-dy0<temp[0].rows && i-dx0>=0 && i-dx0<temp[0].cols)
             {
-                temp[0].at<cv::Vec3b>(j-dy0,i-dx0)[0]=0;
-                temp[0].at<cv::Vec3b>(j-dy0,i-dx0)[1]=0;
-                temp[0].at<cv::Vec3b>(j-dy0,i-dx0)[2]=0;
+                temp[0].at<cv::Vec3b>(j-dy0,i-dx0)[0]=127;
+                temp[0].at<cv::Vec3b>(j-dy0,i-dx0)[1]=127;
+                temp[0].at<cv::Vec3b>(j-dy0,i-dx0)[2]=127;
             }
 
             if(MaskResult.at<cv::Vec3b>(j,i)[0] != 255 && j-dy1>=0 && j-dy1<temp[1].rows && i-dx1>=0 && i-dx1<temp[1].cols)
             {
-                temp[1].at<cv::Vec3b>(j-dy1,i-dx1)[0]=0;
-                temp[1].at<cv::Vec3b>(j-dy1,i-dx1)[1]=0;
-                temp[1].at<cv::Vec3b>(j-dy1,i-dx1)[2]=0;
+                temp[1].at<cv::Vec3b>(j-dy1,i-dx1)[0]=127;
+                temp[1].at<cv::Vec3b>(j-dy1,i-dx1)[1]=127;
+                temp[1].at<cv::Vec3b>(j-dy1,i-dx1)[2]=127;
             }
             //qDebug()<<j-dy2<<" "<<i-dx2;
             if(MaskResult.at<cv::Vec3b>(j,i)[0] != 255 && j-dy2>=0 && j-dy2<temp[2].rows && i-dx2>=0 && i-dx2<temp[2].cols)
             {
 
-                temp[2].at<cv::Vec3b>(j-dy2,i-dx2)[0]=0;
-                temp[2].at<cv::Vec3b>(j-dy2,i-dx2)[1]=0;
-                temp[2].at<cv::Vec3b>(j-dy2,i-dx2)[2]=0;
+                temp[2].at<cv::Vec3b>(j-dy2,i-dx2)[0]=127;
+                temp[2].at<cv::Vec3b>(j-dy2,i-dx2)[1]=127;
+                temp[2].at<cv::Vec3b>(j-dy2,i-dx2)[2]=127;
             }
 
             if(MaskResult.at<cv::Vec3b>(j,i)[0] != 255 && j-dy3>=0 && j-dy3<temp[3].rows && i-dx3>=0 && i-dx3<temp[3].cols)
             {
-                temp[3].at<cv::Vec3b>(j-dy3,i-dx3)[0]=0;
-                temp[3].at<cv::Vec3b>(j-dy3,i-dx3)[1]=0;
-                temp[3].at<cv::Vec3b>(j-dy3,i-dx3)[2]=0;
+                temp[3].at<cv::Vec3b>(j-dy3,i-dx3)[0]=127;
+                temp[3].at<cv::Vec3b>(j-dy3,i-dx3)[1]=127;
+                temp[3].at<cv::Vec3b>(j-dy3,i-dx3)[2]=127;
             }
 
         }
@@ -1143,9 +1142,9 @@ void MainWindow::on_trainButton_clicked()
 
 void MainWindow::on_hSlider_sliderMoved(int position)
 {
-    for(int i=0;i<ClassMat.size();i++)
+    for(int i=0;i<cutTempMat.size();i++)
     {
-         cutTempMat[i] = ClassMat[i].clone();
+         cutTempMat[i] = CapWEual[i].clone();
     }
     //int x = ui->hSlider->value();
     int x = position;
@@ -1190,7 +1189,7 @@ void MainWindow::on_hSlider_sliderMoved(int position)
     {
 
         cv::Rect rect_roi = cv::Rect(x-dx0-cutsize,y-dy0-cutsize,size,size);
-        cv::Mat temp = ClassMat[0](rect_roi);
+        cv::Mat temp = cutTempMat[0](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
         int n = cutTempMat[0].at<cv::Vec3b>(y-dy0,x-dx0)[0];
@@ -1199,7 +1198,7 @@ void MainWindow::on_hSlider_sliderMoved(int position)
     if(x-dx1-cutsize>1 && x-dx1+cutsize <ClassMat[1].cols-1 && y-dy1-cutsize >1 && y-dy1+cutsize<ClassMat[1].rows-1)
     {
         cv::Rect rect_roi = cv::Rect(x-dx1-cutsize,y-dy1-cutsize,size,size);
-        cv::Mat temp = ClassMat[1](rect_roi);
+        cv::Mat temp = cutTempMat[1](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
         int n = cutTempMat[1].at<cv::Vec3b>(y-dy1,x-dx1)[0];
@@ -1208,7 +1207,7 @@ void MainWindow::on_hSlider_sliderMoved(int position)
     if(x-dx2-cutsize>1 && x-dx2+cutsize <ClassMat[2].cols-1 && y-dy2-cutsize >1 && y-dy2+cutsize<ClassMat[2].rows-1)
     {
         cv::Rect rect_roi = cv::Rect(x-dx2-cutsize,y-dy2-cutsize,size,size);
-        cv::Mat temp = ClassMat[2](rect_roi);
+        cv::Mat temp = cutTempMat[2](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
         int n = cutTempMat[2].at<cv::Vec3b>(y-dy2,x-dx2)[0];
@@ -1217,7 +1216,7 @@ void MainWindow::on_hSlider_sliderMoved(int position)
     if(x-dx3-cutsize>1 && x-dx3+cutsize <ClassMat[3].cols-1 && y-dy3-cutsize >1 && y-dy3+cutsize<ClassMat[3].rows-1)
     {
         cv::Rect rect_roi = cv::Rect(x-dx3-cutsize,y-dy3-cutsize,size,size);
-        cv::Mat temp = ClassMat[3](rect_roi);
+        cv::Mat temp = cutTempMat[3](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
         int n = cutTempMat[3].at<cv::Vec3b>(y-dy3,x-dx3)[0];
@@ -1254,9 +1253,9 @@ void MainWindow::on_hSlider_sliderMoved(int position)
 void MainWindow::on_vSlider_sliderMoved(int position)
 {
 
-    for(int i=0;i<ClassMat.size();i++)
+    for(int i=0;i<cutTempMat.size();i++)
     {
-         cutTempMat[i] = ClassMat[i].clone();
+         cutTempMat[i] = CapWEual[i].clone();
     }
     int x = ui->hSlider->value();
     //int y = ui->vSlider->maximum() - ui->vSlider->value();
@@ -1301,7 +1300,7 @@ void MainWindow::on_vSlider_sliderMoved(int position)
     if(x-dx0-cutsize>1 && x-dx0+cutsize <ClassMat[0].cols-1 && y-dy0-cutsize >1 && y-dy0+cutsize<ClassMat[0].rows-1)
     {
         cv::Rect rect_roi = cv::Rect(x-dx0-cutsize,y-dy0-cutsize,size,size);
-        cv::Mat temp = ClassMat[0](rect_roi);
+        cv::Mat temp = cutTempMat[0](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
         int n = cutTempMat[0].at<cv::Vec3b>(y-dy0,x-dx0)[0];
@@ -1310,7 +1309,7 @@ void MainWindow::on_vSlider_sliderMoved(int position)
     if(x-dx1-cutsize>1 && x-dx1+cutsize <ClassMat[1].cols-1 && y-dy1-cutsize >1 && y-dy1+cutsize<ClassMat[1].rows-1)
     {
         cv::Rect rect_roi = cv::Rect(x-dx1-cutsize,y-dy1-cutsize,size,size);
-        cv::Mat temp = ClassMat[1](rect_roi);
+        cv::Mat temp = cutTempMat[1](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
         int n = cutTempMat[1].at<cv::Vec3b>(y-dy1,x-dx1)[0];
@@ -1319,7 +1318,7 @@ void MainWindow::on_vSlider_sliderMoved(int position)
     if(x-dx2-cutsize>1 && x-dx2+cutsize <ClassMat[2].cols-1 && y-dy2-cutsize >1 && y-dy2+cutsize<ClassMat[2].rows-1)
     {
         cv::Rect rect_roi = cv::Rect(x-dx2-cutsize,y-dy2-cutsize,size,size);
-        cv::Mat temp = ClassMat[2](rect_roi);
+        cv::Mat temp = cutTempMat[2](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
         int n = cutTempMat[2].at<cv::Vec3b>(y-dy2,x-dx2)[0];
@@ -1328,7 +1327,7 @@ void MainWindow::on_vSlider_sliderMoved(int position)
     if(x-dx3-cutsize>1 && x-dx3+cutsize <ClassMat[3].cols-1 && y-dy3-cutsize >1 && y-dy3+cutsize<ClassMat[3].rows-1)
     {
         cv::Rect rect_roi = cv::Rect(x-dx3-cutsize,y-dy3-cutsize,size,size);
-        cv::Mat temp = ClassMat[3](rect_roi);
+        cv::Mat temp = cutTempMat[3](rect_roi);
         savetrainMat.push_back(temp);
         int n = cutTempMat[3].at<cv::Vec3b>(y-dy3,x-dx3)[0];
         ui->L4->setText(QString::number(n));
@@ -1370,9 +1369,9 @@ void MainWindow::on_SetButtom_clicked()
     ui->hSlider->setValue(10);
     ui->vSlider->setValue(10);
     cutTempMat.clear();
-    for(int i=0;i<ClassMat.size();i++)
+    for(int i=0;i<CapWEual.size();i++)
     {
-        cutTempMat.push_back(ClassMat[i]);
+        cutTempMat.push_back(CapWEual[i]);
     }
 }
 
@@ -1421,11 +1420,12 @@ void MainWindow::on_PredictButton_clicked()
     }
 }
 
-void MainWindow::predictresult(int y,int x)
+float MainWindow::predictresult(int y,int x)
 {
-    for(int i=0;i<ClassMat.size();i++)
+
+    for(int i=0;i<CapWEual.size();i++)
     {
-         cutTempMat[i] = ClassMat[i].clone();
+         cutTempMat[i] = CapWEual[i].clone();
     }
     cv::Point t1(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
     for(int i=0;i<CorPoint.size();i++)
@@ -1444,89 +1444,78 @@ void MainWindow::predictresult(int y,int x)
     int dy3 = -t1.y+CorPoint[3].y;
     int dx3 = -t1.x+CorPoint[3].x;
 
-    savetrainMat.clear();
+    //savetrainMat.clear();
 
     int cutsize = 1;
+    std::vector<QString> result;
     if(x-dx0-cutsize>1 && x-dx0+cutsize <ClassMat[0].cols-1 && y-dy0-cutsize >1 && y-dy0+cutsize<ClassMat[0].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-dx0-cutsize,y-dy0-cutsize,size,size);
-        cv::Mat temp = cutTempMat[0](rect_roi);
-        savetrainMat.push_back(temp);
+        int n = cutTempMat[0].at<cv::Vec3b>(y-dy0,x-dx0)[0];
+        result.push_back(QString::number(n));
+        //ui->L4->setText(QString::number(n));
+        //cv::Rect rect_roi = cv::Rect(x-dx0-cutsize,y-dy0-cutsize,size,size);
+        //cv::Mat temp = cutTempMat[0](rect_roi);
+        //savetrainMat.push_back(temp);
+
     }
     if(x-dx1-cutsize>1 && x-dx1+cutsize <ClassMat[1].cols-1 && y-dy1-cutsize >1 && y-dy1+cutsize<ClassMat[1].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-dx1-cutsize,y-dy1-cutsize,size,size);
-        cv::Mat temp = cutTempMat[1](rect_roi);
-        savetrainMat.push_back(temp);
+        int n = cutTempMat[1].at<cv::Vec3b>(y-dy1,x-dx1)[0];
+        result.push_back(QString::number(n));
+//        cv::Rect rect_roi = cv::Rect(x-dx1-cutsize,y-dy1-cutsize,size,size);
+//        cv::Mat temp = cutTempMat[1](rect_roi);
+//        savetrainMat.push_back(temp);
     }
     if(x-dx2-cutsize>1 && x-dx2+cutsize <ClassMat[2].cols-1 && y-dy2-cutsize >1 && y-dy2+cutsize<ClassMat[2].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-dx2-cutsize,y-dy2-cutsize,size,size);
-        cv::Mat temp = cutTempMat[2](rect_roi);
-        //cv::imshow("temp",temp);
-        savetrainMat.push_back(temp);
+        int n = cutTempMat[2].at<cv::Vec3b>(y-dy2,x-dx2)[0];
+        result.push_back(QString::number(n));
+//        cv::Rect rect_roi = cv::Rect(x-dx2-cutsize,y-dy2-cutsize,size,size);
+//        cv::Mat temp = cutTempMat[2](rect_roi);
+//        savetrainMat.push_back(temp);
     }
     if(x-dx3-cutsize>1 && x-dx3+cutsize <ClassMat[3].cols-1 && y-dy3-cutsize >1 && y-dy3+cutsize<ClassMat[3].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-dx3-cutsize,y-dy3-cutsize,size,size);
-        cv::Mat temp = cutTempMat[3](rect_roi);
-        //cv::imshow("temp",temp);
-        savetrainMat.push_back(temp);
+        int n = cutTempMat[3].at<cv::Vec3b>(y-dy3,x-dx3)[0];
+        result.push_back(QString::number(n));
+//        cv::Rect rect_roi = cv::Rect(x-dx3-cutsize,y-dy3-cutsize,size,size);
+//        cv::Mat temp = cutTempMat[3](rect_roi);
+//        savetrainMat.push_back(temp);
     }
-    cv::Mat cut;
-    if(savetrainMat.size()==4)
+    cv::Mat test(1,4,CV_32FC1);
+    if(result.size()!=4)
+        return 100;
+    for(int j=0;j<4;j++)
     {
-        cv::Mat temp;
-
-        temp.create(4*cutsize,cutsize,CV_MAKETYPE(temp.type(),3));
-        for(int number =0;number<4;number++)
-        {
-            for(int i=0;i<1;i++)
-            {
-                for(int j=0;j<1;j++)
-                {
-                    temp.at<cv::Vec3b>(j+cutsize*number,0)[0] = savetrainMat[number].at<cv::Vec3b>(j,i)[0];
-
-                    temp.at<cv::Vec3b>(j+cutsize*number,0)[1] = savetrainMat[number].at<cv::Vec3b>(j,i)[1];
-
-                    temp.at<cv::Vec3b>(j+cutsize*number,0)[2] = savetrainMat[number].at<cv::Vec3b>(j,i)[2];
-                }
-            }
-        }
-//        ui->getDataButton->setEnabled(true);
-        cut = temp.clone();
-    }
-
-    int ii=0;
-    cv::Mat Result1D(1,4,CV_32FC1);
-    cv::cvtColor(cut,cut,CV_RGB2GRAY);
-
-    //cv::Mat trainingImage;
-    for(int i=0;i<cut.rows;i++)
-    {
-        for(int j=0;j<cut.cols;j++)
-        {
-            Result1D.at<float>(0,ii++) = cut.at<uchar>(i,j);
-        }
+        test.at<float>(0,j) = result[j].toFloat();
+        //qDebug()<<result[j].toFloat();
     }
 
     svm.load("SVM.txt");
-    float resultclass = svm.predict(Result1D);
-    //qDebug()<<"Resut: "<< resultclass;
+    float resultclass = svm.predict(test);
     if(y<predict.rows && x<predict.cols && y>=0 && x>=0)
-    if(resultclass == 0)
     {
-        predict.at<cv::Vec3b>(y,x)[0] = 0;
-        predict.at<cv::Vec3b>(y,x)[1] = 255;
-        predict.at<cv::Vec3b>(y,x)[2] = 0;
-    }
-    else if(resultclass == 2)
-    {
-        predict.at<cv::Vec3b>(y,x)[0] = 0;
-        predict.at<cv::Vec3b>(y,x)[1] = 0;
-        predict.at<cv::Vec3b>(y,x)[2] = 255;
+        if(resultclass == 0)
+        {
+            predict.at<cv::Vec3b>(y,x)[0] = 0;
+            predict.at<cv::Vec3b>(y,x)[1] = 255;
+            predict.at<cv::Vec3b>(y,x)[2] = 0;
+        }
+        else if(resultclass == 1)
+        {
+            predict.at<cv::Vec3b>(y,x)[0] = 0;
+            predict.at<cv::Vec3b>(y,x)[1] = 255;
+            predict.at<cv::Vec3b>(y,x)[2] = 255;
+        }
+        else if(resultclass == 2)
+        {
+            predict.at<cv::Vec3b>(y,x)[0] = 0;
+            predict.at<cv::Vec3b>(y,x)[1] = 0;
+            predict.at<cv::Vec3b>(y,x)[2] = 255;
+        }
     }
 
+    return resultclass;
 
 }
 
@@ -1548,10 +1537,10 @@ void MainWindow::Equal()
         CapWEual.push_back(out);
     }
     qDebug()<<"Hi";
-    ShowOnLabel(CapWEual[0],ui->equalLabel1);
-    ShowOnLabel(CapWEual[1],ui->equalLabel2);
-    ShowOnLabel(CapWEual[2],ui->equalLabel3);
-    ShowOnLabel(CapWEual[3],ui->equalLabel4);
+    //ShowOnLabel(CapWEual[0],ui->equalLabel1);
+    //ShowOnLabel(CapWEual[1],ui->equalLabel2);
+    //ShowOnLabel(CapWEual[2],ui->equalLabel3);
+    //ShowOnLabel(CapWEual[3],ui->equalLabel4);
 }
 
 void MainWindow::on_getData3x3Button_clicked()
@@ -1564,5 +1553,31 @@ void MainWindow::on_getData3x3Button_clicked()
 
 void MainWindow::on_EqualButton_clicked()
 {
-    Equal();
+    CapWEual.clear();
+    for(int i=0;i<4;i++)
+    {
+        cv::Mat temp ;
+        cv::cvtColor(ClassMat[i],temp,CV_BGR2GRAY);
+        cv::Mat temp1;
+        cv::normalize(temp,temp1,0,255,CV_MINMAX);
+        cv::Mat out;
+        cv::cvtColor(temp1,out,CV_GRAY2BGR);
+        CapWEual.push_back(out);
+    }
+    ShowOnLabel(CapWEual[0],ui->equalLabel1);
+    ShowOnLabel(CapWEual[1],ui->equalLabel2);
+    ShowOnLabel(CapWEual[2],ui->equalLabel3);
+    ShowOnLabel(CapWEual[3],ui->equalLabel4);
+}
+
+void MainWindow::on_hSlider_valueChanged(int value)
+{
+
+}
+
+void MainWindow::on_TestButton_2_clicked()
+{
+    int x = ui->hSlider->value();
+    int y = ui->vSlider->maximum() - ui->vSlider->value();
+    qDebug()<<predictresult(y,x);
 }

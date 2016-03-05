@@ -41,7 +41,7 @@ public:
     void ShowOnLabel(cv::Mat mat,QLabel *k);
     int Cal();
     void Stitch(int value);
-    void predictresult(int y,int x);
+    float predictresult(int y,int x);
     void Equal();
 
 
@@ -94,6 +94,10 @@ private slots:
     void on_getData3x3Button_clicked();
 
     void on_EqualButton_clicked();
+
+    void on_hSlider_valueChanged(int value);
+
+    void on_TestButton_2_clicked();
 
 private:
 

@@ -113,6 +113,7 @@ public:
     QLabel *L2;
     QLabel *L3;
     QLabel *L4;
+    QPushButton *TestButton_2;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -121,7 +122,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(659, 532);
+        MainWindow->resize(821, 592);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         tabClassifier = new QTabWidget(centralWidget);
@@ -245,7 +246,7 @@ public:
         equalLabel4->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
         EqualButton = new QPushButton(tab_5);
         EqualButton->setObjectName(QStringLiteral("EqualButton"));
-        EqualButton->setEnabled(false);
+        EqualButton->setEnabled(true);
         EqualButton->setGeometry(QRect(10, 280, 331, 31));
         tabWidget_2->addTab(tab_5, QString());
         saveResultButtom = new QPushButton(DetectTab);
@@ -429,10 +430,13 @@ public:
         L4 = new QLabel(centralWidget);
         L4->setObjectName(QStringLiteral("L4"));
         L4->setGeometry(QRect(320, 450, 47, 12));
+        TestButton_2 = new QPushButton(centralWidget);
+        TestButton_2->setObjectName(QStringLiteral("TestButton_2"));
+        TestButton_2->setGeometry(QRect(660, 260, 91, 61));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 659, 21));
+        menuBar->setGeometry(QRect(0, 0, 821, 21));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -443,8 +447,8 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabClassifier->setCurrentIndex(2);
-        tabWidget_2->setCurrentIndex(2);
+        tabClassifier->setCurrentIndex(0);
+        tabWidget_2->setCurrentIndex(3);
         stackedWidget->setCurrentIndex(0);
         ProgressList->setCurrentRow(0);
 
@@ -534,6 +538,7 @@ public:
         L2->setText(QApplication::translate("MainWindow", "TextLabel", 0));
         L3->setText(QApplication::translate("MainWindow", "TextLabel", 0));
         L4->setText(QApplication::translate("MainWindow", "TextLabel", 0));
+        TestButton_2->setText(QApplication::translate("MainWindow", "Test", 0));
     } // retranslateUi
 
 };
