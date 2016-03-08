@@ -1022,8 +1022,8 @@ void MainWindow::on_shadowButton_clicked()
 //    int x2 = CorPoint[2].x;
 //    int y2 = CorPoint[2].y;
 
-    int x1 = CorPoint[0].x;
-    int y1 = CorPoint[0].y;
+    int x1 = CorPoint[0].x-t1.x;
+    int y1 = CorPoint[0].y-t1.y;
 
     int threv1 = ui->hSlider01->value();
     int threv3 = ui->hSlider03->value();
@@ -1034,7 +1034,7 @@ void MainWindow::on_shadowButton_clicked()
 //    qDebug()<<CorPoint[3].x<<" "<<CorPoint[3].y;
     int dy2 = CorPoint[2].y-t1.y;
     int dx2 = CorPoint[2].x-t1.x;
-
+    qDebug()<<"===0";
     for(int i = 0;i<shadow.cols;i++)
     {
         for(int j=0;j<shadow.rows;j++)
@@ -1045,10 +1045,12 @@ void MainWindow::on_shadowButton_clicked()
             {
                 bool1 = ( tempWarp[2].at<cv::Vec3b>(j-dy2,i-dx2)[0]+tempWarp[2].at<cv::Vec3b>(j-dy2,i-dx2)[1]+tempWarp[2].at<cv::Vec3b>(j-dy2,i-dx2)[2])/3 > threv1;
             }
-            if(j+y1-t1.y >=0 && i+x1-t1.x >=0 && j+y1-t1.y <tempWarp[3].rows && i+x1-t1.x <tempWarp[3].cols)
-            {
+//            if(j+y1>=0 && i+x1 >=0 && j+y1 <tempWarp[3].rows && i+x1 <tempWarp[3].cols)
+//            {
+            if(j>=y1 && i>=x1 && j<tempWarp[0].rows+y1 && i<tempWarp[0].cols+x1)
+             {
                 //bool3 = ( tempWarp[1].at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[0]+tempWarp[1].at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[1]+tempWarp[1].at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[2])/3 < threv3;
-                bool3 = ( tempWarp[0].at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[0]+tempWarp[0].at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[1]+tempWarp[0].at<cv::Vec3b>(j+y1-t1.y,i+x1-t1.x)[2])/3 < threv3;
+                bool3 = ( tempWarp[0].at<cv::Vec3b>(j-y1,i-x1)[0]+tempWarp[0].at<cv::Vec3b>(j-y1,i-x1)[1]+tempWarp[0].at<cv::Vec3b>(j-y1,i-x1)[2])/3 < threv3;
             }
             if(bool1==true  && bool3 == true )//(bool1==true && bool3 == true)
             {
@@ -1064,7 +1066,7 @@ void MainWindow::on_shadowButton_clicked()
             }
         }
     }
-
+    qDebug()<<"===1";
     //cv::imshow("shadow",shadow);
     int erosion_elem = 0;
     int erosion_size = 10;
@@ -1575,7 +1577,7 @@ void MainWindow::on_EqualButton_clicked()
     cv::cvtColor(ClassMat[0],temp,CV_BGR2GRAY);
     int his[256]={0};
     //int sum = 0;
-
+    qDebug()<<"==0";
     for(int i=0; i<temp.cols;i++)
     {
         for(int j=0;j<temp.rows;j++)
@@ -1592,17 +1594,24 @@ void MainWindow::on_EqualButton_clicked()
             }
         }
     }
+    qDebug()<<"==1";
     int large0 =his[0] ;
     int threshold0 =0;
     for(int n=1;n<256;n++)
     {
         if(his[n]-his[n-1]>large0)
         {
-            large0 = his[n];
+            large0 = his[n]-his[n-1];
             threshold0 = n;
         }
     }
-    //qDebug()<<"threshold0"<<threshold0;
+    qDebug()<<"==2";
+    //qDebug()<<"his[10]"<<his[10]<<"his[20]="<<his[20]<<" his[150]="<<his[150];
+    for(int i=0;i<255;i++)
+    {
+        qDebug()<<i<<" "<<his[i];
+    }
+    qDebug()<<"threshold0"<<threshold0;
     for(int i=0; i<temp.cols;i++)
     {
         for(int j=0;j<temp.rows;j++)
@@ -1611,15 +1620,24 @@ void MainWindow::on_EqualButton_clicked()
             {
                 if(temp.at<uchar>(j,i)<=threshold0)
                 {
-                    temp.at<uchar>(j,i)=(his[temp.at<uchar>(j,i)])/((his[temp.at<uchar>(j,i)])/threshold0)*127;
+                    double current = his[temp.at<uchar>(j,i)];
+                    double total = his[threshold0];
+                    temp.at<uchar>(j,i)=(current/total)*127;
                     //temp.at<uchar>(j,i)=127-(threshold0-temp.at<uchar>(j,i))/threshold0*127;
                 }
                 else
-                    temp.at<uchar>(j,i)=(his[temp.at<uchar>(j,i)]-his[threshold0])/((his[255]-his[threshold0])/(255-threshold0))*127+128;
+                {
+                    qDebug()<<"b"<<temp.at<uchar>(j,i);
+                    double current =his[temp.at<uchar>(j,i)]-his[threshold0];
+                    double total = (his[255]-his[threshold0]);
+                    temp.at<uchar>(j,i)=int(double(current/total)*128)+127;
+                    qDebug()<<"a"<<temp.at<uchar>(j,i);
+                }
             }
         }
     }
 
+    qDebug()<<"==3";
     cv::Mat out;
     //cv::equalizeHist(temp,out1);
     cv::cvtColor(temp,out,CV_GRAY2BGR);
@@ -1653,7 +1671,7 @@ void MainWindow::on_EqualButton_clicked()
     {
         if(his1[n]-his1[n-1]>large1)
         {
-            large1 = his1[n];
+            large1 = his1[n]-his1[n-1];
             threshold1 = n;
         }
     }
@@ -1696,16 +1714,18 @@ void MainWindow::on_EqualButton_clicked()
             }
         }
     }
+    qDebug()<<"=1";
     int large2 = his2[0];
     int threshold2 = 0;
     for(int n=1;n<256;n++)
     {
         if(his2[n]-his2[n-1]>large2)
         {
-            large2 = his2[n];
+            large2 = his2[n]-his2[n-1];
             threshold2 = n;
         }
     }
+    qDebug()<<"=2";
     for(int i=0; i<temp.cols;i++)
     {
         for(int j=0;j<temp.rows;j++)
@@ -1713,17 +1733,18 @@ void MainWindow::on_EqualButton_clicked()
             if(MaskResult.at<cv::Vec3b>(j+dy2,i+dx2)[0]!=0 && j+dy2<MaskResult.rows && i+dx2 <MaskResult.cols)
             {
                 if(temp.at<uchar>(j,i)<=threshold2)
-                    temp.at<uchar>(j,i)=(his2[temp.at<uchar>(j,i)])/((his2[temp.at<uchar>(j,i)])/threshold2)*127;
+                    temp.at<uchar>(j,i)=(his2[temp.at<uchar>(j,i)])/((his2[threshold2])/threshold2)*127;
                 else
                     temp.at<uchar>(j,i)=(his2[temp.at<uchar>(j,i)]-his2[threshold2])/((his2[255]-his2[threshold2])/(255-threshold2))*127+128;
 
             }
         }
     }
+    qDebug()<<"=3";
     cv::cvtColor(temp,out,CV_GRAY2BGR);
     CapWEual.push_back(out);
     qDebug()<<"00000002";
-
+    qDebug()<<"=4";
     cv::cvtColor(ClassMat[3],temp,CV_BGR2GRAY);
     int his3[256]={0};
     //int sum3 = 0;
@@ -1749,7 +1770,7 @@ void MainWindow::on_EqualButton_clicked()
     {
         if(his3[n]-his3[n-1]>large3)
         {
-            large3 = his3[n];
+            large3 = his3[n]-his3[n-1];
             threshold3 = n;
         }
     }
@@ -1760,7 +1781,7 @@ void MainWindow::on_EqualButton_clicked()
             if(MaskResult.at<cv::Vec3b>(j+dy3,i+dx3)[0]!=0 && j+dy3<MaskResult.rows && i+dx3 <MaskResult.cols)
             {
                 if(temp.at<uchar>(j,i)<=threshold3)
-                    temp.at<uchar>(j,i)=(his3[temp.at<uchar>(j,i)])/((his3[temp.at<uchar>(j,i)])/threshold3)*127;
+                    temp.at<uchar>(j,i)=(his3[temp.at<uchar>(j,i)])/((his3[threshold3])/threshold3)*127;
                 else
                     temp.at<uchar>(j,i)=(his3[temp.at<uchar>(j,i)]-his3[threshold3])/((his3[255]-his3[threshold3])/(255-threshold3))*127+128;
 
