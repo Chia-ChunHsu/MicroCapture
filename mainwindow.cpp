@@ -17,6 +17,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->stackedWidget->setCurrentIndex(0);
 
     setWindowTitle("Micro Capture ");
+    for(int i=0;i<4;i++)
+    {
+        biosx[i]=0;
+        biosy[i]=0;
+    }
 }
 
 MainWindow::~MainWindow()
@@ -96,7 +101,7 @@ void MainWindow::on_LoadCalButtom_clicked()
 
     std::vector<cv::Mat> WarpMat;
     std::vector<cv::Mat> WarpM;
-    qDebug()<<CalMat[0].cols;
+    //qDebug()<<CalMat[0].cols;
 
     if(TS.Warp(CalMat,WarpMat,nonDilateMask,CalResult,CorPoint)!=1)
     {
@@ -195,11 +200,7 @@ void MainWindow::on_LoadCapPic_clicked()
     for(int i=0;i<4;i++)
     {
         CapMat[i] = CapMat[i] -BlackRef[i];
-        //Equal();
         CapOMat.push_back(CapMat[i]);
-
-        //CapMat[i] = CapWEual[i].clone();
-
     }
 
     ShowOnLabel(CapOMat[0],ui->FilterLabel1);
@@ -208,7 +209,7 @@ void MainWindow::on_LoadCapPic_clicked()
     ShowOnLabel(CapOMat[3],ui->FilterLabel4);
     statusLabel->setText("Load Capture Pictures Success!");
     statusProgressBar->setValue(20);
-    //qDebug()<<CapWEual[0].channels();
+
     if(Cal()==1)
     {
         statusLabel->setText("Success!");
@@ -217,7 +218,6 @@ void MainWindow::on_LoadCapPic_clicked()
     {
         statusLabel->setAcceptDrops("Fail!");
     }
-    qDebug()<<"test";
 
 
     std::vector<cv::Mat> CapWarp2;
@@ -873,10 +873,10 @@ void MainWindow::on_cutButton_clicked()
     int dx2 = -t1.x+CorPoint[2].x;
     int dy3 = -t1.y+CorPoint[3].y;
     int dx3 = -t1.x+CorPoint[3].x;
-    qDebug()<<0<<dy0<<" "<<dx0;
-    qDebug()<<1<<dy1<<" "<<dx1;
-    qDebug()<<2<<dy2<<" "<<dx2;
-    qDebug()<<3<<dy3<<" "<<dx3;
+//    qDebug()<<0<<dy0<<" "<<dx0;
+//    qDebug()<<1<<dy1<<" "<<dx1;
+//    qDebug()<<2<<dy2<<" "<<dx2;
+//    qDebug()<<3<<dy3<<" "<<dx3;
     for(int i=0;i<MaskResult.cols;i++)
     {
         for(int j=0;j<MaskResult.rows;j++)
@@ -885,31 +885,31 @@ void MainWindow::on_cutButton_clicked()
             //int y=-1;
             if(MaskResult.at<cv::Vec3b>(j,i)[0] != 255 && j-dy0>=0 && j-dy0<temp[0].rows && i-dx0>=0 && i-dx0<temp[0].cols)
             {
-                temp[0].at<cv::Vec3b>(j-dy0,i-dx0)[0]=127;
-                temp[0].at<cv::Vec3b>(j-dy0,i-dx0)[1]=127;
-                temp[0].at<cv::Vec3b>(j-dy0,i-dx0)[2]=127;
+                temp[0].at<cv::Vec3b>(j-dy0,i-dx0)[0]=0;
+                temp[0].at<cv::Vec3b>(j-dy0,i-dx0)[1]=0;
+                temp[0].at<cv::Vec3b>(j-dy0,i-dx0)[2]=0;
             }
 
             if(MaskResult.at<cv::Vec3b>(j,i)[0] != 255 && j-dy1>=0 && j-dy1<temp[1].rows && i-dx1>=0 && i-dx1<temp[1].cols)
             {
-                temp[1].at<cv::Vec3b>(j-dy1,i-dx1)[0]=127;
-                temp[1].at<cv::Vec3b>(j-dy1,i-dx1)[1]=127;
-                temp[1].at<cv::Vec3b>(j-dy1,i-dx1)[2]=127;
+                temp[1].at<cv::Vec3b>(j-dy1,i-dx1)[0]=0;
+                temp[1].at<cv::Vec3b>(j-dy1,i-dx1)[1]=0;
+                temp[1].at<cv::Vec3b>(j-dy1,i-dx1)[2]=0;
             }
             //qDebug()<<j-dy2<<" "<<i-dx2;
             if(MaskResult.at<cv::Vec3b>(j,i)[0] != 255 && j-dy2>=0 && j-dy2<temp[2].rows && i-dx2>=0 && i-dx2<temp[2].cols)
             {
 
-                temp[2].at<cv::Vec3b>(j-dy2,i-dx2)[0]=127;
-                temp[2].at<cv::Vec3b>(j-dy2,i-dx2)[1]=127;
-                temp[2].at<cv::Vec3b>(j-dy2,i-dx2)[2]=127;
+                temp[2].at<cv::Vec3b>(j-dy2,i-dx2)[0]=0;
+                temp[2].at<cv::Vec3b>(j-dy2,i-dx2)[1]=0;
+                temp[2].at<cv::Vec3b>(j-dy2,i-dx2)[2]=0;
             }
 
             if(MaskResult.at<cv::Vec3b>(j,i)[0] != 255 && j-dy3>=0 && j-dy3<temp[3].rows && i-dx3>=0 && i-dx3<temp[3].cols)
             {
-                temp[3].at<cv::Vec3b>(j-dy3,i-dx3)[0]=127;
-                temp[3].at<cv::Vec3b>(j-dy3,i-dx3)[1]=127;
-                temp[3].at<cv::Vec3b>(j-dy3,i-dx3)[2]=127;
+                temp[3].at<cv::Vec3b>(j-dy3,i-dx3)[0]=0;
+                temp[3].at<cv::Vec3b>(j-dy3,i-dx3)[1]=0;
+                temp[3].at<cv::Vec3b>(j-dy3,i-dx3)[2]=0;
             }
 
         }
@@ -1158,14 +1158,15 @@ void MainWindow::on_hSlider_sliderMoved(int position)
         t1.y = std::min(t1.y,CorPoint[i].y);
     }
 
-    int dy0 = -t1.y+CorPoint[0].y;
-    int dx0 = -t1.x+CorPoint[0].x;
-    int dy1 = -t1.y+CorPoint[1].y;
-    int dx1 = -t1.x+CorPoint[1].x;
-    int dy2 = -t1.y+CorPoint[2].y;
-    int dx2 = -t1.x+CorPoint[2].x;
-    int dy3 = -t1.y+CorPoint[3].y;
-    int dx3 = -t1.x+CorPoint[3].x;
+    int dy0 = -t1.y+CorPoint[0].y+biosy[0];
+    int dx0 = -t1.x+CorPoint[0].x+biosx[0];
+    int dy1 = -t1.y+CorPoint[1].y+biosy[1];
+    int dx1 = -t1.x+CorPoint[1].x+biosx[1];
+    int dy2 = -t1.y+CorPoint[2].y+biosy[2];
+    int dx2 = -t1.x+CorPoint[2].x+biosx[2];
+    int dy3 = -t1.y+CorPoint[3].y+biosy[3];
+    int dx3 = -t1.x+CorPoint[3].x+biosx[3];
+
 
     int size = 1;
     cv::rectangle(cutTempMat[0],cv::Point(x-dx0-size,y-dy0-size),cv::Point(x-dx0+size,y-dy0+size),cv::Scalar(255,0,0),1,8,0);
@@ -1268,15 +1269,15 @@ void MainWindow::on_vSlider_sliderMoved(int position)
         t1.x = std::min(t1.x,CorPoint[i].x);
         t1.y = std::min(t1.y,CorPoint[i].y);
     }
+    int dy0 = -t1.y+CorPoint[0].y+biosy[0];
+    int dx0 = -t1.x+CorPoint[0].x+biosx[0];
+    int dy1 = -t1.y+CorPoint[1].y+biosy[1];
+    int dx1 = -t1.x+CorPoint[1].x+biosx[1];
+    int dy2 = -t1.y+CorPoint[2].y+biosy[2];
+    int dx2 = -t1.x+CorPoint[2].x+biosx[2];
+    int dy3 = -t1.y+CorPoint[3].y+biosy[3];
+    int dx3 = -t1.x+CorPoint[3].x+biosx[3];
 
-    int dy0 = -t1.y+CorPoint[0].y;
-    int dx0 = -t1.x+CorPoint[0].x;
-    int dy1 = -t1.y+CorPoint[1].y;
-    int dx1 = -t1.x+CorPoint[1].x;
-    int dy2 = -t1.y+CorPoint[2].y;
-    int dx2 = -t1.x+CorPoint[2].x;
-    int dy3 = -t1.y+CorPoint[3].y;
-    int dx3 = -t1.x+CorPoint[3].x;
     int size = 1;
     cv::rectangle(cutTempMat[0],cv::Point(x-dx0-size,y-dy0-size),cv::Point(x-dx0+size,y-dy0+size),cv::Scalar(255,0,0),1,8,0);
     cv::rectangle(cutTempMat[1],cv::Point(x-dx1-size,y-dy1-size),cv::Point(x-dx1+size,y-dy1+size),cv::Scalar(255,0,0),1,8,0);
@@ -1435,14 +1436,14 @@ float MainWindow::predictresult(int y,int x)
     }
 
     int size = 1;
-    int dy0 = -t1.y+CorPoint[0].y;
-    int dx0 = -t1.x+CorPoint[0].x;
-    int dy1 = -t1.y+CorPoint[1].y;
-    int dx1 = -t1.x+CorPoint[1].x;
-    int dy2 = -t1.y+CorPoint[2].y;
-    int dx2 = -t1.x+CorPoint[2].x;
-    int dy3 = -t1.y+CorPoint[3].y;
-    int dx3 = -t1.x+CorPoint[3].x;
+    int dy0 = -t1.y+CorPoint[0].y+biosy[0];
+    int dx0 = -t1.x+CorPoint[0].x+biosx[0];
+    int dy1 = -t1.y+CorPoint[1].y+biosy[1];
+    int dx1 = -t1.x+CorPoint[1].x+biosx[1];
+    int dy2 = -t1.y+CorPoint[2].y+biosy[2];
+    int dx2 = -t1.x+CorPoint[2].x+biosx[2];
+    int dy3 = -t1.y+CorPoint[3].y+biosy[3];
+    int dx3 = -t1.x+CorPoint[3].x+biosx[3];
 
     //savetrainMat.clear();
 
@@ -1531,8 +1532,10 @@ void MainWindow::Equal()
         cv::cvtColor(CapMat[i],temp,CV_BGR2GRAY);
         //qDebug()<<" "<<temp.channels();
         cv::Mat temp1;
-        cv::normalize(temp,temp1,0,255,CV_MINMAX);
+        //cv::normalize(temp,temp1,0,255,CV_MINMAX);
         cv::Mat out;
+        cv::equalizeHist(temp,out);
+
         cv::cvtColor(temp1,out,CV_GRAY2BGR);
         CapWEual.push_back(out);
     }
@@ -1545,29 +1548,233 @@ void MainWindow::Equal()
 
 void MainWindow::on_getData3x3Button_clicked()
 {
-    QString name = QFileDialog::getSaveFileName(this, tr("Save File"),
-                                                "/untitled.jpg",
-                                                tr("Images (*.jpg)"));
-    cv::imwrite(name.toStdString(),saveMat3);
+    CapWEual.clear();
+    for(int i=0;i<CapWarp.size();i++)
+        CapWEual.push_back(ClassMat[i]);
 }
 
 void MainWindow::on_EqualButton_clicked()
 {
-    CapWEual.clear();
-    for(int i=0;i<4;i++)
+    cv::Point t1(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
+    for(int i=0;i<CorPoint.size();i++)
     {
-        cv::Mat temp ;
-        cv::cvtColor(ClassMat[i],temp,CV_BGR2GRAY);
-        cv::Mat temp1;
-        cv::normalize(temp,temp1,0,255,CV_MINMAX);
-        cv::Mat out;
-        cv::cvtColor(temp1,out,CV_GRAY2BGR);
-        CapWEual.push_back(out);
+        t1.x = std::min(t1.x,CorPoint[i].x);
+        t1.y = std::min(t1.y,CorPoint[i].y);
     }
+    CapWEual.clear();
+    int dy0 = -t1.y+CorPoint[0].y+biosy[0];
+    int dx0 = -t1.x+CorPoint[0].x+biosx[0];
+    int dy1 = -t1.y+CorPoint[1].y+biosy[1];
+    int dx1 = -t1.x+CorPoint[1].x+biosx[1];
+    int dy2 = -t1.y+CorPoint[2].y+biosy[2];
+    int dx2 = -t1.x+CorPoint[2].x+biosx[2];
+    int dy3 = -t1.y+CorPoint[3].y+biosy[3];
+    int dx3 = -t1.x+CorPoint[3].x+biosx[3];
+
+    cv::Mat temp ;
+    cv::cvtColor(ClassMat[0],temp,CV_BGR2GRAY);
+    int his[256]={0};
+    //int sum = 0;
+
+    for(int i=0; i<temp.cols;i++)
+    {
+        for(int j=0;j<temp.rows;j++)
+        {
+            if(MaskResult.at<cv::Vec3b>(j+dy0,i+dx0)[0]!=0 && j+dy0<MaskResult.rows && i+dx0 <MaskResult.cols)
+            {
+                for(int n=0;n<256;n++)
+                {
+                    if(n>=temp.at<uchar>(j,i))
+                    {
+                        his[n]++;
+                    }
+                }
+            }
+        }
+    }
+    int large0 =his[0] ;
+    int threshold0 =0;
+    for(int n=1;n<256;n++)
+    {
+        if(his[n]-his[n-1]>large0)
+        {
+            large0 = his[n];
+            threshold0 = n;
+        }
+    }
+    //qDebug()<<"threshold0"<<threshold0;
+    for(int i=0; i<temp.cols;i++)
+    {
+        for(int j=0;j<temp.rows;j++)
+        {
+            if(MaskResult.at<cv::Vec3b>(j+dy0,i+dx0)[0]!=0 && j+dy0<MaskResult.rows && i+dx0 <MaskResult.cols)
+            {
+                if(temp.at<uchar>(j,i)<=threshold0)
+                {
+                    temp.at<uchar>(j,i)=(his[temp.at<uchar>(j,i)])/((his[temp.at<uchar>(j,i)])/threshold0)*127;
+                    //temp.at<uchar>(j,i)=127-(threshold0-temp.at<uchar>(j,i))/threshold0*127;
+                }
+                else
+                    temp.at<uchar>(j,i)=(his[temp.at<uchar>(j,i)]-his[threshold0])/((his[255]-his[threshold0])/(255-threshold0))*127+128;
+            }
+        }
+    }
+
+    cv::Mat out;
+    //cv::equalizeHist(temp,out1);
+    cv::cvtColor(temp,out,CV_GRAY2BGR);
+    CapWEual.push_back(out);
+
+
+    qDebug()<<"00000000";
+
+    cv::cvtColor(ClassMat[1],temp,CV_BGR2GRAY);
+    int his1[256]={0};
+    //int sum1 = 0;
+    for(int i=0; i<temp.cols;i++)
+    {
+        for(int j=0;j<temp.rows;j++)
+        {
+            if(MaskResult.at<cv::Vec3b>(j+dy1,i+dx1)[0]!=0 && j+dy1<MaskResult.rows && i+dx1 <MaskResult.cols)
+            {
+                for(int n=0;n<256;n++)
+                {
+                    if(n>=temp.at<uchar>(j,i))
+                    {
+                        his1[n]++;
+                    }
+                }
+            }
+        }
+    }
+    int large1 = his1[0];
+    int threshold1 = 0;
+    for(int n=1;n<256;n++)
+    {
+        if(his1[n]-his1[n-1]>large1)
+        {
+            large1 = his1[n];
+            threshold1 = n;
+        }
+    }
+    for(int i=0; i<temp.cols;i++)
+    {
+        for(int j=0;j<temp.rows;j++)
+        {
+            if(MaskResult.at<cv::Vec3b>(j+dy1,i+dx1)[0]!=0 && j+dy1<MaskResult.rows && i+dx1 <MaskResult.cols)
+            {
+                if(temp.at<uchar>(j,i)<=threshold1)
+                    temp.at<uchar>(j,i)=(his1[temp.at<uchar>(j,i)])/((his1[threshold1])/threshold1)*127;
+                else
+                    temp.at<uchar>(j,i)=(his1[temp.at<uchar>(j,i)]-his1[threshold1])/((his1[255]-his1[threshold1])/(255-threshold1))*127+128;
+            }
+        }
+    }
+
+
+    cv::cvtColor(temp,out,CV_GRAY2BGR);
+    CapWEual.push_back(out);
+    qDebug()<<"00000001";
+
+
+    cv::cvtColor(ClassMat[2],temp,CV_BGR2GRAY);
+    int his2[256]={0};
+    //int sum2 = 0;
+    for(int i=0; i<temp.cols;i++)
+    {
+        for(int j=0;j<temp.rows;j++)
+        {
+            if(MaskResult.at<cv::Vec3b>(j+dy2,i+dx2)[0]!=0 && j+dy2<MaskResult.rows && i+dx2 <MaskResult.cols)
+            {
+                for(int n=0;n<256;n++)
+                {
+                    if(n>=temp.at<uchar>(j,i))
+                    {
+                        his2[n]++;
+                    }
+                }
+            }
+        }
+    }
+    int large2 = his2[0];
+    int threshold2 = 0;
+    for(int n=1;n<256;n++)
+    {
+        if(his2[n]-his2[n-1]>large2)
+        {
+            large2 = his2[n];
+            threshold2 = n;
+        }
+    }
+    for(int i=0; i<temp.cols;i++)
+    {
+        for(int j=0;j<temp.rows;j++)
+        {
+            if(MaskResult.at<cv::Vec3b>(j+dy2,i+dx2)[0]!=0 && j+dy2<MaskResult.rows && i+dx2 <MaskResult.cols)
+            {
+                if(temp.at<uchar>(j,i)<=threshold2)
+                    temp.at<uchar>(j,i)=(his2[temp.at<uchar>(j,i)])/((his2[temp.at<uchar>(j,i)])/threshold2)*127;
+                else
+                    temp.at<uchar>(j,i)=(his2[temp.at<uchar>(j,i)]-his2[threshold2])/((his2[255]-his2[threshold2])/(255-threshold2))*127+128;
+
+            }
+        }
+    }
+    cv::cvtColor(temp,out,CV_GRAY2BGR);
+    CapWEual.push_back(out);
+    qDebug()<<"00000002";
+
+    cv::cvtColor(ClassMat[3],temp,CV_BGR2GRAY);
+    int his3[256]={0};
+    //int sum3 = 0;
+    for(int i=0; i<temp.cols;i++)
+    {
+        for(int j=0;j<temp.rows;j++)
+        {
+            if(MaskResult.at<cv::Vec3b>(j+dy3,i+dx3)[0]!=0 && j+dy3<MaskResult.rows && i+dx3 <MaskResult.cols)
+            {
+                for(int n=0;n<256;n++)
+                {
+                    if(n>=temp.at<uchar>(j,i))
+                    {
+                        his3[n]++;
+                    }
+                }
+            }
+        }
+    }
+    int large3 = his3[0];
+    int threshold3 = 0;
+    for(int n=1;n<256;n++)
+    {
+        if(his3[n]-his3[n-1]>large3)
+        {
+            large3 = his3[n];
+            threshold3 = n;
+        }
+    }
+    for(int i=0; i<temp.cols;i++)
+    {
+        for(int j=0;j<temp.rows;j++)
+        {
+            if(MaskResult.at<cv::Vec3b>(j+dy3,i+dx3)[0]!=0 && j+dy3<MaskResult.rows && i+dx3 <MaskResult.cols)
+            {
+                if(temp.at<uchar>(j,i)<=threshold3)
+                    temp.at<uchar>(j,i)=(his3[temp.at<uchar>(j,i)])/((his3[temp.at<uchar>(j,i)])/threshold3)*127;
+                else
+                    temp.at<uchar>(j,i)=(his3[temp.at<uchar>(j,i)]-his3[threshold3])/((his3[255]-his3[threshold3])/(255-threshold3))*127+128;
+
+            }
+        }
+    }
+    cv::cvtColor(temp,out,CV_GRAY2BGR);
+    CapWEual.push_back(out);
+    qDebug()<<"00000003";
     ShowOnLabel(CapWEual[0],ui->equalLabel1);
     ShowOnLabel(CapWEual[1],ui->equalLabel2);
     ShowOnLabel(CapWEual[2],ui->equalLabel3);
     ShowOnLabel(CapWEual[3],ui->equalLabel4);
+
 }
 
 void MainWindow::on_hSlider_valueChanged(int value)
@@ -1580,4 +1787,49 @@ void MainWindow::on_TestButton_2_clicked()
     int x = ui->hSlider->value();
     int y = ui->vSlider->maximum() - ui->vSlider->value();
     qDebug()<<predictresult(y,x);
+}
+
+void MainWindow::on_spinBox_valueChanged(int arg1)
+{
+    biosx[0] = arg1;
+}
+
+void MainWindow::on_spinBox_2_valueChanged(int arg1)
+{
+    biosx[1] = arg1;
+}
+
+void MainWindow::on_spinBox_3_valueChanged(int arg1)
+{
+    biosx[2] = arg1;
+}
+
+void MainWindow::on_spinBox_4_valueChanged(int arg1)
+{
+    biosx[3] = arg1;
+}
+
+void MainWindow::on_spinBox_5_valueChanged(int arg1)
+{
+    biosy[0] = arg1;
+}
+
+void MainWindow::on_spinBox_6_valueChanged(int arg1)
+{
+    biosy[1] = arg1;
+}
+
+void MainWindow::on_spinBox_7_valueChanged(int arg1)
+{
+    biosy[2]=arg1;
+}
+
+void MainWindow::on_spinBox_8_valueChanged(int arg1)
+{
+    biosy[3] = arg1;
+}
+
+void MainWindow::on_vSlider_valueChanged(int value)
+{
+
 }

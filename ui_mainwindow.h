@@ -21,6 +21,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSlider>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
@@ -114,6 +115,14 @@ public:
     QLabel *L3;
     QLabel *L4;
     QPushButton *TestButton_2;
+    QSpinBox *spinBox;
+    QSpinBox *spinBox_2;
+    QSpinBox *spinBox_3;
+    QSpinBox *spinBox_4;
+    QSpinBox *spinBox_5;
+    QSpinBox *spinBox_6;
+    QSpinBox *spinBox_7;
+    QSpinBox *spinBox_8;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -122,7 +131,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(821, 592);
+        MainWindow->resize(821, 618);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         tabClassifier = new QTabWidget(centralWidget);
@@ -416,7 +425,7 @@ public:
         PredictButton->setFont(font);
         getData3x3Button = new QPushButton(centralWidget);
         getData3x3Button->setObjectName(QStringLiteral("getData3x3Button"));
-        getData3x3Button->setEnabled(false);
+        getData3x3Button->setEnabled(true);
         getData3x3Button->setGeometry(QRect(370, 450, 75, 23));
         L1 = new QLabel(centralWidget);
         L1->setObjectName(QStringLiteral("L1"));
@@ -433,6 +442,46 @@ public:
         TestButton_2 = new QPushButton(centralWidget);
         TestButton_2->setObjectName(QStringLiteral("TestButton_2"));
         TestButton_2->setGeometry(QRect(660, 260, 91, 61));
+        spinBox = new QSpinBox(centralWidget);
+        spinBox->setObjectName(QStringLiteral("spinBox"));
+        spinBox->setGeometry(QRect(60, 490, 61, 22));
+        spinBox->setMinimum(-10);
+        spinBox->setMaximum(10);
+        spinBox_2 = new QSpinBox(centralWidget);
+        spinBox_2->setObjectName(QStringLiteral("spinBox_2"));
+        spinBox_2->setGeometry(QRect(140, 490, 91, 22));
+        spinBox_2->setMinimum(-10);
+        spinBox_2->setMaximum(10);
+        spinBox_3 = new QSpinBox(centralWidget);
+        spinBox_3->setObjectName(QStringLiteral("spinBox_3"));
+        spinBox_3->setGeometry(QRect(260, 490, 71, 22));
+        spinBox_3->setMinimum(-10);
+        spinBox_3->setMaximum(10);
+        spinBox_4 = new QSpinBox(centralWidget);
+        spinBox_4->setObjectName(QStringLiteral("spinBox_4"));
+        spinBox_4->setGeometry(QRect(350, 490, 51, 22));
+        spinBox_4->setMinimum(-10);
+        spinBox_4->setMaximum(10);
+        spinBox_5 = new QSpinBox(centralWidget);
+        spinBox_5->setObjectName(QStringLiteral("spinBox_5"));
+        spinBox_5->setGeometry(QRect(60, 520, 42, 22));
+        spinBox_5->setMinimum(-10);
+        spinBox_5->setMaximum(10);
+        spinBox_6 = new QSpinBox(centralWidget);
+        spinBox_6->setObjectName(QStringLiteral("spinBox_6"));
+        spinBox_6->setGeometry(QRect(140, 520, 81, 22));
+        spinBox_6->setMinimum(-10);
+        spinBox_6->setMaximum(10);
+        spinBox_7 = new QSpinBox(centralWidget);
+        spinBox_7->setObjectName(QStringLiteral("spinBox_7"));
+        spinBox_7->setGeometry(QRect(260, 520, 71, 22));
+        spinBox_7->setMinimum(-10);
+        spinBox_7->setMaximum(10);
+        spinBox_8 = new QSpinBox(centralWidget);
+        spinBox_8->setObjectName(QStringLiteral("spinBox_8"));
+        spinBox_8->setGeometry(QRect(350, 520, 42, 22));
+        spinBox_8->setMinimum(-10);
+        spinBox_8->setMaximum(10);
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -533,7 +582,7 @@ public:
         getDataButton->setText(QApplication::translate("MainWindow", "GetTrainData", 0));
         SetButtom->setText(QApplication::translate("MainWindow", "Set", 0));
         PredictButton->setText(QApplication::translate("MainWindow", "Predict", 0));
-        getData3x3Button->setText(QApplication::translate("MainWindow", "Get Data3*3", 0));
+        getData3x3Button->setText(QApplication::translate("MainWindow", "Clear", 0));
         L1->setText(QApplication::translate("MainWindow", "TextLabel", 0));
         L2->setText(QApplication::translate("MainWindow", "TextLabel", 0));
         L3->setText(QApplication::translate("MainWindow", "TextLabel", 0));

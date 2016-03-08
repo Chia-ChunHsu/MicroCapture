@@ -99,6 +99,24 @@ private slots:
 
     void on_TestButton_2_clicked();
 
+    void on_spinBox_valueChanged(int arg1);
+
+    void on_spinBox_2_valueChanged(int arg1);
+
+    void on_spinBox_3_valueChanged(int arg1);
+
+    void on_spinBox_4_valueChanged(int arg1);
+
+    void on_spinBox_5_valueChanged(int arg1);
+
+    void on_spinBox_6_valueChanged(int arg1);
+
+    void on_spinBox_7_valueChanged(int arg1);
+
+    void on_spinBox_8_valueChanged(int arg1);
+
+    void on_vSlider_valueChanged(int value);
+
 private:
 
     Ui::MainWindow *ui;
@@ -143,6 +161,9 @@ private:
 
     CvSVM svm;
     cv::Mat predict;
+
+    int biosx[4];
+    int biosy[4];
 
 };
 
