@@ -1171,10 +1171,10 @@ void MainWindow::on_hSlider_sliderMoved(int position)
 
 
     int size = 1;
-    cv::rectangle(cutTempMat[0],cv::Point(x-dx0-size,y-dy0-size),cv::Point(x-dx0+size,y-dy0+size),cv::Scalar(255,0,0),1,8,0);
-    cv::rectangle(cutTempMat[1],cv::Point(x-dx1-size,y-dy1-size),cv::Point(x-dx1+size,y-dy1+size),cv::Scalar(255,0,0),1,8,0);
-    cv::rectangle(cutTempMat[2],cv::Point(x-dx2-size,y-dy2-size),cv::Point(x-dx2+size,y-dy2+size),cv::Scalar(255,0,0),1,8,0);
-    cv::rectangle(cutTempMat[3],cv::Point(x-dx3-size,y-dy3-size),cv::Point(x-dx3+size,y-dy3+size),cv::Scalar(255,0,0),1,8,0);
+    cv::rectangle(cutTempMat[0],cv::Point(x-dx0-size,y-dy0-size),cv::Point(x-dx0+size,y-dy0+size),cv::Scalar(0,0,255),1,8,0);
+    cv::rectangle(cutTempMat[1],cv::Point(x-dx1-size,y-dy1-size),cv::Point(x-dx1+size,y-dy1+size),cv::Scalar(0,0,255),1,8,0);
+    cv::rectangle(cutTempMat[2],cv::Point(x-dx2-size,y-dy2-size),cv::Point(x-dx2+size,y-dy2+size),cv::Scalar(0,0,255),1,8,0);
+    cv::rectangle(cutTempMat[3],cv::Point(x-dx3-size,y-dy3-size),cv::Point(x-dx3+size,y-dy3+size),cv::Scalar(0,0,255),1,8,0);
 
     cv::imshow("cutTempMat[0]",cutTempMat[0]);
     cv::imshow("cutTempMat[1]",cutTempMat[1]);
@@ -1281,10 +1281,10 @@ void MainWindow::on_vSlider_sliderMoved(int position)
     int dx3 = -t1.x+CorPoint[3].x+biosx[3];
 
     int size = 1;
-    cv::rectangle(cutTempMat[0],cv::Point(x-dx0-size,y-dy0-size),cv::Point(x-dx0+size,y-dy0+size),cv::Scalar(255,0,0),1,8,0);
-    cv::rectangle(cutTempMat[1],cv::Point(x-dx1-size,y-dy1-size),cv::Point(x-dx1+size,y-dy1+size),cv::Scalar(255,0,0),1,8,0);
-    cv::rectangle(cutTempMat[2],cv::Point(x-dx2-size,y-dy2-size),cv::Point(x-dx2+size,y-dy2+size),cv::Scalar(255,0,0),1,8,0);
-    cv::rectangle(cutTempMat[3],cv::Point(x-dx3-size,y-dy3-size),cv::Point(x-dx3+size,y-dy3+size),cv::Scalar(255,0,0),1,8,0);
+    cv::rectangle(cutTempMat[0],cv::Point(x-dx0-size,y-dy0-size),cv::Point(x-dx0+size,y-dy0+size),cv::Scalar(0,0,255),1,8,0);
+    cv::rectangle(cutTempMat[1],cv::Point(x-dx1-size,y-dy1-size),cv::Point(x-dx1+size,y-dy1+size),cv::Scalar(0,0,255),1,8,0);
+    cv::rectangle(cutTempMat[2],cv::Point(x-dx2-size,y-dy2-size),cv::Point(x-dx2+size,y-dy2+size),cv::Scalar(0,0,255),1,8,0);
+    cv::rectangle(cutTempMat[3],cv::Point(x-dx3-size,y-dy3-size),cv::Point(x-dx3+size,y-dy3+size),cv::Scalar(0,0,255),1,8,0);
 
     //qDebug()<<"3==  "<<x-(CorPoint[3].x-t1.x)+(CorPoint[2].x-t1.x)-10<<" "<<y-(CorPoint[3].y-t1.y)+(CorPoint[2].y-t1.y)-10;
 
@@ -1302,7 +1302,7 @@ void MainWindow::on_vSlider_sliderMoved(int position)
     int cutsize = 1;
     if(x-dx0-cutsize>1 && x-dx0+cutsize <ClassMat[0].cols-1 && y-dy0-cutsize >1 && y-dy0+cutsize<ClassMat[0].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-dx0-cutsize,y-dy0-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx0,y-dy0,size,size);
         cv::Mat temp = cutTempMat[0](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
@@ -1311,7 +1311,7 @@ void MainWindow::on_vSlider_sliderMoved(int position)
     }
     if(x-dx1-cutsize>1 && x-dx1+cutsize <ClassMat[1].cols-1 && y-dy1-cutsize >1 && y-dy1+cutsize<ClassMat[1].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-dx1-cutsize,y-dy1-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx1,y-dy1,size,size);
         cv::Mat temp = cutTempMat[1](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
@@ -1320,7 +1320,7 @@ void MainWindow::on_vSlider_sliderMoved(int position)
     }
     if(x-dx2-cutsize>1 && x-dx2+cutsize <ClassMat[2].cols-1 && y-dy2-cutsize >1 && y-dy2+cutsize<ClassMat[2].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-dx2-cutsize,y-dy2-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx2,y-dy2,size,size);
         cv::Mat temp = cutTempMat[2](rect_roi);
         //cv::imshow("temp",temp);
         savetrainMat.push_back(temp);
@@ -1329,7 +1329,7 @@ void MainWindow::on_vSlider_sliderMoved(int position)
     }
     if(x-dx3-cutsize>1 && x-dx3+cutsize <ClassMat[3].cols-1 && y-dy3-cutsize >1 && y-dy3+cutsize<ClassMat[3].rows-1)
     {
-        cv::Rect rect_roi = cv::Rect(x-dx3-cutsize,y-dy3-cutsize,size,size);
+        cv::Rect rect_roi = cv::Rect(x-dx3,y-dy3,size,size);
         cv::Mat temp = cutTempMat[3](rect_roi);
         savetrainMat.push_back(temp);
         int n = cutTempMat[3].at<cv::Vec3b>(y-dy3,x-dx3)[0];
@@ -1488,7 +1488,7 @@ float MainWindow::predictresult(int y,int x)
     cv::Mat test(1,4,CV_32FC1);
     if(result.size()!=4)
         return 100;
-    for(int j=0;j<4;j++)
+    for(int j=0;j<3;j++)
     {
         test.at<float>(0,j) = result[j].toFloat();
         //qDebug()<<result[j].toFloat();
