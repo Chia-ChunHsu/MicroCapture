@@ -1488,29 +1488,87 @@ float MainWindow::predictresult(int y,int x)
     cv::Mat test(1,4,CV_32FC1);
     if(result.size()!=4)
         return 100;
-    for(int j=0;j<3;j++)
+    //fot(int j=0;j<)
+    for(int j=0;j<4;j++)
     {
+        //test.at<float>(0,j) = (result[j+1].toFloat()-result[0].toFloat());
         test.at<float>(0,j) = result[j].toFloat();
         //qDebug()<<result[j].toFloat();
     }
 
     svm.load("SVM.txt");
     float resultclass = svm.predict(test);
+    float finalresult = resultclass;
+    //float finalresult = test.at<float>(0,0) - test.at<float>(0,1);
+
+
+//    cv::Mat test700(1,1,CV_32FC1);
+//    if(result.size()!=4)
+//        return 100;
+//    for(int j=1;j<2;j++)
+//    {
+//        test700.at<float>(0,j) = result[j].toFloat();
+//        //qDebug()<<result[j].toFloat();
+//    }
+
+//    svm.load("SVM700.txt");
+//    float resultclass700 = svm.predict(test);
+
+//    cv::Mat test750(1,1,CV_32FC1);
+//    if(result.size()!=4)
+//        return 100;
+//    for(int j=1;j<2;j++)
+//    {
+//        test750.at<float>(0,j) = result[j].toFloat();
+//        //qDebug()<<result[j].toFloat();
+//    }
+
+//    svm.load("SVM750.txt");
+//    float resultclass750 = svm.predict(test);
+
+//    cv::Mat test830(1,1,CV_32FC1);
+//    if(result.size()!=4)
+//        return 100;
+//    for(int j=1;j<2;j++)
+//    {
+//        test830.at<float>(0,j) = result[j].toFloat();
+//        //qDebug()<<result[j].toFloat();
+//    }
+
+//    svm.load("SVM830.txt");
+//    float resultclass830 = svm.predict(test);
+
+//    ui->score0->setText(QString::number(resultclass));
+//    ui->score1->setText(QString::number(resultclass700));
+//    ui->score2->setText(QString::number(resultclass750));
+//    ui->score3->setText(QString::number(resultclass830));
+//    float finalresult=0.0;
+//    if(ui->checkBox->isChecked())
+//        finalresult = finalresult + resultclass;
+//    if(ui->checkBox_2->isChecked())
+//        finalresult = finalresult + resultclass700;
+//    if(ui->checkBox_3->isChecked())
+//        finalresult = finalresult + resultclass750;
+//    if(ui->checkBox_4->isChecked())
+//        finalresult = finalresult + resultclass830;
+    //float result = 1*resultclass+1*resultclass700+1*resultclass750+1*resultclass830;
+
     if(y<predict.rows && x<predict.cols && y>=0 && x>=0)
     {
-        if(resultclass == 0)
+
+        if(finalresult ==0)
         {
             predict.at<cv::Vec3b>(y,x)[0] = 0;
             predict.at<cv::Vec3b>(y,x)[1] = 255;
             predict.at<cv::Vec3b>(y,x)[2] = 0;
         }
-        else if(resultclass == 1)
-        {
-            predict.at<cv::Vec3b>(y,x)[0] = 0;
-            predict.at<cv::Vec3b>(y,x)[1] = 255;
-            predict.at<cv::Vec3b>(y,x)[2] = 255;
-        }
-        else if(resultclass == 2)
+//        else if(resultclass700 == 1)
+//        {
+//            predict.at<cv::Vec3b>(y,x)[0] = 0;
+//            predict.at<cv::Vec3b>(y,x)[1] = 255;
+//            predict.at<cv::Vec3b>(y,x)[2] = 255;
+//        }
+        else
         {
             predict.at<cv::Vec3b>(y,x)[0] = 0;
             predict.at<cv::Vec3b>(y,x)[1] = 0;
@@ -1518,7 +1576,7 @@ float MainWindow::predictresult(int y,int x)
         }
     }
 
-    return resultclass;
+    return finalresult;
 
 }
 
@@ -1557,266 +1615,276 @@ void MainWindow::on_getData3x3Button_clicked()
 
 void MainWindow::on_EqualButton_clicked()
 {
-    cv::Point t1(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
-    for(int i=0;i<CorPoint.size();i++)
-    {
-        t1.x = std::min(t1.x,CorPoint[i].x);
-        t1.y = std::min(t1.y,CorPoint[i].y);
-    }
-    CapWEual.clear();
-    int dy0 = -t1.y+CorPoint[0].y+biosy[0];
-    int dx0 = -t1.x+CorPoint[0].x+biosx[0];
-    int dy1 = -t1.y+CorPoint[1].y+biosy[1];
-    int dx1 = -t1.x+CorPoint[1].x+biosx[1];
-    int dy2 = -t1.y+CorPoint[2].y+biosy[2];
-    int dx2 = -t1.x+CorPoint[2].x+biosx[2];
-    int dy3 = -t1.y+CorPoint[3].y+biosy[3];
-    int dx3 = -t1.x+CorPoint[3].x+biosx[3];
-
-    cv::Mat temp ;
-    cv::cvtColor(ClassMat[0],temp,CV_BGR2GRAY);
-    int his[256]={0};
-    //int sum = 0;
-    qDebug()<<"==0";
-    for(int i=0; i<temp.cols;i++)
-    {
-        for(int j=0;j<temp.rows;j++)
-        {
-            if(MaskResult.at<cv::Vec3b>(j+dy0,i+dx0)[0]!=0 && j+dy0<MaskResult.rows && i+dx0 <MaskResult.cols)
-            {
-                for(int n=0;n<256;n++)
-                {
-                    if(n>=temp.at<uchar>(j,i))
-                    {
-                        his[n]++;
-                    }
-                }
-            }
-        }
-    }
-    qDebug()<<"==1";
-    int large0 =his[0] ;
-    int threshold0 =0;
-    for(int n=1;n<256;n++)
-    {
-        if(his[n]-his[n-1]>large0)
-        {
-            large0 = his[n]-his[n-1];
-            threshold0 = n;
-        }
-    }
-    qDebug()<<"==2";
-    //qDebug()<<"his[10]"<<his[10]<<"his[20]="<<his[20]<<" his[150]="<<his[150];
-//    for(int i=0;i<255;i++)
+//    cv::Point t1(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
+//    for(int i=0;i<CorPoint.size();i++)
 //    {
-//        qDebug()<<i<<" "<<his[i];
+//        t1.x = std::min(t1.x,CorPoint[i].x);
+//        t1.y = std::min(t1.y,CorPoint[i].y);
 //    }
-    qDebug()<<"threshold0"<<threshold0;
-    for(int i=0; i<temp.cols;i++)
-    {
-        for(int j=0;j<temp.rows;j++)
-        {
-            if(MaskResult.at<cv::Vec3b>(j+dy0,i+dx0)[0]!=0 && j+dy0<MaskResult.rows && i+dx0 <MaskResult.cols)
-            {
-                if(temp.at<uchar>(j,i)<=threshold0)
-                {
-                    double current = his[temp.at<uchar>(j,i)];
-                    double total = his[threshold0];
-                    temp.at<uchar>(j,i)=double(current/total)*127;
-                    //temp.at<uchar>(j,i)=127-(threshold0-temp.at<uchar>(j,i))/threshold0*127;
-                }
-                else
-                {
-                    //qDebug()<<"b"<<temp.at<uchar>(j,i);
-                    double current =his[temp.at<uchar>(j,i)]-his[threshold0];
-                    double total = (his[255]-his[threshold0]);
-                    temp.at<uchar>(j,i)=int(double(current/total)*128)+127;
-                    //qDebug()<<"a"<<temp.at<uchar>(j,i);
-                }
-            }
-        }
-    }
+//    CapWEual.clear();
+//    int dy0 = -t1.y+CorPoint[0].y+biosy[0];
+//    int dx0 = -t1.x+CorPoint[0].x+biosx[0];
+//    int dy1 = -t1.y+CorPoint[1].y+biosy[1];
+//    int dx1 = -t1.x+CorPoint[1].x+biosx[1];
+//    int dy2 = -t1.y+CorPoint[2].y+biosy[2];
+//    int dx2 = -t1.x+CorPoint[2].x+biosx[2];
+//    int dy3 = -t1.y+CorPoint[3].y+biosy[3];
+//    int dx3 = -t1.x+CorPoint[3].x+biosx[3];
 
-    qDebug()<<"==3";
-    cv::Mat out;
-    //cv::equalizeHist(temp,out1);
-    cv::cvtColor(temp,out,CV_GRAY2BGR);
-    CapWEual.push_back(out);
+//    cv::Mat temp ;
+//    cv::cvtColor(ClassMat[0],temp,CV_BGR2GRAY);
+//    int his[256]={0};
+//    //int sum = 0;
+//    qDebug()<<"==0";
+//    for(int i=0; i<temp.cols;i++)
+//    {
+//        for(int j=0;j<temp.rows;j++)
+//        {
+//            if(MaskResult.at<cv::Vec3b>(j+dy0,i+dx0)[0]!=0 && j+dy0<MaskResult.rows && i+dx0 <MaskResult.cols)
+//            {
+//                for(int n=0;n<256;n++)
+//                {
+//                    if(n>=temp.at<uchar>(j,i))
+//                    {
+//                        his[n]++;
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    qDebug()<<"==1";
+//    int large0 =his[0] ;
+//    int threshold0 =0;
+//    for(int n=1;n<256;n++)
+//    {
+//        if(his[n]-his[n-1]>large0)
+//        {
+//            large0 = his[n]-his[n-1];
+//            threshold0 = n;
+//        }
+//    }
+//    qDebug()<<"==2";
+//    //qDebug()<<"his[10]"<<his[10]<<"his[20]="<<his[20]<<" his[150]="<<his[150];
+////    for(int i=0;i<255;i++)
+////    {
+////        qDebug()<<i<<" "<<his[i];
+////    }
+//    qDebug()<<"threshold0"<<threshold0;
+//    for(int i=0; i<temp.cols;i++)
+//    {
+//        for(int j=0;j<temp.rows;j++)
+//        {
+//            if(MaskResult.at<cv::Vec3b>(j+dy0,i+dx0)[0]!=0 && j+dy0<MaskResult.rows && i+dx0 <MaskResult.cols)
+//            {
+//                if(temp.at<uchar>(j,i)<=threshold0)
+//                {
+//                    double current = his[temp.at<uchar>(j,i)];
+//                    double total = his[threshold0];
+//                    temp.at<uchar>(j,i)=double(current/total)*127;
+//                    //temp.at<uchar>(j,i)=127-(threshold0-temp.at<uchar>(j,i))/threshold0*127;
+//                }
+//                else
+//                {
+//                    //qDebug()<<"b"<<temp.at<uchar>(j,i);
+//                    double current =his[temp.at<uchar>(j,i)]-his[threshold0];
+//                    double total = (his[255]-his[threshold0]);
+//                    temp.at<uchar>(j,i)=int(double(current/total)*128)+127;
+//                    //qDebug()<<"a"<<temp.at<uchar>(j,i);
+//                }
+//            }
+//        }
+//    }
 
-
-    qDebug()<<"00000000";
-
-    cv::cvtColor(ClassMat[1],temp,CV_BGR2GRAY);
-    int his1[256]={0};
-    //int sum1 = 0;
-    for(int i=0; i<temp.cols;i++)
-    {
-        for(int j=0;j<temp.rows;j++)
-        {
-            if(MaskResult.at<cv::Vec3b>(j+dy1,i+dx1)[0]!=0 && j+dy1<MaskResult.rows && i+dx1 <MaskResult.cols)
-            {
-                for(int n=0;n<256;n++)
-                {
-                    if(n>=temp.at<uchar>(j,i))
-                    {
-                        his1[n]++;
-                    }
-                }
-            }
-        }
-    }
-    int large1 = his1[0];
-    int threshold1 = 0;
-    for(int n=1;n<256;n++)
-    {
-        if(his1[n]-his1[n-1]>large1)
-        {
-            large1 = his1[n]-his1[n-1];
-            threshold1 = n;
-        }
-    }
-    for(int i=0; i<temp.cols;i++)
-    {
-        for(int j=0;j<temp.rows;j++)
-        {
-            if(MaskResult.at<cv::Vec3b>(j+dy1,i+dx1)[0]!=0 && j+dy1<MaskResult.rows && i+dx1 <MaskResult.cols)
-            {
-                if(temp.at<uchar>(j,i)<=threshold1)
-                {
-                    double current = his1[temp.at<uchar>(j,i)];
-                    double total = his1[threshold1];
-                    temp.at<uchar>(j,i)=double(current/total)*127;
-                }
-                else
-                {
-                    double current = his1[temp.at<uchar>(j,i)]-his1[threshold1];
-                    double total = his1[255]-his1[threshold1];
-                    temp.at<uchar>(j,i)= double(current/total)*128+127;
-                }
-            }
-        }
-    }
+//    qDebug()<<"==3";
+//    cv::Mat out;
+//    //cv::equalizeHist(temp,out1);
+//    cv::cvtColor(temp,out,CV_GRAY2BGR);
+//    CapWEual.push_back(out);
 
 
-    cv::cvtColor(temp,out,CV_GRAY2BGR);
-    CapWEual.push_back(out);
-    qDebug()<<"00000001";
+//    qDebug()<<"00000000";
+
+//    cv::cvtColor(ClassMat[1],temp,CV_BGR2GRAY);
+//    int his1[256]={0};
+//    //int sum1 = 0;
+//    for(int i=0; i<temp.cols;i++)
+//    {
+//        for(int j=0;j<temp.rows;j++)
+//        {
+//            if(MaskResult.at<cv::Vec3b>(j+dy1,i+dx1)[0]!=0 && j+dy1<MaskResult.rows && i+dx1 <MaskResult.cols)
+//            {
+//                for(int n=0;n<256;n++)
+//                {
+//                    if(n>=temp.at<uchar>(j,i))
+//                    {
+//                        his1[n]++;
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    int large1 = his1[0];
+//    int threshold1 = 0;
+//    for(int n=1;n<256;n++)
+//    {
+//        if(his1[n]-his1[n-1]>large1)
+//        {
+//            large1 = his1[n]-his1[n-1];
+//            threshold1 = n;
+//        }
+//    }
+//    for(int i=0; i<temp.cols;i++)
+//    {
+//        for(int j=0;j<temp.rows;j++)
+//        {
+//            if(MaskResult.at<cv::Vec3b>(j+dy1,i+dx1)[0]!=0 && j+dy1<MaskResult.rows && i+dx1 <MaskResult.cols)
+//            {
+//                if(temp.at<uchar>(j,i)<=threshold1)
+//                {
+//                    double current = his1[temp.at<uchar>(j,i)];
+//                    double total = his1[threshold1];
+//                    temp.at<uchar>(j,i)=double(current/total)*127;
+//                }
+//                else
+//                {
+//                    double current = his1[temp.at<uchar>(j,i)]-his1[threshold1];
+//                    double total = his1[255]-his1[threshold1];
+//                    temp.at<uchar>(j,i)= double(current/total)*128+127;
+//                }
+//            }
+//        }
+//    }
 
 
-    cv::cvtColor(ClassMat[2],temp,CV_BGR2GRAY);
-    int his2[256]={0};
-    //int sum2 = 0;
-    for(int i=0; i<temp.cols;i++)
+//    cv::cvtColor(temp,out,CV_GRAY2BGR);
+//    CapWEual.push_back(out);
+//    qDebug()<<"00000001";
+
+
+//    cv::cvtColor(ClassMat[2],temp,CV_BGR2GRAY);
+//    int his2[256]={0};
+//    //int sum2 = 0;
+//    for(int i=0; i<temp.cols;i++)
+//    {
+//        for(int j=0;j<temp.rows;j++)
+//        {
+//            if(MaskResult.at<cv::Vec3b>(j+dy2,i+dx2)[0]!=0 && j+dy2<MaskResult.rows && i+dx2 <MaskResult.cols)
+//            {
+//                for(int n=0;n<256;n++)
+//                {
+//                    if(n>=temp.at<uchar>(j,i))
+//                    {
+//                        his2[n]++;
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    qDebug()<<"=1";
+//    int large2 = his2[0];
+//    int threshold2 = 0;
+//    for(int n=1;n<256;n++)
+//    {
+//        if(his2[n]-his2[n-1]>large2)
+//        {
+//            large2 = his2[n]-his2[n-1];
+//            threshold2 = n;
+//        }
+//    }
+//    qDebug()<<"=2";
+//    for(int i=0; i<temp.cols;i++)
+//    {
+//        for(int j=0;j<temp.rows;j++)
+//        {
+//            if(MaskResult.at<cv::Vec3b>(j+dy2,i+dx2)[0]!=0 && j+dy2<MaskResult.rows && i+dx2 <MaskResult.cols)
+//            {
+//                if(temp.at<uchar>(j,i)<=threshold2)
+//                {
+//                    double current = his2[temp.at<uchar>(j,i)];
+//                    double total = his2[threshold2];
+//                    temp.at<uchar>(j,i)=double(current/total)*127;
+//                }
+//                else
+//                {
+//                    double current = his2[temp.at<uchar>(j,i)]-his2[threshold2];
+//                    double total = his2[255]-his2[threshold2];
+//                    temp.at<uchar>(j,i)=double(current/total)*128+127;
+//                }
+//            }
+//        }
+//    }
+//    qDebug()<<"=3";
+//    cv::cvtColor(temp,out,CV_GRAY2BGR);
+//    CapWEual.push_back(out);
+//    qDebug()<<"00000002";
+//    qDebug()<<"=4";
+//    cv::cvtColor(ClassMat[3],temp,CV_BGR2GRAY);
+//    int his3[256]={0};
+//    //int sum3 = 0;
+//    for(int i=0; i<temp.cols;i++)
+//    {
+//        for(int j=0;j<temp.rows;j++)
+//        {
+//            if(MaskResult.at<cv::Vec3b>(j+dy3,i+dx3)[0]!=0 && j+dy3<MaskResult.rows && i+dx3 <MaskResult.cols)
+//            {
+//                for(int n=0;n<256;n++)
+//                {
+//                    if(n>=temp.at<uchar>(j,i))
+//                    {
+//                        his3[n]++;
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    int large3 = his3[0];
+//    int threshold3 = 0;
+//    for(int n=1;n<256;n++)
+//    {
+//        if(his3[n]-his3[n-1]>large3)
+//        {
+//            large3 = his3[n]-his3[n-1];
+//            threshold3 = n;
+//        }
+//    }
+//    for(int i=0; i<temp.cols;i++)
+//    {
+//        for(int j=0;j<temp.rows;j++)
+//        {
+//            if(MaskResult.at<cv::Vec3b>(j+dy3,i+dx3)[0]!=0 && j+dy3<MaskResult.rows && i+dx3 <MaskResult.cols)
+//            {
+//                if(temp.at<uchar>(j,i)<=threshold3)
+//                {
+//                    double current = his3[temp.at<uchar>(j,i)];
+//                    double total = his3[threshold3];
+//                    temp.at<uchar>(j,i)=double(current/total)*127;
+//                }
+//                else
+//                {
+//                    double current = his3[temp.at<uchar>(j,i)]-his3[threshold3];
+//                    double total = his3[255]-his3[threshold3];
+//                    temp.at<uchar>(j,i)=double(current/total)*128+127;
+//                }
+//            }
+//        }
+//    }
+//    cv::cvtColor(temp,out,CV_GRAY2BGR);
+//    CapWEual.push_back(out);
+//    qDebug()<<"00000003";
+//    ShowOnLabel(CapWEual[0],ui->equalLabel1);
+//    ShowOnLabel(CapWEual[1],ui->equalLabel2);
+//    ShowOnLabel(CapWEual[2],ui->equalLabel3);
+//    ShowOnLabel(CapWEual[3],ui->equalLabel4);
+    CapWEual.clear();
+    for(int i=0;i<4;i++)
     {
-        for(int j=0;j<temp.rows;j++)
-        {
-            if(MaskResult.at<cv::Vec3b>(j+dy2,i+dx2)[0]!=0 && j+dy2<MaskResult.rows && i+dx2 <MaskResult.cols)
-            {
-                for(int n=0;n<256;n++)
-                {
-                    if(n>=temp.at<uchar>(j,i))
-                    {
-                        his2[n]++;
-                    }
-                }
-            }
-        }
+        cv::Mat temp;
+        cv::normalize(ClassMat[i],temp,0,255,CV_MINMAX);
+        CapWEual.push_back(temp);
     }
-    qDebug()<<"=1";
-    int large2 = his2[0];
-    int threshold2 = 0;
-    for(int n=1;n<256;n++)
-    {
-        if(his2[n]-his2[n-1]>large2)
-        {
-            large2 = his2[n]-his2[n-1];
-            threshold2 = n;
-        }
-    }
-    qDebug()<<"=2";
-    for(int i=0; i<temp.cols;i++)
-    {
-        for(int j=0;j<temp.rows;j++)
-        {
-            if(MaskResult.at<cv::Vec3b>(j+dy2,i+dx2)[0]!=0 && j+dy2<MaskResult.rows && i+dx2 <MaskResult.cols)
-            {
-                if(temp.at<uchar>(j,i)<=threshold2)
-                {
-                    double current = his2[temp.at<uchar>(j,i)];
-                    double total = his2[threshold2];
-                    temp.at<uchar>(j,i)=double(current/total)*127;
-                }
-                else
-                {
-                    double current = his2[temp.at<uchar>(j,i)]-his2[threshold2];
-                    double total = his2[255]-his2[threshold2];
-                    temp.at<uchar>(j,i)=double(current/total)*128+127;
-                }
-            }
-        }
-    }
-    qDebug()<<"=3";
-    cv::cvtColor(temp,out,CV_GRAY2BGR);
-    CapWEual.push_back(out);
-    qDebug()<<"00000002";
-    qDebug()<<"=4";
-    cv::cvtColor(ClassMat[3],temp,CV_BGR2GRAY);
-    int his3[256]={0};
-    //int sum3 = 0;
-    for(int i=0; i<temp.cols;i++)
-    {
-        for(int j=0;j<temp.rows;j++)
-        {
-            if(MaskResult.at<cv::Vec3b>(j+dy3,i+dx3)[0]!=0 && j+dy3<MaskResult.rows && i+dx3 <MaskResult.cols)
-            {
-                for(int n=0;n<256;n++)
-                {
-                    if(n>=temp.at<uchar>(j,i))
-                    {
-                        his3[n]++;
-                    }
-                }
-            }
-        }
-    }
-    int large3 = his3[0];
-    int threshold3 = 0;
-    for(int n=1;n<256;n++)
-    {
-        if(his3[n]-his3[n-1]>large3)
-        {
-            large3 = his3[n]-his3[n-1];
-            threshold3 = n;
-        }
-    }
-    for(int i=0; i<temp.cols;i++)
-    {
-        for(int j=0;j<temp.rows;j++)
-        {
-            if(MaskResult.at<cv::Vec3b>(j+dy3,i+dx3)[0]!=0 && j+dy3<MaskResult.rows && i+dx3 <MaskResult.cols)
-            {
-                if(temp.at<uchar>(j,i)<=threshold3)
-                {
-                    double current = his3[temp.at<uchar>(j,i)];
-                    double total = his3[threshold3];
-                    temp.at<uchar>(j,i)=double(current/total)*127;
-                }
-                else
-                {
-                    double current = his3[temp.at<uchar>(j,i)]-his3[threshold3];
-                    double total = his3[255]-his3[threshold3];
-                    temp.at<uchar>(j,i)=double(current/total)*128+127;
-                }
-            }
-        }
-    }
-    cv::cvtColor(temp,out,CV_GRAY2BGR);
-    CapWEual.push_back(out);
-    qDebug()<<"00000003";
-    ShowOnLabel(CapWEual[0],ui->equalLabel1);
-    ShowOnLabel(CapWEual[1],ui->equalLabel2);
-    ShowOnLabel(CapWEual[2],ui->equalLabel3);
-    ShowOnLabel(CapWEual[3],ui->equalLabel4);
+//    cv::normalize(CapWarp[1],CapWarp[1],CV_MINMAX,0,255);
+//    cv::normalize(CapWarp[2],CapWarp[2],CV_MINMAX,0,255);
+//    cv::normalize(CapWarp[3],CapWarp[3],CV_MINMAX,0,255);
 
 }
 
