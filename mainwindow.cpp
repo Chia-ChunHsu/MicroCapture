@@ -1562,12 +1562,12 @@ float MainWindow::predictresult(int y,int x)
             predict.at<cv::Vec3b>(y,x)[1] = 255;
             predict.at<cv::Vec3b>(y,x)[2] = 0;
         }
-//        else if(resultclass700 == 1)
-//        {
-//            predict.at<cv::Vec3b>(y,x)[0] = 0;
-//            predict.at<cv::Vec3b>(y,x)[1] = 255;
-//            predict.at<cv::Vec3b>(y,x)[2] = 255;
-//        }
+        else if(finalresult == 1)
+        {
+            predict.at<cv::Vec3b>(y,x)[0] = 0;
+            predict.at<cv::Vec3b>(y,x)[1] = 255;
+            predict.at<cv::Vec3b>(y,x)[2] = 255;
+        }
         else
         {
             predict.at<cv::Vec3b>(y,x)[0] = 0;
